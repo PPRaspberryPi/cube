@@ -34,36 +34,42 @@ class Tile:
 
 
 class GameTicks(Thread):
-    def __init__(self, tick_speed):
+    snake = None
+
+    def __init__(self, tick_speed, snake):
         pass
 
         Thread.__init__(self)
         self.tick_speed = tick_speed
+        self.snake = snake
 
     def run(self):
         while True:
             # draw etc.
-            print(snake.current_direction)  # testing
+            print(self.snake.current_direction)  # testing
             time.sleep(self.tick_speed)
 
 
 class KeyCheck(Thread):
-    def __init__(self):
+    snake = None
+
+    def __init__(self, snake):
         pass
 
         Thread.__init__(self)
+        self.snake = snake
 
     def run(self):
         while True:
             try:
                 if keyboard.is_pressed('w'):
-                    snake.change_direction(Direction.UP)
+                    self.snake.change_direction(Direction.UP)
                 elif keyboard.is_pressed('a'):
-                    snake.change_direction(Direction.LEFT)
+                    self.snake.change_direction(Direction.LEFT)
                 elif keyboard.is_pressed('s'):
-                    snake.change_direction(Direction.DOWN)
+                    self.snake.change_direction(Direction.DOWN)
                 elif keyboard.is_pressed('d'):
-                    snake.change_direction(Direction.RIGHT)
+                    self.snake.change_direction(Direction.RIGHT)
             except:
                 break
 
@@ -73,7 +79,7 @@ class Snake:
     s_length: int = 1
     current_pos = (0, 0)
 
-    def __init__(self, starting_pos_x, starting_pos_y):
+    def __init__(self, starting_pos_x, starting_pos_y, tiles):
         tiles[starting_pos_x * starting_pos_y].change_color(Color.BLACK)
         self.current_pos = (starting_pos_x, starting_pos_y)
 
@@ -108,18 +114,18 @@ class Snake:
 
 
 def main(tick_speed):
+    tiles = [Tile(n, m) for n in range(0, sx) for m in range(0, sy)]
+    snake = Snake(sx // 2, sy - 1, tiles)
     for tile in tiles:
         print(tile.pos_x, " ", tile.pos_y)  # just for testing purpose
         tile.draw()  # initial ...
 
-    game_ticks = GameTicks(tick_speed)
+    game_ticks = GameTicks(tick_speed, snake)
     game_ticks.start()
 
-    key_check = KeyCheck()
+    key_check = KeyCheck(snake)
     key_check.start()
 
 
 sx, sy = 5, 5
-snake = Snake(sx // 2, sy - 1)
-tiles = [Tile(n, m) for n in range(0, sx) for m in range(0, sy)]
 main(0.5)
