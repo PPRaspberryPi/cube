@@ -4,6 +4,7 @@ import pygame
 import sys
 import random
 import time
+from pygame.locals import *
 
 pygame.init()
 length = 600
@@ -97,17 +98,17 @@ while True:
 
     # Event Handler
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_d:
+        if event.type == KEYDOWN:
+            if event.key == K_d or event.key == K_RIGHT:
                 k += 1
-            elif event.key == pygame.K_a:
+            elif event.key == K_a or event.key == K_LEFT:
                 k -= 1
-            elif event.key == pygame.K_w:
+            elif event.key == K_w or event.key == K_UP:
                 k -= 8
-            elif event.key == pygame.K_s:
+            elif event.key == K_s or event.key == K_DOWN:
                 k += 8
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == MOUSEBUTTONDOWN:
             tiles[k].change_color(Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
-        if event.type == pygame.QUIT:
+        if event.type == QUIT:
             pygame.quit()
             sys.exit()
