@@ -10,10 +10,11 @@ pygame.init()
 length = 600
 width = 600
 tile_size = 75
-window = pygame.display.set_mode((length, width))
+window_front = pygame.display.set_mode((length, width))
+
 pygame.display.set_caption("8x8 Test")
 
-window.fill((255, 255, 255))
+window_front.fill((255, 255, 255))
 pygame.display.update()
 
 
@@ -42,7 +43,7 @@ class Tile:
         self.size = size
 
     def draw(self):
-        pygame.draw.rect(window, (self.color.r, self.color.g, self.color.b),
+        pygame.draw.rect(window_front, (self.color.r, self.color.g, self.color.b),
                          (self.pos_x * tile_size, self.pos_y * tile_size, self.size, self.size))
 
     def change_color(self, color: Color):
@@ -74,9 +75,9 @@ tiles = [Tile(m, n, tile_size) for n in range(0, length // tile_size) for m in r
 def grid():
     gridcolor = BLACK
     for i in range(tile_size):
-        pygame.draw.rect(window, (gridcolor.r, gridcolor.g, gridcolor.b), (i * tile_size, 0, 1, length))
+        pygame.draw.rect(window_front, (gridcolor.r, gridcolor.g, gridcolor.b), (i * tile_size, 0, 1, length))
     for i in range(tile_size):
-        pygame.draw.rect(window, (gridcolor.r, gridcolor.g, gridcolor.b), (0, i * tile_size, width, 1))
+        pygame.draw.rect(window_front, (gridcolor.r, gridcolor.g, gridcolor.b), (0, i * tile_size, width, 1))
 
 
 def keypressed(key):
@@ -88,7 +89,7 @@ grid()
 
 ### MAIN LOOP ###
 while True:
-    if k < 64:
+    if 64 > k > 0:
         tiles[k].draw()
         grid()
     else:
@@ -107,6 +108,9 @@ while True:
                 k -= 8
             elif event.key == K_s or event.key == K_DOWN:
                 k += 8
+            elif event.key == K_r:
+                window_front.fill((255, 255, 255))
+
         if event.type == MOUSEBUTTONDOWN:
             tiles[k].change_color(Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
         if event.type == QUIT:
