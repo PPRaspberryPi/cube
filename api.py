@@ -1,4 +1,27 @@
-leds = [[[False for x in range(8)] for y in range(8)] for z in range(8)]
+LED_all=[0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 1&2
+         0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 1&2
+         0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 3&4
+         0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 3&4
+         0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 5&6
+         0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 5&6
+         0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 7&8
+         0, 0, 0, 0, 0, 0, 0, 0]  # Shift-Register 7&8
+GND_all=[0, 0, 0, 0, 0, 0, 0, 0]  # Shift-Register 9
+
+# Eingabebereich: 0-7. Durchlaufe "LED_all" bis zur "8+8*layer"-ten Stelle und setze alle Werte auf 1
+def turnOnLayer(layer):
+    for x in range(0, 8):
+        LED_all[x+8*layer]=1
+    '''
+    TO-DO: Update der Shift-Register
+    '''
+
+def turnOnAllLayers():
+    for x in range(0,63):
+        LED_all[x]=1
+    '''
+    TO-DO: Update der Shift-Register
+    '''
 
 
 class Vector:
