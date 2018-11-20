@@ -16,20 +16,25 @@ class LED:
             if buffer_array[x] != cube_array[x]:
                 cube_array[x] = buffer_array[x]
 
-    def __init__(self, x, y, z):
+    """def __init__(self, x, y, z):
         self.x = x
         self.y = y
-        self.z = z
+        self.z = z"""
 
-    def turn_on(self):
+    def turn_on(self, x, y, z):
+        cord = x * y * z
         self.state = True
+        self.buffer_array[cord] = 1
 
-    #      turn_on(self.x, self.y, self.z)
 
-    def turn_off(self):
+    def turn_off(self, x, y, z):
+        cord = x * y * z
         self.state = False
+        self.buffer_array[cord] = 0
 
     #   turn_off(self.x, self.y, self.z)
 
-    def toggle_state(self):
+    def toggle_state(self, x, y, z):
+        cord = x * y * z
         self.state = not self.state
+        self.buffer_array[cord] = not self.buffer_array[cord]

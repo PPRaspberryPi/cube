@@ -1,10 +1,13 @@
 import led
 
+test = led.LED()
+
 
 # Eingabebereich: 0-7. Durchlaufe "LED_all" bis zur "8+8*layer"-ten Stelle und setze alle Werte auf 1
 def turn_on_layer(layer):
     for x in range(0, 8):
-        LED_all[x + 8 * layer] = 1
+        # LED_all[x + 8 * layer] = 1
+        pass
     '''
     TO-DO: Update der Shift-Register
     '''
@@ -12,7 +15,8 @@ def turn_on_layer(layer):
 
 def turn_on_all_layers():
     for x in range(0, 63):
-        LED_all[x] = 1
+        # LED_all[x] = 1
+        pass
     '''
     TO-DO: Update der Shift-Register
     '''
@@ -38,12 +42,13 @@ class Vector:
         self.y = self.y + y
         self.z = self.z + z
 
+
 def turn_on(x, y, z):
-    leds[x][y][z] = True
+    led.LED.turn_on(test, x, y, z)
 
 
 def turn_off(x, y, z):
-    leds[x][y][z] = False
+    pass
 
 
 def move_all(vector: Vector):
@@ -51,8 +56,11 @@ def move_all(vector: Vector):
 
 
 def move_led(x: int, y: int, z: int, vector: Vector):
-    leds[x + vector.x][y + vector.y][z + vector.z] = leds[x][y][z]
-    leds[x][y][z] = False
+    pass
+
+
+# leds[x + vector.x][y + vector.y][z + vector.z] = leds[x][y][z]
+# leds[x][y][z] = False
 
 
 def move_leds(m_led, vector: Vector):
@@ -63,11 +71,13 @@ def turn_on_all():
     for x in range(8):
         for y in range(8):
             for z in range(8):
-                leds[x][y][z] = True
+                pass
+                # leds[x][y][z] = True
 
 
 def turn_off_all():
     for x in range(8):
         for y in range(8):
             for z in range(8):
-                leds[x][y][z] = False
+                pass
+                # leds[x][y][z] = False
