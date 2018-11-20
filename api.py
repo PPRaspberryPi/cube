@@ -1,12 +1,4 @@
-LED_all = [0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 1&2
-           0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 1&2
-           0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 3&4
-           0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 3&4
-           0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 5&6
-           0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 5&6
-           0, 0, 0, 0, 0, 0, 0, 0,  # Shift-Register 7&8
-           0, 0, 0, 0, 0, 0, 0, 0]  # Shift-Register 7&8
-GND_all = [0, 0, 0, 0, 0, 0, 0, 0]  # Shift-Register 9
+import led
 
 
 # Eingabebereich: 0-7. Durchlaufe "LED_all" bis zur "8+8*layer"-ten Stelle und setze alle Werte auf 1
@@ -45,31 +37,6 @@ class Vector:
         self.x = self.x + x
         self.y = self.y + y
         self.z = self.z + z
-
-
-class LED:
-    x: int = None
-    y: int = None
-    z: int = None
-    state: bool = False
-    lifetime: float = None
-
-    def __init__(self, x, y, z):
-        self.x = x
-        self.y = y
-        self.z = z
-
-    def turn_on(self):
-        self.state = True
-        turn_on(self.x, self.y, self.z)
-
-    def turn_off(self):
-        self.state = False
-        turn_off(self.x, self.y, self.z)
-
-    def toggle_state(self):
-        self.state = not self.state
-
 
 def turn_on(x, y, z):
     leds[x][y][z] = True
