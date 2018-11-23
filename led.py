@@ -2,11 +2,11 @@ import numpy as np
 
 
 class LED:
-    def transmission(self, cube_array, buffer_array):
+    def transmission(self):
         """Buffer-Array mit aktualisiertem Muster füllen."""
-        for x in range(buffer_array.size):
-            if buffer_array[x] != cube_array[x]:
-                cube_array[x] = buffer_array[x]
+        for x in range(0, 512):
+            if self.buffer_array[x] != self.cube_array[x]:
+                self.cube_array[x] = self.buffer_array[x]
 
     def __init__(self):
         '''Cube- und Buffer-Array initialisieren'''
