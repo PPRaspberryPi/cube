@@ -6,6 +6,7 @@ import random
 import time
 from pygame.locals import *
 
+
 pygame.init()
 length = 600
 width = 600
