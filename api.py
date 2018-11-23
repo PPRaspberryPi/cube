@@ -1,25 +1,4 @@
-import led
-
-test = led.LED()
-
-
-# Eingabebereich: 0-7. Durchlaufe "LED_all" bis zur "8+8*layer"-ten Stelle und setze alle Werte auf 1
-def turn_on_layer(layer):
-    for x in range(0, 8):
-        # LED_all[x + 8 * layer] = 1
-        pass
-    '''
-    TO-DO: Update der Shift-Register
-    '''
-
-
-def turn_on_all_layers():
-    for x in range(0, 63):
-        # LED_all[x] = 1
-        pass
-    '''
-    TO-DO: Update der Shift-Register
-    '''
+leds = [[[False for x in range(8)] for y in range(8)] for z in range(8)]
 
 
 class Vector:
@@ -43,12 +22,36 @@ class Vector:
         self.z = self.z + z
 
 
+class LED:
+    x: int = None
+    y: int = None
+    z: int = None
+    state: bool = False
+    lifetime: float = None
+
+    def __init__(self, x, y, z):
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def turn_on(self):
+        self.state = True
+        turn_on(self.x, self.y, self.z)
+
+    def turn_off(self):
+        self.state = False
+        turn_off(self.x, self.y, self.z)
+
+    def toggle_state(self):
+        self.state = not self.state
+
+
 def turn_on(x, y, z):
-    led.LED.turn_on(test, x, y, z)
+    leds[x][y][z] = True
 
 
 def turn_off(x, y, z):
-    pass
+    leds[x][y][z] = False
 
 
 def move_all(vector: Vector):
@@ -56,11 +59,8 @@ def move_all(vector: Vector):
 
 
 def move_led(x: int, y: int, z: int, vector: Vector):
-    pass
-
-
-# leds[x + vector.x][y + vector.y][z + vector.z] = leds[x][y][z]
-# leds[x][y][z] = False
+    leds[x + vector.x][y + vector.y][z + vector.z] = leds[x][y][z]
+    leds[x][y][z] = False
 
 
 def move_leds(m_led, vector: Vector):
@@ -71,13 +71,11 @@ def turn_on_all():
     for x in range(8):
         for y in range(8):
             for z in range(8):
-                pass
-                # leds[x][y][z] = True
+                leds[x][y][z] = True
 
 
 def turn_off_all():
     for x in range(8):
         for y in range(8):
             for z in range(8):
-                pass
-                # leds[x][y][z] = False
+                leds[x][y][z] = False
