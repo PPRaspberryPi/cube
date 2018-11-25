@@ -21,7 +21,7 @@ def shift_write(led):
     """
     aktuelles Bitmuster wird in die Shift-Register geschoben.
     Soweit nur Implementation für 8 zusammenhängende Register.
-    TO-DO (falls gwünscht): Funktion erweitern, sodass abhhängig von der aktuellen
+    TO-DO (falls gewünscht): Funktion erweitern, sodass abhhängig von der aktuellen
     Position im Array der Pin für die nächste Shift-Registerreihe angesprochen wird.
     """
     for x in range(0, 512):

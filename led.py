@@ -9,7 +9,7 @@ class LED:
                 self.cube_array[x] = self.buffer_array[x]
 
     def __init__(self):
-        '''Cube- und Buffer-Array initialisieren'''
+        """Cube- und Buffer-Array initialisieren"""
         self.cube_array = np.ones(512, dtype=int)
         self.buffer_array = np.zeros(512, dtype=int)
 
