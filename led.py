@@ -2,16 +2,10 @@ import numpy as np
 
 
 class LED:
-    def transmission(self):
-        """Buffer-Array mit aktualisiertem Muster füllen."""
-        for x in range(0, 512):
-            if self.buffer_array[x] != self.cube_array[x]:
-                self.cube_array[x] = self.buffer_array[x]
-
     def __init__(self):
         """Cube- und Buffer-Array initialisieren"""
-        self.cube_array = np.ones(512, dtype=int)
-        self.buffer_array = np.zeros(512, dtype=int)
+        self.cube_array = np.zeros(520, dtype=int)
+        self.buffer_array = np.zeros(520, dtype=int)
 
     '''
         Zählweise LED's: Man fängt hinten links unten an zu zählen.
@@ -20,6 +14,18 @@ class LED:
         :param y: Höhe/Layer (Ansteuerung: 64 Elemente des Arrays weitergehen)
         :param z: Tiefe (Ansteuerung: Eine Zeile weitergehen <=> 8 Schritte)
     '''
+
+    def nth_layer(self, layer):
+        self.cube_array = np.ones(520, dtype=int)
+        for x in range(8):
+            if x == layer:
+                self.cube_array[x+512] = 1
+            else:
+                self.cube_array[x+512] = 0
+
+    def transmission(self):
+        """Buffer-Array mit aktualisiertem Muster füllen."""
+        self.buffer_array=self.cube_array
 
     def turn_on(self, x, y, z):
         """Über die Parameter angesprochenes LED-Bit unabhängig vom derzeitigen Status auf 1 setzen."""
@@ -60,8 +66,6 @@ class LED:
         :param z2: Pos. z-Achse Ziel
         :return:
         """
-        if self.cube_array[x1 + 64 * y1 + 8 * z1] == 0:
-            return
-        else:
+        if self.cube_array[x1 + 64 * y1 + 8 * z1] == 1:
             self.cube_array[x1 + 64 * y1 + 8 * z1] = 0
             self.cube_array[x2 + 64 * y2 + 8 * z2] = 1

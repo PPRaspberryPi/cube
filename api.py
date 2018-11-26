@@ -4,7 +4,6 @@ import RPi.GPIO as GPIO
 
 import led
 
-GPIO.setwarnings(False)
 
 # Temporäre Dummy-Werte für die Pins
 data = 1
@@ -17,14 +16,31 @@ def initialise():
     return led.LED()
 
 
-def shift_write(led):
+def test_all(led):
+    """Durchläuft alle Layer einmal."""
+    for layer in range(0, 8):
+        led.nth_layer(layer)
+        shift_write_all(led)
+        time.sleep(.01)
+
+
+def shift_write_layer(led, layer):
+    for x in range(0, 8):
+        if x == layer:
+            led.cube_array[x+512] = 1
+        else:
+            led.cube_array[x+512] = 0
+    shift_write_all(led)
+
+
+def shift_write_all(led):
     """
     aktuelles Bitmuster wird in die Shift-Register geschoben.
     Soweit nur Implementation für 8 zusammenhängende Register.
     TO-DO (falls gewünscht): Funktion erweitern, sodass abhhängig von der aktuellen
     Position im Array der Pin für die nächste Shift-Registerreihe angesprochen wird.
     """
-    for x in range(0, 512):
+    for x in range(0, 520):
         temp = led.cube_array[x]
         if temp == 1:
             GPIO.output(data, GPIO.HIGH)
