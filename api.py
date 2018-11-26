@@ -4,7 +4,6 @@ import RPi.GPIO as GPIO
 
 import led
 
-
 # Temporäre Dummy-Werte für die Pins
 data = 1
 clock = 2
@@ -56,7 +55,6 @@ def pulse_clock():
     GPIO.output(clock, GPIO.HIGH)
     time.sleep(.01)
     GPIO.output(clock, GPIO.LOW)
-    return
 
 
 def trigger_latch():

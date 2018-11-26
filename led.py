@@ -66,6 +66,7 @@ class LED:
         :param z2: Pos. z-Achse Ziel
         :return:
         """
+
         if self.cube_array[x1 + 64 * y1 + 8 * z1] == 1:
             self.cube_array[x1 + 64 * y1 + 8 * z1] = 0
             self.cube_array[x2 + 64 * y2 + 8 * z2] = 1

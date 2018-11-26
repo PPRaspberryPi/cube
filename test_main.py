@@ -1,12 +1,14 @@
-import api
-import numpy as np
 import unittest
+
+import numpy as np
+
+import api
 
 
 class TestLED(unittest.TestCase):
     def test_initialise(self):
-        led=api.initialise()
-        vgl=np.zeros(520, dtype=int)
+        led = api.initialise()
+        vgl = np.zeros(520, dtype=int)
         self.assertEqual(led.cube_array.all(), vgl.all())
 
     def test_nth_layer(self):
