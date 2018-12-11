@@ -21,4 +21,5 @@ def led_off(*target_leds):
         cube.main().cubes[(x[0] + 1) * (x[1] + 1) * (x[2] + 1)].setOff()
 
 
-cube.main()
+def start():
+    cube.main()
