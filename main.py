@@ -1,4 +1,4 @@
-import pygame, sys, os, math
+import pygame, sys, os, math, vCube
 
 
 def lock_mouse(): pygame.event.get(); pygame.mouse.get_rel(); pygame.mouse.set_visible(0); pygame.event.set_grab(1)
@@ -19,10 +19,10 @@ class Cam:
 
     def events(self, event):
         if event.type == pygame.MOUSEMOTION:
-            x, y = event.rel;
-            x /= 200;
+            x, y = event.rel
+            x /= 200
             y /= 200
-            self.rot[0] += y;
+            self.rot[0] += y
             self.rot[1] += x
             self.update_rot()
 
@@ -37,29 +37,6 @@ class Cam:
         if key[pygame.K_s]: self.pos[0] -= x; self.pos[2] -= y
         if key[pygame.K_a]: self.pos[0] -= y; self.pos[2] += x
         if key[pygame.K_d]: self.pos[0] += y; self.pos[2] -= x
-
-
-class Cube:
-    vertices = (-0.5, -0.5, -0.5), (0.5, -0.5, -0.5), (0.5, 0.5, -0.5), (-0.5, 0.5, -0.5), (-0.5, -0.5, 0.5), (
-    0.5, -0.5, 0.5), (0.5, 0.5, 0.5), (-0.5, 0.5, 0.5)
-    faces = (0, 1, 2, 3), (4, 5, 6, 7), (0, 1, 5, 4), (2, 3, 7, 6), (0, 3, 7, 4), (1, 2, 6, 5)
-    colors = (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0), (0, 0, 0)
-
-    def setOn(self):
-        self.colors = (255, 255, 0), (255, 255, 0), (255, 255, 0), (255, 255, 0), (255, 255, 0), (255, 255, 0)
-
-    def setOff(self):
-        self.colors = (255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255), (
-        255, 255, 255)
-
-    def __init__(self, on: bool, pos=(0, 0, 0)):
-        x, y, z = pos
-        if on:
-            self.colors = (255, 255, 0), (255, 255, 0), (255, 255, 0), (255, 255, 0), (255, 255, 0), (255, 255, 0)
-        else:
-            self.colors = (255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255), (255, 255, 255), (
-            255, 255, 255)
-        self.verts = [(x + X, y + Y, z + Z) for X, Y, Z in self.vertices]
 
 
 # dont need to check if z is 0 (we clip z at min value)
@@ -104,7 +81,7 @@ def main():
     cam = Cam((0, 0, -5))
 
     pacman_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
-    cubes = [Cube(False, (x, y, z)) for x, y, z in pacman_points]
+    cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in pacman_points]
 
     cubes[0].setOn()
     cubes[8].setOn()
