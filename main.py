@@ -1,21 +1,10 @@
-import math
-import os
-import pygame
-import sys
-import vCube
+import pygame, sys, os, math, vCube
 
 
-def lock_mouse():
-    pygame.event.get()
-    pygame.mouse.get_rel()
-    pygame.mouse.set_visible(0)
-    pygame.event.set_grab(1)
+def lock_mouse(): pygame.event.get(); pygame.mouse.get_rel(); pygame.mouse.set_visible(0); pygame.event.set_grab(1)
 
 
-def rotate2d(pos, rot):
-    x, y = pos
-    s, c = rot
-    return x * c - y * s, y * c + x * s
+def rotate2d(pos, rot): x, y = pos; s, c = rot; return x * c - y * s, y * c + x * s
 
 
 class Cam:
@@ -51,8 +40,7 @@ class Cam:
 
 
 # dont need to check if z is 0 (we clip z at min value)
-def get2D(v):
-    return cx + int(v[0] / v[2] * projX), cy + int(v[1] / v[2] * projY)
+def get2D(v): return cx + int(v[0] / v[2] * projX), cy + int(v[1] / v[2] * projY)
 
 
 def get3D(v):
@@ -63,8 +51,7 @@ def get3D(v):
 
 
 def getZ(A, B, newZ):
-    if B[2] == A[2] or newZ < A[2] or newZ > B[2]:
-        return None
+    if B[2] == A[2] or newZ < A[2] or newZ > B[2]: return None
     dx, dy, dz = B[0] - A[0], B[1] - A[1], B[2] - A[2]
     i = (newZ - A[2]) / dz
     return A[0] + dx * i, A[1] + dy * i, newZ
@@ -76,10 +63,10 @@ minZ = 1
 def main():
     global projX, projY, cx, cy, cam, minZ
     pygame.init()
-    w, h = 800, 600
+    w, h = 800, 600;
     cx, cy = w // 2, h // 2
 
-    fov = 90 / 180 * math.pi
+    fov = 90 / 180 * math.pi;
     half_fov = fov / 2
     half_w, half_h = w / 2, h / 2
     projY = half_h / math.tan(half_fov)
@@ -93,8 +80,8 @@ def main():
     lock_mouse()
     cam = Cam((0, 0, -5))
 
-    cube_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
-    cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in cube_points]
+    pacman_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
+    cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in pacman_points]
 
     cubes[0].setOn()
     cubes[8].setOn()
@@ -110,11 +97,9 @@ def main():
             if event.type == pygame.QUIT: pygame.quit(); sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F4 and key[pygame.K_LALT]:
-                    pygame.quit()
-                    sys.exit()
+                    pygame.quit(); sys.exit()
                 elif event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
+                    pygame.quit(); sys.exit()
                 elif event.key == pygame.K_0:
                     minZ = 0.4
                 elif event.key == pygame.K_1:
@@ -131,8 +116,8 @@ def main():
 
         screen.fill((128, 128, 255))
 
-        face_list = []
-        face_color = []
+        face_list = [];
+        face_color = [];
         depth = []  # store faces (polygons / colors / depth for sorting)
 
         for obj in cubes:  # go through all models
@@ -154,7 +139,7 @@ def main():
                         if l[2] >= minZ: sides += [getZ(verts[i], l, minZ)]
                         if r[2] >= minZ: sides += [getZ(verts[i], r, minZ)]
                         verts = verts[:i] + sides + verts[i + 1:]
-                        i += len(sides) - 1
+                        i += len(sides) - 1;
                     i += 1
 
                 if len(verts) > 2:
@@ -164,7 +149,7 @@ def main():
                     depth += [sum(sum(v[i] / len(verts) for v in verts) ** 2 for i in range(3))]
 
         # sort and render all polygons
-        order = sorted(range(len(face_list)), key=lambda i: depth[i], reverse=True)
+        order = sorted(range(len(face_list)), key=lambda i: depth[i], reverse=1)
         for i in order:
             try:
                 pygame.draw.polygon(screen, face_color[i], face_list[i])

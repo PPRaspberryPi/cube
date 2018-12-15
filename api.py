@@ -6,6 +6,7 @@ from multiprocessing.dummy import Pool
 # Dummy-library, welche (nicht implementierte) Funktionen der RPi.GPIO-library
 # bereitstellt, damit das Programm ordentlich kompiliert wird
 import RPi.GPIO as IO
+
 IO.VERBOSE = False
 
 # numpy import für die arrays
@@ -145,7 +146,6 @@ for x in range(kathodePins.size):
     # get_set liefert das 16 stellige array als input für die schieberegister
     # get_pins liefert die für das jeweilie Set zuständigen IO Pins
     # das tupel wird in der print_registers methode wieder aufgelöst
-
 
     with Pool(4) as pool:
         pool.map(print_registers, [(get_set(x, y), get_pins(y)) for y in [0, 1, 2, 3]])

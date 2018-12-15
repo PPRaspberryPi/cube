@@ -8,7 +8,7 @@ def led_on(*target_leds):
     :return: none
     """
     for x in target_leds:
-        cube.main().cubes[(x[0] + 1) * (x[1] + 1) * (x[2] + 1)].setOn()
+        cube.cubes[(x[0] + 1) * (x[1] + 1) * (x[2] + 1)].setOn()
 
 
 def led_off(*target_leds):
@@ -18,7 +18,7 @@ def led_off(*target_leds):
     :return: none
     """
     for x in target_leds:
-        cube.main().cubes[(x[0] + 1) * (x[1] + 1) * (x[2] + 1)].setOff()
+        cube.cubes[(x[0] + 1) * (x[1] + 1) * (x[2] + 1)].setOff()
 
 
 def start():
