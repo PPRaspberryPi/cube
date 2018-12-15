@@ -59,6 +59,9 @@ def getZ(A, B, newZ):
 
 minZ = 1
 
+pacman_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
+cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in pacman_points]
+
 
 def main():
     global projX, projY, cx, cy, cam, minZ
@@ -80,9 +83,6 @@ def main():
     lock_mouse()
     cam = Cam((0, 0, -5))
 
-    pacman_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
-    cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in pacman_points]
-
     cubes[0].setOn()
     cubes[8].setOn()
 
@@ -97,9 +97,11 @@ def main():
             if event.type == pygame.QUIT: pygame.quit(); sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F4 and key[pygame.K_LALT]:
-                    pygame.quit(); sys.exit()
+                    pygame.quit();
+                    sys.exit()
                 elif event.key == pygame.K_ESCAPE:
-                    pygame.quit(); sys.exit()
+                    pygame.quit();
+                    sys.exit()
                 elif event.key == pygame.K_0:
                     minZ = 0.4
                 elif event.key == pygame.K_1:
