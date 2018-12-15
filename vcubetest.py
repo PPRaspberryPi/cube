@@ -1,24 +1,22 @@
-#!/usr/bin/python
-
 import threading
 import vCubeAPI as api
 import time
 
 
-class myThread(threading.Thread):
+class MyThread(threading.Thread):
     def __init__(self):
         super().__init__()
 
     def run(self):
-        i = 1
+        i = 0
         while True:
-            time.sleep(5)
-            api.led_on([i, i, i])
+            time.sleep(2)
+            api.led_on([i % 7, i % 7, i % 7])
             i += 1
 
 
 # Create new threads
-thread1 = myThread()
+thread1 = MyThread()
 
 # Start new Threads
 thread1.start()
