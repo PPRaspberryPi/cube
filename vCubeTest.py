@@ -8,11 +8,21 @@ class MyThread(threading.Thread):
         super().__init__()
 
     def run(self):
-        i = 0
-        while True:
-            time.sleep(0.5)
-            api.led_on([i, i, i])
-            i += 1
+        z = 0
+        while z < 8:
+            y = 0
+            while y < 8:
+                x = 0
+                while x < 8:
+                    time.sleep(0.014)
+                    api.led_on([z, y, x])
+                    x += 1
+                time.sleep(0.014)
+                api.led_on([z, y, x])
+                y += 1
+            time.sleep(0.014)
+            api.led_on([z, y, x])
+            z += 1
 
 
 # Create new threads
