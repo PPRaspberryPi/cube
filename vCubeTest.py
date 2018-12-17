@@ -10,11 +10,9 @@ class MyThread(threading.Thread):
     def run(self):
         i = 0
         while True:
-            time.sleep(2)
-            api.led_on([i % 7, i % 7, i % 7])
+            time.sleep(0.5)
+            api.led_on([i, i, i])
             i += 1
-            eingabe = input("Nummer[x,y,z]: ")
-            api.led_on(eingabe)
 
 
 # Create new threads
