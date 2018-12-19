@@ -8,7 +8,7 @@ class MyThread(threading.Thread):
         super().__init__()
 
     def run(self):
-        z = 0
+        z = x = 0
         while z < 8:
             y = 0
             while y < 8:

@@ -1,11 +1,22 @@
 import pygame, sys, os, math, vCube
 
 
-def lock_mouse():
-    pygame.event.get()
-    pygame.mouse.get_rel()
-    pygame.mouse.set_visible(0)
-    pygame.event.set_grab(1)
+def un_lock_mouse(was_locked):
+    global locked
+    if was_locked:
+        print("isUnlocked")
+        pygame.event.get()
+        pygame.mouse.get_rel()
+        pygame.mouse.set_visible(1)
+        pygame.event.set_grab(0)
+        locked = False
+    else:
+        print("isLocked")
+        pygame.event.get()
+        pygame.mouse.get_rel()
+        pygame.mouse.set_visible(0)
+        pygame.event.set_grab(1)
+        locked = True
 
 
 def rotate2d(pos, rot):
@@ -71,6 +82,7 @@ minZ = 1
 cube_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
 cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in cube_points]
 
+
 def main():
     global projX, projY, cx, cy, cam, minZ
     pygame.init()
@@ -88,9 +100,7 @@ def main():
     screen = pygame.display.set_mode((w, h))
     fpsclock = pygame.time.Clock()
 
-    lock_mouse()
     cam = Cam((0, 0, -5))
-
 
     while True:
         dt = fpsclock.tick() / 1000
@@ -122,6 +132,8 @@ def main():
                     minZ = max(0.4, minZ - 1)
                 elif event.key == pygame.K_EQUALS:
                     minZ += 1
+                elif event.key == pygame.K_LCTRL:
+                    un_lock_mouse(locked)
             cam.events(event)
 
         screen.fill((128, 128, 255))
