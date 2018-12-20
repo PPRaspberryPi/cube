@@ -18,7 +18,7 @@ def led_off(*target_leds):
     :return: none
     """
     for x in target_leds:
-        cube.buffer_cubes[(x[0] + 1) * ((x[1] + 1) * 8) * (x[2] + 1) - 1].setOff()
+        cube.buffer_cubes[(x[0] % 8) + ((x[1] % 8) * 8) + ((x[2] % 8) * 64)].setOff()
 
 
 def start():

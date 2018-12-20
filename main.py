@@ -1,4 +1,4 @@
-import pygame, sys, os, math, vCube
+import pygame, sys, os, math, vCube, Direction
 
 
 def un_lock_mouse(was_locked):
@@ -137,6 +137,19 @@ def main():
                     minZ += 1
                 elif event.key == pygame.K_LCTRL:
                     un_lock_mouse(locked)
+                elif event.key == pygame.K_UP:
+                    Direction.direction = Direction.Direction.UP
+                elif event.key == pygame.K_DOWN:
+                    Direction.direction = Direction.Direction.DOWN
+                elif event.key == pygame.K_RIGHT:
+                    Direction.direction = Direction.Direction.RIGHT
+                elif event.key == pygame.K_LEFT:
+                    Direction.direction = Direction.Direction.LEFT
+                elif event.key == pygame.K_PAGEUP:
+                    Direction.direction = Direction.Direction.BACK
+                elif event.key == pygame.K_PAGEDOWN:
+                    Direction.direction = Direction.Direction.FORTH
+
             cam.events(event)
 
         screen.fill((128, 128, 255))
