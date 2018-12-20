@@ -4,14 +4,12 @@ import pygame, sys, os, math, vCube
 def un_lock_mouse(was_locked):
     global locked
     if was_locked:
-        print("isUnlocked")
         pygame.event.get()
         pygame.mouse.get_rel()
         pygame.mouse.set_visible(1)
         pygame.event.set_grab(0)
         locked = False
     else:
-        print("isLocked")
         pygame.event.get()
         pygame.mouse.get_rel()
         pygame.mouse.set_visible(0)
@@ -81,11 +79,13 @@ minZ = 1
 locked = False
 
 cube_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
-cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in cube_points]
+buffer_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
 
+cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in cube_points]
+buffer_cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in buffer_points]
 
 def main():
-    global projX, projY, cx, cy, cam, minZ
+    global projX, projY, cx, cy, cam, minZ, cubes, buffer_cubes
     pygame.init()
     w, h = 800, 600
     cx, cy = w // 2, h // 2
@@ -104,6 +104,8 @@ def main():
     cam = Cam((0, 0, -5))
 
     while True:
+        cubes = buffer_cubes
+
         dt = fpsclock.tick() / 1000
         pygame.display.set_caption('3D Graphics - FPS: %.2f' % fpsclock.get_fps())
 
@@ -172,7 +174,7 @@ def main():
                     depth += [sum(sum(v[i] / len(verts) for v in verts) ** 2 for i in range(3))]
 
         # sort and render all polygons
-        order = sorted(range(len(face_list)), key=lambda i: depth[i], reverse=1)
+        order = sorted(range(len(face_list)), key=lambda i: depth[i], reverse=True)
         for i in order:
             try:
                 pygame.draw.polygon(screen, face_color[i], face_list[i])
