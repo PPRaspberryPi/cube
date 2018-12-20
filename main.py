@@ -78,6 +78,7 @@ def getZ(A, B, newZ):
 
 
 minZ = 1
+locked = False
 
 cube_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
 cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in cube_points]
