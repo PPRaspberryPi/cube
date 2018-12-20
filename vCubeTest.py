@@ -50,7 +50,7 @@ class MyThread(threading.Thread):
 
             api.led_on(self.pickup_loc)
 
-            if self.snake_loc[0] == self.snake_loc[1:]:
+            if self.snake_loc[0] in self.snake_loc[1:]:
                 self.failed = True
 
             if self.snake_loc[0][0] % 8 == self.pickup_loc[0] and self.snake_loc[0][1] % 8 == self.pickup_loc[1] and \
