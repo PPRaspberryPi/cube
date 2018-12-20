@@ -11,7 +11,7 @@ class MyThread(threading.Thread):
     snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
     direction = Direction.Direction.UP
     snake_length = 3
-    pickup_loc = [0, 7, 0]
+    pickup_loc = [0, 7, 1]
     failed = False
 
     def __init__(self):
@@ -56,8 +56,11 @@ class MyThread(threading.Thread):
             if self.snake_loc[0][0] % 8 == self.pickup_loc[0] and self.snake_loc[0][1] % 8 == self.pickup_loc[1] and \
                     self.snake_loc[0][2] % 8 == self.pickup_loc[2]:
                 self.snake_length += 1
-                self.pickup_loc = [random.randint(0, 8), random.randint(0, 8), random.randint(0, 8)]
-
+                found_spawn = False
+                while not found_spawn:
+                    self.pickup_loc = [random.randint(0, 7), random.randint(0, 7), random.randint(0, 7)]
+                    if self.pickup_loc not in self.snake_loc:
+                        found_spawn = True
             time.sleep(0.2)
 
 
