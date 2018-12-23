@@ -20,18 +20,21 @@ Also sollten wir uns am besten keinen Controller mit Sensor holen.
 """
 
 # event codes der Tastendrücke. Müssen bei neuen Gamepads erst noch abgefragt werden.
-xBtn = 304
-oBtn = 305
-viereckBtn = 308
-dreieckBtn = 307
+aBtn = 289
+bBtn = 290
+xBtn = 288
+yBtn = 291
 
-start = 315
-select = 314
+start = 297
+select = 296
 
-lTrig_1 = 310
-lTrig_2 = 312
-rTrig_1 = 311
-rTrig_2 = 313
+lTrig = 292
+rTrig = 293
+
+up = 1
+left = 2
+right = 3
+down = 4
 
 
 class controller():
@@ -43,18 +46,14 @@ class controller():
         """
 
         self.gamepad = InputDevice('/dev/input/event' + str(eventnum))
+        self.aBtn = aBtn
+        self.bBtn = bBtn
         self.xBtn = xBtn
-        self.oBtn = oBtn
-        self.viereckBtn = viereckBtn
-        self.dreieckBtn = dreieckBtn
-        self.xBtn = xBtn
-        self.xBtn = xBtn
+        self.yBtn = yBtn
         self.start = start
         self.select = select
-        self.lTrig_1 = lTrig_1
-        self.lTrig_2 = lTrig_2
-        self.rTrig_1 = rTrig_1
-        self.rTrig_2 = rTrig_2
+        self.lTrig = lTrig
+        self.rTrig = rTrig
 
     def getInput(self):
         """
@@ -62,6 +61,17 @@ class controller():
         :return: event code des Tastendrucks
         """
         for event in self.gamepad.read_loop():
+            if event.type == ecodes.EV_ABS:
+                if event.value == 0:
+                    if event.code == 1:
+                        return up
+                    if event.code == 0:
+                        return left
+                if event.value == 255:
+                    if event.code == 0:
+                        return right
+                    if event.code == 1:
+                        return down
             if event.type == ecodes.EV_KEY:
                 if event.value == 1:
                     if event.code == self.xBtn:
