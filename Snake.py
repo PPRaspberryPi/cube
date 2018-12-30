@@ -1,11 +1,8 @@
 import threading
-from enum import Enum
-
 import Direction
 import vCubeAPI as api
 import time
 import random
-import msvcrt
 
 
 class MyThread(threading.Thread):
@@ -63,11 +60,6 @@ class MyThread(threading.Thread):
                     if self.pickup_loc not in self.snake_loc:
                         found_spawn = True
             time.sleep(0.2)
-
-            # Dazu da um Snake.py zu beenden, sonst endlos loop, weil das nicht durch sys.exit oder pygame.quit
-            # berücksichtigt wird
-            if msvcrt.getch() == chr(27).encode():
-                break
 
 
 if __name__ == "__main__":

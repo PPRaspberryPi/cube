@@ -84,6 +84,7 @@ buffer_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8
 cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in cube_points]
 buffer_cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in buffer_points]
 
+
 def main():
     global projX, projY, cx, cy, cam, minZ, cubes, buffer_cubes
     pygame.init()
