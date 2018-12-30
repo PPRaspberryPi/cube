@@ -1,6 +1,6 @@
 from enum import Enum
 
-import main as cube
+import vCubeTestFolder.main as cube
 
 
 class Face(Enum):
@@ -32,28 +32,42 @@ def change_face(face: Face, frame):
     elif face is Face.BACK:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
-                pass
-                # leds[x][7][y] = frame[(x + 1) * (y + 1)]
+                if frame[x + (y * 8)] == 1:
+                    cube.buffer_cubes[(7 % 8) + ((x % 8) * 8) + ((y % 8) * 64)].setOn()
+                else:
+                    cube.buffer_cubes[(7 % 8) + ((x % 8) * 8) + ((y % 8) * 64)].setOff()
+
     elif face is Face.LEFT:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
-                pass
-                # leds[x][y][0] = frame[(x + 1) * (y + 1)]
+                if frame[x + (y * 8)] == 1:
+                    cube.buffer_cubes[(x % 8) + ((y % 8) * 8) + ((0 % 8) * 64)].setOn()
+                else:
+                    cube.buffer_cubes[(x % 8) + ((y % 8) * 8) + ((0 % 8) * 64)].setOff()
+
     elif face is Face.RIGHT:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
-                pass
-                # leds[x][y][7] = frame[(x + 1) * (y + 1)]
+                if frame[x + (y * 8)] == 1:
+                    cube.buffer_cubes[(x % 8) + ((y % 8) * 8) + ((7 % 8) * 64)].setOn()
+                else:
+                    cube.buffer_cubes[(x % 8) + ((y % 8) * 8) + ((7 % 8) * 64)].setOff()
+
     elif face is Face.UP:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
-                pass
-                # leds[0][x][y] = frame[(x + 1) * (y + 1)]
+                if frame[x + (y * 8)] == 1:
+                    cube.buffer_cubes[(x % 8) + ((0 % 8) * 8) + ((y % 8) * 64)].setOn()
+                else:
+                    cube.buffer_cubes[(x % 8) + ((0 % 8) * 8) + ((y % 8) * 64)].setOff()
+
     elif face is Face.DOWN:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
-                pass
-                # leds[7][x][y] = frame[(x + 1) * (y + 1)]
+                if frame[x + (y * 8)] == 1:
+                    cube.buffer_cubes[(x % 8) + ((0 % 8) * 8) + ((y % 8) * 64)].setOn()
+                else:
+                    cube.buffer_cubes[(x % 8) + ((0 % 8) * 8) + ((y % 8) * 64)].setOff()
 
 
 def led_on(*target_leds):

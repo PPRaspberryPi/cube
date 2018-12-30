@@ -78,6 +78,8 @@ def getZ(A, B, newZ):
 minZ = 1
 locked = False
 
+pressed_enter = False
+
 cube_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
 buffer_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
 
@@ -85,7 +87,7 @@ cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in cube_points]
 buffer_cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in buffer_points]
 
 def main():
-    global projX, projY, cx, cy, cam, minZ, cubes, buffer_cubes
+    global projX, projY, cx, cy, cam, minZ, cubes, buffer_cubes, pressed_enter
     pygame.init()
     w, h = 800, 600
     cx, cy = w // 2, h // 2
@@ -149,6 +151,9 @@ def main():
                     Direction.direction = Direction.Direction.BACK
                 elif event.key == pygame.K_PAGEDOWN:
                     Direction.direction = Direction.Direction.FORTH
+                elif event.key == pygame.K_INSERT:
+                    pressed_enter = True
+
 
             cam.events(event)
 

@@ -32,8 +32,12 @@ class LEDCube(threading.Thread):
         else:
             while self.current_game is None:
                 self.show_2d_frame(self.cube_games[self.current_item].get_menu_frame())
-                # Warten auf Input
-                time.sleep(10)
+                api.change_face(api.Face.LEFT, Frames.arrow_right)
+                api.change_face(api.Face.RIGHT, Frames.arrow_right)
+                api.cube.pressed_enter = False
+                while not api.cube.pressed_enter:
+                    time.sleep(0.5)
+
                 api.clear_all()
                 self.start_game(self.current_item)
 

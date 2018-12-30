@@ -4,7 +4,8 @@ from abc import ABC, abstractmethod
 import time
 
 import Direction
-import vCubeAPI as api
+import vCubeTestFolder.vCubeAPI as api
+import FrameCollection2D as Frames
 
 
 class CubeGame(ABC):
@@ -52,7 +53,6 @@ class CubeGame(ABC):
 
 
 class Snake(CubeGame, threading.Thread):
-
     _name = 'Snake'
     _version = 'v0.1'
 
@@ -89,6 +89,7 @@ class Snake(CubeGame, threading.Thread):
     snake_length = 3
     pickup_loc = [0, 7, 1]
     failed = False
+    score = 0
 
     def run(self):
         while not self.failed:
@@ -125,15 +126,18 @@ class Snake(CubeGame, threading.Thread):
 
             if self.snake_loc[0] in self.snake_loc[1:]:
                 self.failed = True
+                api.change_face(api.Face.LEFT, Frames.get_score_frame(int(self.score / 100)))
+                api.change_face(api.Face.FRONT, Frames.get_score_frame(int((self.score % 100) / 10)))
+                api.change_face(api.Face.RIGHT, Frames.get_score_frame(int(self.score % 10)))
+                time.sleep(7)
 
             if self.snake_loc[0][0] % 8 == self.pickup_loc[0] and self.snake_loc[0][1] % 8 == self.pickup_loc[1] and \
                     self.snake_loc[0][2] % 8 == self.pickup_loc[2]:
                 self.snake_length += 1
+                self.score += 1
                 found_spawn = False
                 while not found_spawn:
                     self.pickup_loc = [random.randint(0, 7), random.randint(0, 7), random.randint(0, 7)]
                     if self.pickup_loc not in self.snake_loc:
                         found_spawn = True
             time.sleep(0.2)
-
-
