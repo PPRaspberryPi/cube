@@ -114,10 +114,12 @@ def main():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.display.quit()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F4 and key[pygame.K_LALT]:
+                    pygame.display.quit()
                     pygame.quit()
                     sys.exit()
                 elif event.key == pygame.K_ESCAPE:
@@ -193,7 +195,6 @@ def main():
                 pygame.draw.polygon(screen, face_color[i], face_list[i])
             except:
                 pass
-
         pygame.display.flip()
 
 
