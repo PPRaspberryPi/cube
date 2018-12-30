@@ -24,7 +24,7 @@ def change_face(face: Face, frame):
     if face is Face.FRONT:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
-                if frame[x + (y * 8)] == 1:
+                if frame[y + ((7 - x) * 8)] == 1:
                     cube.buffer_cubes[(0 % 8) + ((x % 8) * 8) + ((y % 8) * 64)].setOn()
                 else:
                     cube.buffer_cubes[(0 % 8) + ((x % 8) * 8) + ((y % 8) * 64)].setOff()
@@ -32,12 +32,13 @@ def change_face(face: Face, frame):
     elif face is Face.BACK:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
-                if frame[x + (y * 8)] == 1:
+                if frame[y + (x * 8)] == 1:
                     cube.buffer_cubes[(7 % 8) + ((x % 8) * 8) + ((y % 8) * 64)].setOn()
                 else:
                     cube.buffer_cubes[(7 % 8) + ((x % 8) * 8) + ((y % 8) * 64)].setOff()
 
     elif face is Face.LEFT:
+        frame = list(reversed(frame))
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
                 if frame[x + (y * 8)] == 1:
@@ -46,9 +47,10 @@ def change_face(face: Face, frame):
                     cube.buffer_cubes[(x % 8) + ((y % 8) * 8) + ((0 % 8) * 64)].setOff()
 
     elif face is Face.RIGHT:
+        #frame = list(reversed(frame))
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
-                if frame[x + (y * 8)] == 1:
+                if frame[x + ((7 - y) * 8)] == 1:
                     cube.buffer_cubes[(x % 8) + ((y % 8) * 8) + ((7 % 8) * 64)].setOn()
                 else:
                     cube.buffer_cubes[(x % 8) + ((y % 8) * 8) + ((7 % 8) * 64)].setOff()
