@@ -40,12 +40,16 @@ class MyThread(threading.Thread):
             if self.ball_loc[1] == 0 and not any(loc in [self.ball_loc] for loc in self.player_loc):
                 self.failed = True
 
+            # If Ball hits the paddle bounce off of it and do not go into the paddle
+            if self.ball_loc[1] == 0 and any(loc in [self.ball_loc] for loc in self.player_loc):
+                self.ball_loc[1] = 1
+
             # Turn on new position
             api.led_on(self.ball_loc)
             for s in self.player_loc:
                 api.led_on(s)
 
-            time.sleep(.2)
+            time.sleep(1)
 
 
 if __name__ == "__main__":
