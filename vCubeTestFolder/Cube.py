@@ -26,6 +26,7 @@ class LEDCube(threading.Thread):
     def run(self):
         self.open_menu()
 
+    # TODO: SELECT GAMES WITH ARROW KEYS
     def open_menu(self):
         if not self.cube_games:
             self.show_2d_frame(Frames.question_mark)
@@ -56,7 +57,7 @@ frame_size = (8, 8)
 
 led_cube = LEDCube(8, 0.001)
 
-led_cube.register(Game.Snake(api.cubeSize, frame_size))
+led_cube.register(Game.Snake(api.cubeSize, frame_size), Game.Pong(api.cubeSize, frame_size))
 
 led_cube.start()
 api.start()

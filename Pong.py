@@ -1,11 +1,10 @@
 import threading
 import vCubeAPI as api
 import time
-import random
 
 
 class MyThread(threading.Thread):
-    player_loc = [[2, 0, 2], [3, 0, 2], [2, 0, 3], [3, 0, 3]]
+    player_loc = [[2, 0, 1], [3, 0, 1], [2, 0, 2], [3, 0, 2]]
     ball_loc = [3, 1, 2]
     ball_vel_x = 1
     ball_vel_y = 1
@@ -38,22 +37,15 @@ class MyThread(threading.Thread):
                 self.ball_vel_z *= -1
 
             # If Ball hits the ground
-            # TODO: NOT WORKING AS INTENDED
-            if self.ball_loc[1] == 0 and \
-                    (self.player_loc[0][0] != self.ball_loc[1] or self.player_loc[0][2] != self.ball_loc[1] or
-                     self.player_loc[1][0] != self.ball_loc[1] or self.player_loc[1][2] != self.ball_loc[1] or
-                     self.player_loc[2][0] != self.ball_loc[1] or self.player_loc[2][2] != self.ball_loc[1] or
-                     self.player_loc[3][0] != self.ball_loc[1] or self.player_loc[3][2] != self.ball_loc[1]):
+            if self.ball_loc[1] == 0 and not any(loc in [self.ball_loc] for loc in self.player_loc):
                 self.failed = True
-
-            print(self.ball_loc[1])
 
             # Turn on new position
             api.led_on(self.ball_loc)
             for s in self.player_loc:
                 api.led_on(s)
 
-            time.sleep(1)
+            time.sleep(.2)
 
 
 if __name__ == "__main__":

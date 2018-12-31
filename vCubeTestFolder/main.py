@@ -154,7 +154,6 @@ def main():
                 elif event.key == pygame.K_INSERT:
                     pressed_enter = True
 
-
             cam.events(event)
 
         screen.fill((128, 128, 255))
