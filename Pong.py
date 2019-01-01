@@ -1,5 +1,6 @@
 import threading
 import vCubeAPI as api
+import Direction
 import time
 
 
@@ -9,8 +10,8 @@ class MyThread(threading.Thread):
     ball_vel_x = 1
     ball_vel_y = 1
     ball_vel_z = 1
-
     failed = False
+    player_action = None
 
     def __init__(self):
         super().__init__()
@@ -27,6 +28,48 @@ class MyThread(threading.Thread):
             self.ball_loc[0] += self.ball_vel_x
             self.ball_loc[1] += self.ball_vel_y
             self.ball_loc[2] += self.ball_vel_z
+
+            # TODO: UGLY AF. WE SHOULD FIX THAT. IT ONLY UPDATES PLAYER EACH INTERVAL
+            # Player moving
+            self.player_action = Direction.direction
+            if self.player_action is not None:
+                if self.player_action == Direction.Direction.UP:
+                    for s in self.player_loc:
+                        api.led_off(s)
+                    self.player_loc[0][0] += 1
+                    self.player_loc[1][0] += 1
+                    self.player_loc[2][0] += 1
+                    self.player_loc[3][0] += 1
+                    for s in self.player_loc:
+                        api.led_on(s)
+                if self.player_action == Direction.Direction.DOWN:
+                    for s in self.player_loc:
+                        api.led_off(s)
+                    self.player_loc[0][0] -= 1
+                    self.player_loc[1][0] -= 1
+                    self.player_loc[2][0] -= 1
+                    self.player_loc[3][0] -= 1
+                    for s in self.player_loc:
+                        api.led_on(s)
+                if self.player_action == Direction.Direction.RIGHT:
+                    for s in self.player_loc:
+                        api.led_off(s)
+                    self.player_loc[0][2] += 1
+                    self.player_loc[1][2] += 1
+                    self.player_loc[2][2] += 1
+                    self.player_loc[3][2] += 1
+                    for s in self.player_loc:
+                        api.led_on(s)
+                if self.player_action == Direction.Direction.LEFT:
+                    for s in self.player_loc:
+                        api.led_off(s)
+                    self.player_loc[0][2] -= 1
+                    self.player_loc[1][2] -= 1
+                    self.player_loc[2][2] -= 1
+                    self.player_loc[3][2] -= 1
+                    for s in self.player_loc:
+                        api.led_on(s)
+                Direction.direction = None
 
             # Ball bouncing on walls
             if self.ball_loc[0] > 6 or self.ball_loc[0] < 1:
@@ -49,7 +92,7 @@ class MyThread(threading.Thread):
             for s in self.player_loc:
                 api.led_on(s)
 
-            time.sleep(1)
+            time.sleep(0.22)
 
 
 if __name__ == "__main__":
