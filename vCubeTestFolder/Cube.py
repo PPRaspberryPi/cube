@@ -26,7 +26,6 @@ class LEDCube(threading.Thread):
     def run(self):
         self.open_menu()
 
-    # TODO: SELECT GAMES WITH ARROW KEYS
     def open_menu(self):
         if not self.cube_games:
             self.show_2d_frame(Frames.question_mark)
