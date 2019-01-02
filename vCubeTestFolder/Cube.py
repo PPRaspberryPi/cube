@@ -31,32 +31,33 @@ class LEDCube(threading.Thread):
         if not self.cube_games:
             self.show_2d_frame(Frames.question_mark)
         else:
-            while self.current_game is None:
-                self.show_2d_frame(self.cube_games[self.current_item].get_menu_frame())
-                api.change_face(api.Face.LEFT, Frames.arrow_right)
-                api.change_face(api.Face.RIGHT, Frames.arrow_right)
+            while True:
+                while self.current_game is None:
+                    self.show_2d_frame(self.cube_games[self.current_item].get_menu_frame())
+                    api.change_face(api.Face.LEFT, Frames.arrow_right)
+                    api.change_face(api.Face.RIGHT, Frames.arrow_right)
+
+                    if api.cube.pressed_enter:
+                        self.current_game = self.cube_games[self.current_item]
+                        api.cube.pressed_enter = True
+
+                    if Direction.direction == Direction.Direction.RIGHT:
+                        self.current_item += 1
+                        Direction.direction = None
+
+                    if Direction.direction == Direction.Direction.LEFT:
+                        self.current_item -= 1
+                        Direction.direction = None
+
+                    # Otherwise we will get array out of bounds exception (similar to mathf.clamp)
+                    self.current_item = max(0, min(self.current_item, len(self.cube_games)-1))
+                    time.sleep(0.2)
+
+                api.clear_all()
+                self.start_game(self.current_item)
+                # Reset everything for next menu launch
                 api.cube.pressed_enter = False
-
-                if api.cube.pressed_enter:
-                    self.cube_games = self.cube_games[self.current_item]
-                    api.cube.pressed_enter = True
-
-                if Direction.direction == Direction.Direction.RIGHT:
-                    self.current_item += 1
-                    Direction.direction = None
-                    print(self.current_item)
-
-                if Direction.direction == Direction.Direction.LEFT:
-                    self.current_item -= 1
-                    Direction.direction = None
-                    print(self.current_item)
-
-                # Otherwise we will get array out of bounds exception (similar to mathf.clamp)
-                self.current_item = max(0, min(self.current_item, len(self.cube_games)-1))
-                time.sleep(0.5)
-
-            api.clear_all()
-            self.start_game(self.current_item)
+                self.current_game = None
 
     def show_2d_frame(self, frame):
         api.change_face(self.current_face, frame)

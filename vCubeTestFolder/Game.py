@@ -94,6 +94,8 @@ class Snake(CubeGame, threading.Thread):
     def run(self):
         while not self.failed:
             self.direction = Direction.direction
+            if self.direction is None:
+                self.direction = Direction.Direction.UP
             if self.snake_length > len(self.snake_loc):
                 self.snake_loc.append(self.snake_loc[len(self.snake_loc) - 1])
                 self.snake_length = len(self.snake_loc)
@@ -129,7 +131,11 @@ class Snake(CubeGame, threading.Thread):
                 api.change_face(api.Face.LEFT, Frames.get_score_frame(int(self.score / 100)))
                 api.change_face(api.Face.FRONT, Frames.get_score_frame(int((self.score % 100) / 10)))
                 api.change_face(api.Face.RIGHT, Frames.get_score_frame(int(self.score % 10)))
-                time.sleep(10)
+
+                # Timer for cooldown
+                for x in range(0, 8):
+                    api.led_on([0, x, 0], [7, x, 0], [0, x, 7], [7, x, 7])
+                    time.sleep(1)
 
             if self.snake_loc[0][0] % 8 == self.pickup_loc[0] and self.snake_loc[0][1] % 8 == self.pickup_loc[1] and \
                     self.snake_loc[0][2] % 8 == self.pickup_loc[2]:
@@ -180,11 +186,8 @@ class Pong(CubeGame, threading.Thread):
     ball_vel_x = 1
     ball_vel_y = 1
     ball_vel_z = 1
-
     failed = False
-
-    def move_player(self):
-        pass
+    player_action = None
 
     def run(self):
         while not self.failed:
@@ -195,6 +198,48 @@ class Pong(CubeGame, threading.Thread):
             self.ball_loc[0] += self.ball_vel_x
             self.ball_loc[1] += self.ball_vel_y
             self.ball_loc[2] += self.ball_vel_z
+
+            # TODO: UGLY AF. WE SHOULD FIX THAT. IT ONLY UPDATES PLAYER EACH INTERVAL
+            # Player moving
+            self.player_action = Direction.direction
+            if self.player_action is not None:
+                if self.player_action == Direction.Direction.UP:
+                    for s in self.player_loc:
+                        api.led_off(s)
+                    self.player_loc[0][0] += 1
+                    self.player_loc[1][0] += 1
+                    self.player_loc[2][0] += 1
+                    self.player_loc[3][0] += 1
+                    for s in self.player_loc:
+                        api.led_on(s)
+                if self.player_action == Direction.Direction.DOWN:
+                    for s in self.player_loc:
+                        api.led_off(s)
+                    self.player_loc[0][0] -= 1
+                    self.player_loc[1][0] -= 1
+                    self.player_loc[2][0] -= 1
+                    self.player_loc[3][0] -= 1
+                    for s in self.player_loc:
+                        api.led_on(s)
+                if self.player_action == Direction.Direction.RIGHT:
+                    for s in self.player_loc:
+                        api.led_off(s)
+                    self.player_loc[0][2] += 1
+                    self.player_loc[1][2] += 1
+                    self.player_loc[2][2] += 1
+                    self.player_loc[3][2] += 1
+                    for s in self.player_loc:
+                        api.led_on(s)
+                if self.player_action == Direction.Direction.LEFT:
+                    for s in self.player_loc:
+                        api.led_off(s)
+                    self.player_loc[0][2] -= 1
+                    self.player_loc[1][2] -= 1
+                    self.player_loc[2][2] -= 1
+                    self.player_loc[3][2] -= 1
+                    for s in self.player_loc:
+                        api.led_on(s)
+                Direction.direction = None
 
             # Ball bouncing on walls
             if self.ball_loc[0] > 6 or self.ball_loc[0] < 1:
@@ -208,9 +253,20 @@ class Pong(CubeGame, threading.Thread):
             if self.ball_loc[1] == 0 and not any(loc in [self.ball_loc] for loc in self.player_loc):
                 self.failed = True
 
+                # Timer for cooldown
+                for x in range(0, 8):
+                    api.led_on([0, x, 0], [7, x, 0], [0, x, 7], [7, x, 7])
+                    time.sleep(1)
+
+            # If Ball hits the paddle bounce off of it and do not go into the paddle
+            if self.ball_loc[1] == 0 and any(loc in [self.ball_loc] for loc in self.player_loc):
+                self.ball_loc[1] = 1
+
             # Turn on new position
             api.led_on(self.ball_loc)
             for s in self.player_loc:
                 api.led_on(s)
 
-            time.sleep(.2)
+            time.sleep(0.22)
+
+
