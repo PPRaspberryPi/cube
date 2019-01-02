@@ -1,6 +1,6 @@
 import threading
 import time
-
+import Direction
 import vCubeTestFolder.vCubeAPI as api
 import vCubeTestFolder.Game as Game
 import FrameCollection2D as Frames
@@ -36,11 +36,27 @@ class LEDCube(threading.Thread):
                 api.change_face(api.Face.LEFT, Frames.arrow_right)
                 api.change_face(api.Face.RIGHT, Frames.arrow_right)
                 api.cube.pressed_enter = False
-                while not api.cube.pressed_enter:
-                    time.sleep(0.5)
 
-                api.clear_all()
-                self.start_game(self.current_item)
+                if api.cube.pressed_enter:
+                    self.cube_games = self.cube_games[self.current_item]
+                    api.cube.pressed_enter = True
+
+                if Direction.direction == Direction.Direction.RIGHT:
+                    self.current_item += 1
+                    Direction.direction = None
+                    print(self.current_item)
+
+                if Direction.direction == Direction.Direction.LEFT:
+                    self.current_item -= 1
+                    Direction.direction = None
+                    print(self.current_item)
+
+                # Otherwise we will get array out of bounds exception (similar to mathf.clamp)
+                self.current_item = max(0, min(self.current_item, len(self.cube_games)-1))
+                time.sleep(0.5)
+
+            api.clear_all()
+            self.start_game(self.current_item)
 
     def show_2d_frame(self, frame):
         api.change_face(self.current_face, frame)
