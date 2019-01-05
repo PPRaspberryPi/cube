@@ -51,6 +51,7 @@ class CubeGame(ABC):
     def __str__(self):
         return self._name, ' ', self._version
 
+
 # TODO: DO NOT COPY GAME CODE -> USE EXTERNAL .PY FILES
 class Snake(CubeGame, threading.Thread):
     _name = 'Snake'
@@ -68,12 +69,19 @@ class Snake(CubeGame, threading.Thread):
     def __init__(self, cube_size, frame_size):
         CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
+        self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
+        self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
+        self.direction = Direction.Direction.UP
+        self.snake_length = 3
+        self.pickup_loc = [0, 7, 1]
+        self.failed = False
+        self.score = 0
 
     def get_menu_frame(self):
         return self._menu_frame
 
     def has_menu_animation(self):
-        return True
+        return False
 
     def start_game(self):
         pass
@@ -83,13 +91,6 @@ class Snake(CubeGame, threading.Thread):
 
     def done(self):
         pass
-
-    snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
-    direction = Direction.Direction.UP
-    snake_length = 3
-    pickup_loc = [0, 7, 1]
-    failed = False
-    score = 0
 
     def run(self):
         while not self.failed:
@@ -170,7 +171,7 @@ class Pong(CubeGame, threading.Thread):
         return self._menu_frame
 
     def has_menu_animation(self):
-        return True
+        return False
 
     def start_game(self):
         pass
@@ -268,5 +269,3 @@ class Pong(CubeGame, threading.Thread):
                 api.led_on(s)
 
             time.sleep(0.22)
-
-
