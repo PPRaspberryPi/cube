@@ -1,4 +1,5 @@
-import pygame, sys, os, math, vCube, Direction
+import pygame, sys, os, math, Direction
+from Ablage08012019 import vCube
 
 
 def un_lock_mouse(was_locked):
@@ -78,16 +79,15 @@ def getZ(A, B, newZ):
 minZ = 1
 locked = False
 
-pressed_enter = False
-
 cube_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
 buffer_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8) for z in range(0, 8)]
 
 cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in cube_points]
 buffer_cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in buffer_points]
 
+
 def main():
-    global projX, projY, cx, cy, cam, minZ, cubes, buffer_cubes, pressed_enter
+    global projX, projY, cx, cy, cam, minZ, cubes, buffer_cubes
     pygame.init()
     w, h = 800, 600
     cx, cy = w // 2, h // 2
@@ -116,10 +116,12 @@ def main():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                pygame.display.quit()
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F4 and key[pygame.K_LALT]:
+                    pygame.display.quit()
                     pygame.quit()
                     sys.exit()
                 elif event.key == pygame.K_ESCAPE:
@@ -151,8 +153,6 @@ def main():
                     Direction.direction = Direction.Direction.BACK
                 elif event.key == pygame.K_PAGEDOWN:
                     Direction.direction = Direction.Direction.FORTH
-                elif event.key == pygame.K_INSERT:
-                    pressed_enter = True
 
             cam.events(event)
 
@@ -197,7 +197,6 @@ def main():
                 pygame.draw.polygon(screen, face_color[i], face_list[i])
             except:
                 pass
-
         pygame.display.flip()
 
 
