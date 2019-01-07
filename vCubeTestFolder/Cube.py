@@ -39,33 +39,40 @@ class LEDCube(threading.Thread):
         else:
             while True:
                 while self.current_game is None:
+                    updated = False
+
                     if self.cube_games[self.current_item].has_menu_animation():
                         self.cube_games[self.current_item].play_animation()
-                    else:
-                        self.show_2d_frame(self.cube_games[self.current_item].get_menu_frame())
+
                     if self.current_item > 0:
-                        api.change_face(api.Face.LEFT, Frames.arrow_left)
+                        api.change_face(api.Face.LEFT, 0, Frames.arrow_left)
                     if self.current_item < len(self.cube_games) - 1:
-                        api.change_face(api.Face.RIGHT, Frames.arrow_right)
+                        api.change_face(api.Face.RIGHT, 0, Frames.arrow_right)
 
-                    if api.cube.pressed_enter:
-                        self.current_game = self.cube_games[self.current_item]
-                        api.cube.pressed_enter = True
+                    self.show_2d_frame(self.cube_games[self.current_item].get_menu_frame())
 
-                    if Direction.direction == Direction.Direction.RIGHT and self.current_item < len(
-                            self.cube_games) - 1:
-                        self.current_item += 1
-                        Direction.direction = None
-                        api.clear_all()
+                    while not updated:
+                        if api.cube.pressed_enter:
+                            self.current_game = self.cube_games[self.current_item]
+                            api.cube.pressed_enter = True
+                            updated = True
 
-                    if Direction.direction == Direction.Direction.LEFT and self.current_item > 0:
-                        self.current_item -= 1
-                        Direction.direction = None
-                        api.clear_all()
+                        if Direction.direction == Direction.Direction.RIGHT and self.current_item < len(
+                                self.cube_games) - 1:
+                            self.current_item += 1
+                            Direction.direction = None
+                            api.clear_all()
+                            updated = True
 
-                    # Otherwise we will get array out of bounds exception (similar to mathf.clamp)
-                    self.current_item = max(0, min(self.current_item, len(self.cube_games) - 1))
-                    time.sleep(0.2)
+                        if Direction.direction == Direction.Direction.LEFT and self.current_item > 0:
+                            self.current_item -= 1
+                            Direction.direction = None
+                            api.clear_all()
+                            updated = True
+
+                        # Otherwise we will get array out of bounds exception (similar to mathf.clamp)
+                        # self.current_item = max(0, min(self.current_item, len(self.cube_games) - 1))
+                        time.sleep(0.2)
 
                 api.clear_all()
                 self.start_game(self.current_item)
@@ -77,7 +84,7 @@ class LEDCube(threading.Thread):
                 self.current_game = None
 
     def show_2d_frame(self, frame):
-        api.change_face(self.current_face, frame)
+        api.change_face(self.current_face, 0, frame)
 
     def start_game(self, game_id):
         self.cube_games[game_id].start()

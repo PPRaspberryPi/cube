@@ -7,6 +7,8 @@ import Direction
 import vCubeTestFolder.vCubeAPI as api
 import FrameCollection2D as Frames
 
+import vCubeTestFolder.Animations as Animations
+
 
 class CubeGame(ABC):
     cube_size = None
@@ -81,13 +83,15 @@ class Snake(CubeGame, threading.Thread):
         return self._menu_frame
 
     def has_menu_animation(self):
-        return False
+        return True
 
     def start_game(self):
         pass
 
     def play_animation(self):
-        pass
+        an = Animations.TickerAnimation("snake")
+        an.start()
+        an.join()
 
     def done(self):
         pass
@@ -129,9 +133,9 @@ class Snake(CubeGame, threading.Thread):
 
             if self.snake_loc[0] in self.snake_loc[1:]:
                 self.failed = True
-                api.change_face(api.Face.LEFT, Frames.get_score_frame(int(self.score / 100)))
-                api.change_face(api.Face.FRONT, Frames.get_score_frame(int((self.score % 100) / 10)))
-                api.change_face(api.Face.RIGHT, Frames.get_score_frame(int(self.score % 10)))
+                api.change_face(api.Face.LEFT, 0, Frames.get_score_frame(int(self.score / 100)))
+                api.change_face(api.Face.FRONT, 0, Frames.get_score_frame(int((self.score % 100) / 10)))
+                api.change_face(api.Face.RIGHT, 0, Frames.get_score_frame(int(self.score % 10)))
 
                 # Timer for cooldown
                 for x in range(0, 8):
@@ -171,13 +175,15 @@ class Pong(CubeGame, threading.Thread):
         return self._menu_frame
 
     def has_menu_animation(self):
-        return False
+        return True
 
     def start_game(self):
         pass
 
     def play_animation(self):
-        pass
+        an = Animations.TickerAnimation("pong")
+        an.start()
+        an.join()
 
     def done(self):
         pass
