@@ -254,13 +254,31 @@ def get_letter_frame(letter):
 def letter_to_frame(letter):
     return {
         'a': letter_a,
+        'b': empty,
+        'c': empty,
+        'd': empty,
         'e': letter_e,
+        'f': empty,
         'g': letter_g,
+        'h': empty,
+        'i': empty,
+        'j': empty,
         'k': letter_k,
+        'l': empty,
+        'm': empty,
         'n': letter_n,
         'o': letter_o,
         'p': letter_p,
-        's': letter_s
+        'q': empty,
+        'r': empty,
+        's': letter_s,
+        't': empty,
+        'u': empty,
+        'v': empty,
+        'w': empty,
+        'x': empty,
+        'y': empty,
+        'z': empty
     }[letter]
 
 
@@ -277,4 +295,4 @@ def number_to_frame(number):
         8: eight,
         9: nine,
         0: zero
-    }[number]
+    }[number % 10]
