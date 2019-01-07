@@ -7,6 +7,8 @@ import Direction
 import vCubeAPI as api
 import FrameCollection2D as Frames
 
+import Animations
+
 
 class CubeGame(ABC):
     cube_size = None
@@ -51,6 +53,7 @@ class CubeGame(ABC):
     def __str__(self):
         return self._name, ' ', self._version
 
+
 # TODO: DO NOT COPY GAME CODE -> USE EXTERNAL .PY FILES
 class Snake(CubeGame, threading.Thread):
     _name = 'Snake'
@@ -68,6 +71,13 @@ class Snake(CubeGame, threading.Thread):
     def __init__(self, cube_size, frame_size):
         CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
+        self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
+        self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
+        self.direction = Direction.Direction.UP
+        self.snake_length = 3
+        self.pickup_loc = [0, 7, 1]
+        self.failed = False
+        self.score = 0
 
     def get_menu_frame(self):
         return self._menu_frame
@@ -79,17 +89,12 @@ class Snake(CubeGame, threading.Thread):
         pass
 
     def play_animation(self):
-        pass
+        an = Animations.TickerAnimation("snake")
+        an.start()
+        an.join()
 
     def done(self):
         pass
-
-    snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
-    direction = Direction.Direction.UP
-    snake_length = 3
-    pickup_loc = [0, 7, 1]
-    failed = False
-    score = 0
 
     def run(self):
         while not self.failed:
@@ -128,9 +133,9 @@ class Snake(CubeGame, threading.Thread):
 
             if self.snake_loc[0] in self.snake_loc[1:]:
                 self.failed = True
-                api.change_face(api.Face.LEFT, Frames.get_score_frame(int(self.score / 100)))
-                api.change_face(api.Face.FRONT, Frames.get_score_frame(int((self.score % 100) / 10)))
-                api.change_face(api.Face.RIGHT, Frames.get_score_frame(int(self.score % 10)))
+                api.change_face(api.Face.LEFT, 0, Frames.get_score_frame(int(self.score / 100)))
+                api.change_face(api.Face.FRONT, 0, Frames.get_score_frame(int((self.score % 100) / 10)))
+                api.change_face(api.Face.RIGHT, 0, Frames.get_score_frame(int(self.score % 10)))
 
                 # Timer for cooldown
                 for x in range(0, 8):
@@ -176,7 +181,9 @@ class Pong(CubeGame, threading.Thread):
         pass
 
     def play_animation(self):
-        pass
+        an = Animations.TickerAnimation("pong")
+        an.start()
+        an.join()
 
     def done(self):
         pass
@@ -268,5 +275,3 @@ class Pong(CubeGame, threading.Thread):
                 api.led_on(s)
 
             time.sleep(0.22)
-
-
