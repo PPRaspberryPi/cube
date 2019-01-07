@@ -248,3 +248,33 @@ def get_letter_frame(letter):
     elif letter == 's':
         return letter_s
     return empty
+
+
+# Alternative zu 'get_letter_frame'
+def letter_to_frame(letter):
+    return {
+        'a': letter_a,
+        'e': letter_e,
+        'g': letter_g,
+        'k': letter_k,
+        'n': letter_n,
+        'o': letter_o,
+        'p': letter_p,
+        's': letter_s
+    }[letter]
+
+
+# Alternative zu 'get_score_frame'
+def number_to_frame(number):
+    return {
+        1: one,
+        2: two,
+        3: three,
+        4: four,
+        5: five,
+        6: six,
+        7: seven,
+        8: eight,
+        9: nine,
+        0: zero
+    }[number]

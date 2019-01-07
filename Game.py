@@ -133,9 +133,9 @@ class Snake(CubeGame, threading.Thread):
 
             if self.snake_loc[0] in self.snake_loc[1:]:
                 self.failed = True
-                api.change_face(api.Face.LEFT, 0, Frames.get_score_frame(int(self.score / 100)))
-                api.change_face(api.Face.FRONT, 0, Frames.get_score_frame(int((self.score % 100) / 10)))
-                api.change_face(api.Face.RIGHT, 0, Frames.get_score_frame(int(self.score % 10)))
+                api.change_face(api.Face.LEFT, 0, Frames.number_to_frame(int(self.score / 100)))
+                api.change_face(api.Face.FRONT, 0, Frames.number_to_frame(int((self.score % 100) / 10)))
+                api.change_face(api.Face.RIGHT, 0, Frames.number_to_frame(int(self.score % 10)))
 
                 # Timer for cooldown
                 for x in range(0, 8):
