@@ -108,3 +108,4 @@ venv.bak/
 .idea/
 .floo
 .flooignore
+.vscode/
