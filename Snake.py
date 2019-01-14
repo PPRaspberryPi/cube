@@ -1,23 +1,61 @@
+import random
 import threading
+import time
+
 import Direction
 import vCubeAPI as api
-import time
-import random
+import FrameCollection2D as Frames
+
+import Animations
+import Game
 
 
-class MyThread(threading.Thread):
-    snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
-    direction = Direction.Direction.UP
-    snake_length = 3
-    pickup_loc = [0, 7, 1]
-    failed = False
+class Snake(Game.CubeGame, threading.Thread):
+    _name = 'Snake'
+    _version = 'v0.1'
 
-    def __init__(self):
-        super().__init__()
+    _menu_frame = [0, 0, 1, 0, 0, 0, 0, 0,
+                   0, 0, 1, 0, 0, 0, 0, 0,
+                   0, 0, 1, 1, 1, 0, 0, 0,
+                   0, 0, 0, 0, 1, 0, 0, 0,
+                   0, 0, 0, 0, 1, 0, 0, 0,
+                   0, 0, 0, 1, 1, 0, 0, 0,
+                   0, 0, 0, 1, 0, 0, 0, 0,
+                   0, 0, 0, 1, 1, 1, 0, 0]
+
+    def __init__(self, cube_size, frame_size):
+        Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
+        threading.Thread.__init__(self)
+        self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
+        self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
+        self.direction = Direction.Direction.UP
+        self.snake_length = 3
+        self.pickup_loc = [0, 7, 1]
+        self.failed = False
+        self.score = 0
+
+    def get_menu_frame(self):
+        return self._menu_frame
+
+    def has_menu_animation(self):
+        return True
+
+    def start_game(self):
+        pass
+
+    def play_animation(self):
+        an = Animations.TickerAnimation("snake")
+        an.start()
+        an.join()
+
+    def done(self):
+        pass
 
     def run(self):
         while not self.failed:
             self.direction = Direction.direction
+            if self.direction is None:
+                self.direction = Direction.Direction.UP
             if self.snake_length > len(self.snake_loc):
                 self.snake_loc.append(self.snake_loc[len(self.snake_loc) - 1])
                 self.snake_length = len(self.snake_loc)
@@ -50,22 +88,25 @@ class MyThread(threading.Thread):
 
             if self.snake_loc[0] in self.snake_loc[1:]:
                 self.failed = True
+                api.change_face(api.Face.LEFT, 0, Frames.number_to_frame(int(self.score / 100)))
+                api.change_face(api.Face.FRONT, 0, Frames.number_to_frame(int((self.score % 100) / 10)))
+                api.change_face(api.Face.RIGHT, 0, Frames.number_to_frame(int(self.score % 10)))
+
+                # Timer for cooldown
+                for x in range(0, 8):
+                    api.led_on([0, x, 0], [7, x, 0], [0, x, 7], [7, x, 7])
+                    api.display()
+                    time.sleep(1)
 
             if self.snake_loc[0][0] % 8 == self.pickup_loc[0] and self.snake_loc[0][1] % 8 == self.pickup_loc[1] and \
                     self.snake_loc[0][2] % 8 == self.pickup_loc[2]:
                 self.snake_length += 1
+                self.score += 1
                 found_spawn = False
                 while not found_spawn:
                     self.pickup_loc = [random.randint(0, 7), random.randint(0, 7), random.randint(0, 7)]
                     if self.pickup_loc not in self.snake_loc:
                         found_spawn = True
+
+            api.display()
             time.sleep(0.2)
-
-
-if __name__ == "__main__":
-    # Create new threads
-    thread1 = MyThread()
-
-    # Start new Threads
-    thread1.start()
-    api.start()

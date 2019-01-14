@@ -4,6 +4,8 @@ import Direction
 import vCubeAPI as api
 import Game as Game
 import FrameCollection2D as Frames
+import Snake
+import Pong
 
 
 class LEDCube(threading.Thread):
@@ -96,7 +98,7 @@ class LEDCube(threading.Thread):
 
 def register_all():
     if led_cube is not None:
-        led_cube.register(Game.Snake(api.cubeSize, frame_size), Game.Pong(api.cubeSize, frame_size))
+        led_cube.register(Snake.Snake(api.cubeSize, frame_size), Pong.Pong(api.cubeSize, frame_size))
 
 
 frame_size = (8, 8)
