@@ -87,6 +87,12 @@ buffer_points = [(x * 2, y * -2, z * 2) for x in range(0, 8) for y in range(0, 8
 cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in cube_points]
 buffer_cubes = [vCube.Cube(False, (x, y, z)) for x, y, z in buffer_points]
 
+
+def display():
+    global cubes, buffer_cubes
+    cubes = buffer_cubes
+
+
 def main():
     global projX, projY, cx, cy, cam, minZ, cubes, buffer_cubes, pressed_enter
     pygame.init()
@@ -107,7 +113,7 @@ def main():
     cam = Cam((0, 0, -5))
 
     while True:
-        cubes = buffer_cubes
+        # cubes = buffer_cubes
 
         dt = fpsclock.tick() / 1000
         pygame.display.set_caption('3D Graphics - FPS: %.2f' % fpsclock.get_fps())

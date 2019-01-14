@@ -170,6 +170,17 @@ class Pong(CubeGame, threading.Thread):
     def __init__(self, cube_size, frame_size):
         CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
+        self.player_loc = [[2, 0, 1], [3, 0, 1], [2, 0, 2], [3, 0, 2]]
+        self.ball_loc = [3, 1, 2]
+        self.ball_vel_x = 1
+        self.ball_vel_y = 1
+        self.ball_vel_z = 1
+        self.failed = False
+        self.player_action = None
+
+        self.p_loc = [0.5, 0.5]
+
+        self.mov_val = (1 / (self.cube_size - 1))
 
     def get_menu_frame(self):
         return self._menu_frame
@@ -188,64 +199,60 @@ class Pong(CubeGame, threading.Thread):
     def done(self):
         pass
 
-    player_loc = [[2, 0, 1], [3, 0, 1], [2, 0, 2], [3, 0, 2]]
-    ball_loc = [3, 1, 2]
-    ball_vel_x = 1
-    ball_vel_y = 1
-    ball_vel_z = 1
-    failed = False
-    player_action = None
-
     def run(self):
         while not self.failed:
             # Turn off last position
             api.led_off(self.ball_loc)
 
             # Ball moving
+            """
             self.ball_loc[0] += self.ball_vel_x
             self.ball_loc[1] += self.ball_vel_y
             self.ball_loc[2] += self.ball_vel_z
+            """
 
             # TODO: UGLY AF. WE SHOULD FIX THAT. IT ONLY UPDATES PLAYER EACH INTERVAL
             # Player moving
             self.player_action = Direction.direction
             if self.player_action is not None:
                 if self.player_action == Direction.Direction.UP:
-                    for s in self.player_loc:
-                        api.led_off(s)
-                    self.player_loc[0][0] += 1
-                    self.player_loc[1][0] += 1
-                    self.player_loc[2][0] += 1
-                    self.player_loc[3][0] += 1
-                    for s in self.player_loc:
-                        api.led_on(s)
+
+                    api.pad_led_off(self.p_loc)
+
+                    if self.p_loc[0] + self.mov_val <= 1:
+                        self.p_loc[0] += self.mov_val
+                    else:
+                        self.p_loc[0] = 0.99
+
+                    api.pad_led_on(self.p_loc)
+
                 if self.player_action == Direction.Direction.DOWN:
-                    for s in self.player_loc:
-                        api.led_off(s)
-                    self.player_loc[0][0] -= 1
-                    self.player_loc[1][0] -= 1
-                    self.player_loc[2][0] -= 1
-                    self.player_loc[3][0] -= 1
-                    for s in self.player_loc:
-                        api.led_on(s)
+                    api.pad_led_off(self.p_loc)
+
+                    if self.p_loc[0] - self.mov_val >= 0:
+                        self.p_loc[0] -= self.mov_val
+                    else:
+                        self.p_loc[0] = 0.01
+
+                    api.pad_led_on(self.p_loc)
                 if self.player_action == Direction.Direction.RIGHT:
-                    for s in self.player_loc:
-                        api.led_off(s)
-                    self.player_loc[0][2] += 1
-                    self.player_loc[1][2] += 1
-                    self.player_loc[2][2] += 1
-                    self.player_loc[3][2] += 1
-                    for s in self.player_loc:
-                        api.led_on(s)
+                    api.pad_led_off(self.p_loc)
+
+                    if self.p_loc[1] + self.mov_val <= 1:
+                        self.p_loc[1] += self.mov_val
+                    else:
+                        self.p_loc[1] = 0.99
+
+                    api.pad_led_on(self.p_loc)
                 if self.player_action == Direction.Direction.LEFT:
-                    for s in self.player_loc:
-                        api.led_off(s)
-                    self.player_loc[0][2] -= 1
-                    self.player_loc[1][2] -= 1
-                    self.player_loc[2][2] -= 1
-                    self.player_loc[3][2] -= 1
-                    for s in self.player_loc:
-                        api.led_on(s)
+                    api.pad_led_off(self.p_loc)
+
+                    if self.p_loc[1] - self.mov_val >= 0:
+                        self.p_loc[1] -= self.mov_val
+                    else:
+                        self.p_loc[1] = 0.01
+
+                    api.pad_led_on(self.p_loc)
                 Direction.direction = None
 
             # Ball bouncing on walls
@@ -271,7 +278,8 @@ class Pong(CubeGame, threading.Thread):
 
             # Turn on new position
             api.led_on(self.ball_loc)
-            for s in self.player_loc:
-                api.led_on(s)
+            api.pad_led_on(self.p_loc)
+
+            api.display()
 
             time.sleep(0.22)
