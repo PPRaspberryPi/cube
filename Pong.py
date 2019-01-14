@@ -65,7 +65,6 @@ class Pong(Game.CubeGame, threading.Thread):
             self.ball_loc[2] += self.ball_vel_z
             """
 
-            # TODO: UGLY AF. WE SHOULD FIX THAT. IT ONLY UPDATES PLAYER EACH INTERVAL
             # Player moving
             self.player_action = Direction.direction
             if self.player_action is not None:
