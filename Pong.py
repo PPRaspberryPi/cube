@@ -1,9 +1,7 @@
 import threading
 import time
-
 import Direction
 import vCubeAPI as api
-
 import Animations
 import Game
 

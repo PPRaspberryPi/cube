@@ -2,26 +2,57 @@ import threading
 import vCubeAPI as api
 import Direction
 import time
+import Animations
+import Game
+import FrameCollection2D as Frames
 
 
-class MyThread(threading.Thread):
-    player1_loc = [[0, 2, 0], [1, 2, 0], [0, 3, 0], [1, 3, 0]]  # Left Side P1
-    player2_loc = [[0, 2, 7], [1, 2, 7], [0, 3, 7], [1, 3, 7]]  # Right Side P2
-    ball_loc = [3, 1, 2]
-    ball_vel_x = 1
-    ball_vel_y = 1
-    ball_vel_z = 1
-    failed = False
-    player1_action = None
-    player2_action = None
+class PongMulti(Game.CubeGame, threading.Thread):
+    _name = 'PongMultiplayer'
+    _version = 'v0.1'
 
-    player1_score = 0
-    player2_score = 0
+    _menu_frame = [0, 0, 0, 1, 0, 0, 0, 0,
+                   0, 0, 1, 0, 0, 0, 0, 0,
+                   0, 1, 0, 0, 0, 0, 0, 0,
+                   1, 0, 0, 0, 0, 0, 0, 0,
+                   0, 1, 0, 0, 0, 1, 0, 0,
+                   0, 0, 1, 0, 1, 0, 0, 0,
+                   0, 0, 0, 1, 0, 0, 0, 0,
+                   0, 0, 1, 1, 1, 0, 0, 0]
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, cube_size, frame_size):
+        Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
+        threading.Thread.__init__(self)
+        self.player1_loc = [[0, 2, 0], [1, 2, 0], [0, 3, 0], [1, 3, 0]]  # Left Side P1
+        self.player2_loc = [[0, 2, 7], [1, 2, 7], [0, 3, 7], [1, 3, 7]]  # Right Side P2
+        self.ball_loc = [3, 1, 2]
+        self.ball_vel_x = 1
+        self.ball_vel_y = 1
+        self.ball_vel_z = 1
+        self.failed = False
+        self.player1_action = None
+        self.player2_action = None
+        self.player1_score = 0
+        self.player2_score = 0
 
     def move_player(self):
+        pass
+
+    def get_menu_frame(self):
+        return self._menu_frame
+
+    def has_menu_animation(self):
+        return True
+
+    def start_game(self):
+        pass
+
+    def play_animation(self):
+        an = Animations.TickerAnimation("pongmulti")
+        an.start()
+        an.join()
+
+    def done(self):
         pass
 
     def run(self):
@@ -110,12 +141,25 @@ class MyThread(threading.Thread):
             for s in self.player2_loc:
                 api.led_on(s)
 
+            if self.player1_score == 8 or self.player2_score == 8:
+                self.failed = True
+                api.change_face(api.Face.LEFT, 0, Frames.number_to_frame(int(self.player1_score)))
+                api.change_face(api.Face.RIGHT, 0, Frames.number_to_frame(int(self.player2_score)))
+
+                # Timer for cooldown
+                for x in range(0, 8):
+                    api.led_on([0, x, 0], [7, x, 0], [0, x, 7], [7, x, 7])
+                    api.display()
+                    time.sleep(1)
+
+            api.display()
+
             time.sleep(0.22)
 
 
 if __name__ == "__main__":
     # Create new threads
-    thread1 = MyThread()
+    thread1 = PongMulti()
 
     # Start new Threads
     thread1.start()
