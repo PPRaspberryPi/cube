@@ -12,12 +12,17 @@ ser = 9   #serial 4th
 rck = 4 #out 5th
 sck = 25  #clock 6th
 
+ser = 9   #serial 4th
+rck = 4 #out 5th
+sck = 25  #clock 6th
+
 
 IO.setmode(IO.BCM)
 IO.setup(ser,IO.OUT)
 IO.setup(sck,IO.OUT)
 IO.setup(rck,IO.OUT)
 
+pins = [14,15,17,18,27,22,23,24]
 pins = [14,15,17,18,27,22,23,24]
 for x in pins:
     IO.setup(x, IO.OUT)

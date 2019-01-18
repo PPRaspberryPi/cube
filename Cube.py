@@ -91,6 +91,7 @@ class LEDCube(threading.Thread):
 
     def show_2d_frame(self, frame):
         api.change_face(self.current_face, 0, frame)
+        print(api.leds[:])
 
     def start_game(self, game_id):
         self.cube_games[game_id].start()
