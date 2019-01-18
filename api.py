@@ -12,6 +12,7 @@ import Direction
 # import keyboard
 
 IO.VERBOSE = False
+IO.setwarnings(False)
 
 ###############
 
@@ -30,7 +31,7 @@ IO.VERBOSE = False
 cubeSize = 8
 
 # Delay für sleep-Funktion
-delay = 0.001
+delay = 0.01
 
 # Array enthält die Namen der Anoden-Pins
 anodePins = [9, 4, 25]
@@ -394,18 +395,18 @@ def print_registers(leds):
                 for x in range(8):
                     # Serieller Input über den ser-Pin cube.buffer_cubes[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)].setOn()
                     IO.output(anodePins[0], leds[x + y * 8 + z * cubeSize ** 2])
-                    #time.sleep(delay)
+                    time.sleep(delay)
 
                     # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
                     IO.output(anodePins[1], 1)
-                    #time.sleep(delay)
+                    time.sleep(delay)
                     IO.output(anodePins[1], 0)
-                    #time.sleep(delay)
+                    time.sleep(delay)
 
             # rck-bit
             IO.output(anodePins[2], 1)
-            #time.sleep(delay)
+            time.sleep(delay)
             IO.output(anodePins[2], 0)
-            #time.sleep(delay)
+            time.sleep(delay)
 
             IO.output(kathodePins[y], 0)

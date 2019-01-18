@@ -56,6 +56,7 @@ class LEDCube(threading.Thread):
                         if api.pressed_enter:
                             self.cube_games[self.current_item].close_animation()
                             self.current_game = self.cube_games[self.current_item]
+                            api.pressed_enter = False
                             updated = True
 
                         if Direction.direction == Direction.Direction.RIGHT and self.current_item < len(
@@ -115,7 +116,7 @@ def register_all():
 
 frame_size = (8, 8)
 
-led_cube = LEDCube(8, 0.01)
+led_cube = LEDCube(8, 0.001)
 
 # led_cube.register(Game.Snake(api.cubeSize, frame_size), Game.Pong(api.cubeSize, frame_size))
 
