@@ -168,6 +168,7 @@ class ShiftPair(threading.Thread):
 
 # 04: PROGRAMMVERHALTEN
 
+
 # Setup-Methode der IO-pins
 # led_setup()
 threadLock = threading.Lock()
