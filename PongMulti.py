@@ -5,7 +5,7 @@ import Animations
 import Direction
 import FrameCollection2D as Frames
 import Game
-import vCubeAPI as api
+import api
 
 
 class PongMulti(Game.CubeGame, threading.Thread):

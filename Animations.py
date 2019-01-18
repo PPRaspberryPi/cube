@@ -1,6 +1,6 @@
 import threading
 import time
-import vCubeAPI as api
+import api
 import FrameCollection2D as Frames
 import random
 

@@ -3,7 +3,7 @@ import threading
 import time
 
 import Direction
-import vCubeAPI as api
+import api
 import FrameCollection2D as Frames
 
 import Animations

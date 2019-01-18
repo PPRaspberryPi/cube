@@ -34,7 +34,7 @@ cubeSize = 8
 delay = 0.01
 
 # Array enthält die Namen der Anoden-Pins
-anodePins = [9, 4, 25]
+anodePins = [9, 25, 4]
 
 # Array enthält die Namen der Kathoden-Pins
 kathodePins = [14,15,17,18,27,22,23,24]
@@ -390,11 +390,11 @@ def setup_pins():
 def print_registers(leds):
     while True:
         for y in range(8):
-            IO.output(kathodePins[y], 1)
+            
             for z in range(8):
                 for x in range(8):
                     # Serieller Input über den ser-Pin cube.buffer_cubes[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)].setOn()
-                    IO.output(anodePins[0], leds[x + (y * 8) + (z * cubeSize ** 2)])
+                    IO.output(anodePins[0], leds[x + (y * 8) + (64 - (z+2)%8 * cubeSize ** 2)])
                     #time.sleep(delay)
 
                     # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
@@ -407,6 +407,7 @@ def print_registers(leds):
             IO.output(anodePins[2], 1)
             #time.sleep(delay)
             IO.output(anodePins[2], 0)
-            time.sleep(delay)
+            IO.output(kathodePins[y], 1)
+            time.sleep(0.002)
 
             IO.output(kathodePins[y], 0)
