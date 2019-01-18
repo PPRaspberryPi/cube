@@ -1,14 +1,14 @@
 import threading
 import time
 import Direction
-import vCubeAPI as api
+import api
 import Game as Game
 import FrameCollection2D as Frames
 import Snake
 import Pong
 import PongMulti
 import Weather
-import FFT
+#import FFT
 
 
 class LEDCube(threading.Thread):
@@ -53,10 +53,9 @@ class LEDCube(threading.Thread):
 
                         self.show_menu_state()
 
-                        if api.cube.pressed_enter:
+                        if api.pressed_enter:
                             self.cube_games[self.current_item].close_animation()
                             self.current_game = self.cube_games[self.current_item]
-                            api.cube.pressed_enter = True
                             updated = True
 
                         if Direction.direction == Direction.Direction.RIGHT and self.current_item < len(
@@ -86,7 +85,7 @@ class LEDCube(threading.Thread):
                 # Reset everything for next menu launch
                 self.reset_all()
                 register_all()
-                api.cube.pressed_enter = False
+                api.pressed_enter = False
                 self.current_game = None
 
     def show_2d_frame(self, frame):
@@ -111,8 +110,7 @@ class LEDCube(threading.Thread):
 def register_all():
     if led_cube is not None:
         led_cube.register(Snake.Snake(api.cubeSize, frame_size), Pong.Pong(api.cubeSize, frame_size),
-                          PongMulti.PongMulti(api.cubeSize, frame_size), Weather.Weather(api.cubeSize, frame_size),
-                          FFT.AudioVis(api.cubeSize, frame_size))
+                          PongMulti.PongMulti(api.cubeSize, frame_size), Weather.Weather(api.cubeSize, frame_size))
 
 
 frame_size = (8, 8)

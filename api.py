@@ -3,6 +3,7 @@ import time
 from enum import Enum
 import RPi.GPIO as IO
 import numpy as np
+#import keyboard
 
 IO.VERBOSE = False
 
@@ -34,6 +35,8 @@ kathodePins = [24, 23, 22, 27, ]
 # 512-Bit boolean-Array für die LED's
 leds = [0 for x in range(cubeSize ** 3)]
 buffer_leds = [0 for y in range(cubeSize ** 3)]
+
+pressed_enter = False
 
 
 # 02: SOFTWARESEITIGE FUNKTIONALITÄTEN
@@ -326,6 +329,7 @@ def setup_pins():
 def print_registers():
     while True:
         for y in kathodePins:
+            IO.output(y, 1)
             for x in leds:
                 # Serieller Input über den ser-Pin
                 IO.output(anodePins[0], x)
@@ -343,5 +347,4 @@ def print_registers():
             IO.output(anodePins[2], 0)
             time.sleep(delay)
 
-            IO.output(y - 1, 0)
-            IO.output(y, 1)
+            IO.output(y, 0)
