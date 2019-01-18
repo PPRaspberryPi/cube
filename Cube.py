@@ -115,7 +115,7 @@ def register_all():
 
 frame_size = (8, 8)
 
-led_cube = LEDCube(8, 0.001)
+led_cube = LEDCube(8, 0.01)
 
 # led_cube.register(Game.Snake(api.cubeSize, frame_size), Game.Pong(api.cubeSize, frame_size))
 

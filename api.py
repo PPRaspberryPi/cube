@@ -33,10 +33,10 @@ cubeSize = 8
 delay = 0.001
 
 # Array enthält die Namen der Anoden-Pins
-anodePins = [9, 10, 11]
+anodePins = [9, 4, 25]
 
 # Array enthält die Namen der Kathoden-Pins
-kathodePins = [24, 23, 22, 27, ]
+kathodePins = [14,15,17,18,27,22,23,24]
 
 # 512-Bit boolean-Array für die LED's
 # leds = [0 for x in range(cubeSize ** 3)]
@@ -323,10 +323,10 @@ def start():
     setup_pins()
     p = multiprocessing.Process(target=print_registers, args=(leds,))
     pad1 = multiprocessing.Process(target=gamepad1)
-    pad2 = multiprocessing.Process(target=gamepad2)
+    #pad2 = multiprocessing.Process(target=gamepad2)
     p.start()
     pad1.start()
-    pad2.start()
+    #pad2.start()
     p.join()
 
 
@@ -349,6 +349,8 @@ def gamepad1():
                 Direction.direction = Direction.Direction.BACK
             if eve.code == "BTN_TRIGGER" and eve.state == 1:
                 Direction.direction = Direction.Direction.FORTH
+            if eve.code == "BTN_BASE4" and eve.state == 1:
+                pressed_enter = True
 
 
 def gamepad2():
@@ -370,6 +372,8 @@ def gamepad2():
                 Direction.direction2 = Direction.Direction.BACK
             if eve.code == "BTN_TRIGGER" and eve.state == 1:
                 Direction.direction2 = Direction.Direction.FORTH
+            if eve.code == "BTN_BASE4" and eve.state == 1:
+                pressed_enter = True
 
 
 def setup_pins():
@@ -390,18 +394,18 @@ def print_registers(leds):
                 for x in range(8):
                     # Serieller Input über den ser-Pin cube.buffer_cubes[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)].setOn()
                     IO.output(anodePins[0], leds[x + y * 8 + z * cubeSize ** 2])
-                    # time.sleep(delay)
+                    #time.sleep(delay)
 
                     # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
                     IO.output(anodePins[1], 1)
-                    # time.sleep(delay)
+                    #time.sleep(delay)
                     IO.output(anodePins[1], 0)
-                    # time.sleep(delay)
+                    #time.sleep(delay)
 
             # rck-bit
             IO.output(anodePins[2], 1)
-            # time.sleep(delay)
+            #time.sleep(delay)
             IO.output(anodePins[2], 0)
-            time.sleep(delay)
+            #time.sleep(delay)
 
             IO.output(kathodePins[y], 0)
