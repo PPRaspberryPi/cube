@@ -194,7 +194,7 @@ def draw_sun(target_location, size_x, size_y, size_z):
     for r_x in range(size_x):
         for r_y in range(size_y):
             for r_z in range(size_z):
-                if not ((r_x == 1 or r_x == (size_x - 2)) and (r_y == 1 or r_y == (size_y - 2)) and (r_z == 1 or r_z == (size_z - 2))) and not (((r_x == 0 or r_x == size_x - 1) and (r_y == 0 or  r_y == 1 or r_y == size_y - 1 or r_y == size_y - 2))):
+                if not ((r_x == 1 or r_x == (size_x - 2)) and (r_y == 1 or r_y == (size_y - 2)) and (r_z == 1 or r_z == (size_z - 2))) and not (((r_x == 0 or r_x == size_x - 1) and (r_y == 0 or  r_y == 1 or r_y == size_y - 1 or r_y == size_y - 2)) or ((r_y == 0 or r_y == size_y - 1) and (r_x == 0 or  r_x == 1 or r_x == size_x - 1 or r_x == size_x - 2)) or ((r_y == 0 or r_y == size_y - 1) and (r_z == 0 or  r_z == 1 or r_z == size_z - 1 or r_z == size_z - 2)) or ((r_z == 0 or r_z == size_z - 1) and (r_y == 0 or  r_y == 1 or r_y == size_y - 1 or r_y == size_y - 2)) or ((r_x == 0 or r_x == size_x - 1) and (r_z == 0 or  r_z == 1 or r_z == size_z - 1 or r_z == size_z - 2)) or ((r_z == 0 or r_z == size_z - 1) and (r_x == 0 or  r_x == 1 or r_x == size_x - 1 or r_x == size_x - 2))):
                     cube.buffer_cubes[((int(np.ceil(x_center - half_x + r_x)) % cubeSize) + (
                                 (int(np.ceil(y_center - half_y + r_y)) % cubeSize) * cubeSize) + (
                                                    (int(np.ceil(z_center - half_z + r_z)) % cubeSize) * (

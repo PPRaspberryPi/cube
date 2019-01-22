@@ -151,6 +151,6 @@ class Clouds:
 class Sun:
 
     def play(self):
-        api.draw_sun([0.5, 0.5, 0.5], 6, 6, 6)
+        api.draw_sun([0.5, 0.5, 0.5], 8, 8, 8)
         while True:
             time.sleep(0.5)
