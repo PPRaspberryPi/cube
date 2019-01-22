@@ -1,3 +1,4 @@
+# Import für die sleep funktionen
 import time
 from enum import Enum
 import RPi.GPIO as IO
@@ -292,6 +293,7 @@ def cuboid_off(target_location, size_x, size_y, size_z):
 # 03: HARDWARESEITIGE FUNKTIONALITÄTEN
 
 def display():
+    global leds
     leds = buffer_leds
 
 

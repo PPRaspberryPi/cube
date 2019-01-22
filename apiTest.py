@@ -33,13 +33,13 @@ cubeSize = 8
 delay = 0.001
 
 # Array enthält die Namen der Anoden-Pins
-anodePins = np.array([[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11]])
+anodePins = [9, 10, 11]
 
 # Array enthält die Namen der Kathoden-Pins
-kathodePins = np.array([12, 13, 14, 15, 16, 17, 18, 19])
+kathodePins = [12, 13, 14, 15, 16, 17, 18, 19]
 
 # 512-Bit boolean-Array für die LED's
-leds = np.array([[[0 for x in range(cubeSize)] for y in range(cubeSize)] for z in range(cubeSize)])
+leds = [0 for x in range(cubeSize ** 3)]
 
 
 # 02: SOFTWARESEITIGE FUNKTIONALITÄTEN
@@ -71,6 +71,25 @@ def led_off(*target_leds):
     """
     for x in target_leds:
         leds[x[0]][x[1]][x[2]] = 0
+
+def led_on(*target_leds):
+    """
+    Schaltet beliebige Menge an LED's an
+    :param target_leds: [<layer>, <Zeile im Layer>, <LED in der Zeile>]
+    :return: none
+    """
+    for x in target_leds:
+        leds[(x[0] % 8) + ((x[1] % 8) * 8) + ((x[2] % 8) * 64)] = 1
+
+
+def led_off(*target_leds):
+    """
+    Schaltet beliebige Menge an LED's aus
+    :param target_leds: [<layer>, <Zeile im Layer>, <LED in der Zeile>]
+    :return: none
+    """
+    for x in target_leds:
+        cube.buffer_cubes[(x[0] % 8) + ((x[1] % 8) * 8) + ((x[2] % 8) * 64)].setOff()
 
 
 def led_to(*target_leds):
