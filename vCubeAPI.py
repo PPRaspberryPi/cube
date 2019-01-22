@@ -152,14 +152,59 @@ def pad_led_off(*target_led_location):
         cube.buffer_cubes[ceil1 + 0 + (floor2 * 64)].setOff()
         cube.buffer_cubes[floor1 + 0 + ceil2 * 64].setOff()
 
+def draw_sun(target_location, size_x, size_y, size_z):
+    x = target_location[0] * (cubeSize - 1)
+    y = target_location[1] * (cubeSize - 1)
+    z = target_location[2] * (cubeSize - 1)
+
+    half_x = size_x / 2
+    half_y = size_y / 2
+    half_z = size_z / 2
+
+    if size_x % 2 == 0:
+        if x < 1:
+            x_center = 0.5
+        elif x > 6:
+            x_center = 6.5
+        else:
+            x_center = np.floor(x) + 0.5
+    else:
+        x_center = round(x)
+
+    if size_y % 2 == 0:
+        if y < 1:
+            y_center = 0.5
+        elif y > 6:
+            y_center = 6.5
+        else:
+            y_center = np.floor(y) + 0.5
+    else:
+        y_center = round(y)
+
+    if size_z % 2 == 0:
+        if z < 1:
+            z_center = 0.5
+        elif z > 6:
+            z_center = 6.5
+        else:
+            z_center = np.floor(z) + 0.5
+    else:
+        z_center = round(z)
+
+    for r_x in range(size_x):
+        for r_y in range(size_y):
+            for r_z in range(size_z):
+                if not ((r_x == 1 or r_x == (size_x - 2)) and (r_y == 1 or r_y == (size_y - 2)) and (r_z == 1 or r_z == (size_z - 2))) and not (((r_x == 0 or  r_x == 1 or r_x == size_x - 1 or r_x == size_x - 2) and (r_y == 0 or  r_y == 1 or r_y == size_y - 1 or r_y == size_y - 2))):
+                    cube.buffer_cubes[((int(np.ceil(x_center - half_x + r_x)) % cubeSize) + (
+                                (int(np.ceil(y_center - half_y + r_y)) % cubeSize) * cubeSize) + (
+                                                   (int(np.ceil(z_center - half_z + r_z)) % cubeSize) * (
+                                                       cubeSize ** 2)))].setOn()
+
 
 def cuboid_on(target_location, size_x, size_y, size_z):
     x = target_location[0] * (cubeSize - 1)
     y = target_location[1] * (cubeSize - 1)
     z = target_location[2] * (cubeSize - 1)
-
-    #print(x, " ", y, " ", z)
-    #print(target_location)
 
     half_x = size_x / 2
     half_y = size_y / 2

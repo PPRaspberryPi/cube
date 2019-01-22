@@ -27,7 +27,7 @@ class Weather(Game.CubeGame, threading.Thread):
         self.failed = False
 
         self.url = "http://api.openweathermap.org/data/2.5/weather?id=2934691&units=metric&appid" \
-                   "=ec6a8c233a22cc97020c5f60c46fb90f "
+                   "=ec6a8c233a22cc97020c5f60c46fb90f"
 
     def get_menu_frame(self):
         return self._menu_frame
@@ -57,11 +57,6 @@ class Weather(Game.CubeGame, threading.Thread):
         # 7xx Atmosphere (Fog)
         # 800 Clear
         # 80x Clouds
-        rain = Animations.Rain(0.5, self.cube_size, 1)
+        rain = Animations.Sun()
         rain.play()
-        while not self.failed:
-            self.direction = Direction.direction
-            if self.direction == Direction.Direction.DOWN:
-                self.failed = True
-            api.display()
-            time.sleep(0.2)
+
