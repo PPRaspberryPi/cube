@@ -37,9 +37,6 @@ class AudioVis(Game.CubeGame, threading.Thread):
         # process wave data
         self.f = wave.open(self.file_name, 'rb')
 
-        # read data
-        self.data = self.f.readframes(self.chunk)
-
         self.params = self.f.getparams()
         self.nchannels, self.sampwidth, self.framerate, self.nframes = self.params[:4]
         self.str_data = self.f.readframes(self.nframes)
@@ -77,7 +74,6 @@ class AudioVis(Game.CubeGame, threading.Thread):
         while not self.finished:
             if Direction.direction == Direction.Direction.BACK:
                 self.finished = True
-            self.data = self.f.readframes(self.chunk)
             num = int(self.num)
             h = abs(dct(self.wave_data[0][self.nframes - num:self.nframes - num + self.N]))
             h = [min(self.HEIGHT, int(i ** (1 / 2.5) * self.HEIGHT / 100)) * self.amplifier for i in h]
