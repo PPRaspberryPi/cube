@@ -8,7 +8,6 @@ import Game
 import sys, math, wave, numpy
 from scipy.fftpack import dct
 import Util as util
-import PyAudio as audio
 
 
 class AudioVis(Game.CubeGame, threading.Thread):
@@ -37,12 +36,7 @@ class AudioVis(Game.CubeGame, threading.Thread):
 
         # process wave data
         self.f = wave.open(self.file_name, 'rb')
-        self.p = audio.PyAudio()
 
-        self.stream = self.p.open(format=self.p.get_format_from_width(self.f.getsampwidth()),
-                                  channels=self.f.getnchannels(),
-                                  rate=self.f.getframerate(),
-                                  output=True)
         # read data
         self.data = self.f.readframes(self.chunk)
 
@@ -83,8 +77,6 @@ class AudioVis(Game.CubeGame, threading.Thread):
         while not self.finished:
             if Direction.direction == Direction.Direction.BACK:
                 self.finished = True
-
-            self.stream.write(self.data)
             self.data = self.f.readframes(self.chunk)
             num = int(self.num)
             h = abs(dct(self.wave_data[0][self.nframes - num:self.nframes - num + self.N]))
@@ -107,6 +99,3 @@ class AudioVis(Game.CubeGame, threading.Thread):
 
             time.sleep(1 / self.fps)
 
-        self.stream.stop.stream()
-        self.p.terminate()
-        self.f.close()
