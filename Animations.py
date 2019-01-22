@@ -15,7 +15,8 @@ class TickerAnimation(threading.Thread):
         for l in self.game_name:
             for i in reversed(range(0, 8)):  # range goes to 0 to 7 (always 1 less than given)
                 api.change_face(api.Face.FRONT, i, Frames.letter_to_frame(l))
-                time.sleep(0.08)
+                sleep = 0.3/len(self.game_name)
+                time.sleep(sleep)
                 api.change_face(api.Face.FRONT, i, Frames.empty)
 
         time.sleep(0.5)

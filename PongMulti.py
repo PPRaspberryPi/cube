@@ -23,13 +23,15 @@ class PongMulti(Game.CubeGame, threading.Thread):
     def __init__(self, cube_size, frame_size):
         Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
-        self.player1_loc = [[0, 2, 0], [1, 2, 0], [0, 3, 0], [1, 3, 0]]  # Left Side P1
-        self.player2_loc = [[0, 2, 7], [1, 2, 7], [0, 3, 7], [1, 3, 7]]  # Right Side P2
+        self.player1_loc = [0, 0.5, 0.5]  # Left Side P1
+        self.player2_loc = [7, 0.5, 0.5]  # Right Side P2
         self.player1_size = 2
         self.player2_size = 2
         self.player1_radius = (self.player1_size / self.cube_size) / 2
         self.player2_radius = (self.player2_size / self.cube_size) / 2
-        self.ball_loc = [3 / cube_size, 1 / cube_size, 2 / cube_size]
+        self.ball_size = 1
+        self.ball_loc = [0.5, 0.5, 0.5]
+        self.ball_radius = (self.ball_size / self.cube_size) / 2
         self.ball_vel_x = 0.01
         self.ball_vel_y = 0.01
         self.ball_vel_z = 0.01
@@ -64,12 +66,14 @@ class PongMulti(Game.CubeGame, threading.Thread):
     def run(self):
         while not self.failed:
             # Turn off last position
-            api.led_off(self.ball_loc)
+            # api.led_off(self.ball_loc)
 
             # Ball moving
             self.ball_loc[0] += self.ball_vel_x
             self.ball_loc[1] += self.ball_vel_y
             self.ball_loc[2] += self.ball_vel_z
+
+            api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
 
             # Ball turning on wall impact
             if self.ball_loc[0] - self.ball_radius < 0 or self.ball_loc[0] + self.ball_radius > 1:
@@ -85,41 +89,45 @@ class PongMulti(Game.CubeGame, threading.Thread):
             self.player1_action = Direction.direction
             if self.player1_action is not None:
                 if self.player1_action == Direction.Direction.UP:
-                    for s in self.player1_loc:
-                        api.led_off(s)
-                    self.player1_loc[0][0] += 1
-                    self.player1_loc[1][0] += 1
-                    self.player1_loc[2][0] += 1
-                    self.player1_loc[3][0] += 1
-                    for s in self.player1_loc:
-                        api.led_on(s)
+                    api.cuboid_off(self.player1_loc, 1, self.player1_size, self.player1_size)
+
+                    if self.player1_loc[1] + self.mov_val <= 1:
+                        self.player1_loc[1] += self.mov_val
+                    else:
+                        self.player1_loc[1] = 0.99
+
+                    api.cuboid_on(self.player1_loc, 1, self.player1_size, self.player1_size)
+
                 if self.player1_action == Direction.Direction.DOWN:
-                    for s in self.player1_loc:
-                        api.led_off(s)
-                    self.player1_loc[0][0] -= 1
-                    self.player1_loc[1][0] -= 1
-                    self.player1_loc[2][0] -= 1
-                    self.player1_loc[3][0] -= 1
-                    for s in self.player1_loc:
-                        api.led_on(s)
+                    api.cuboid_off(self.player1_loc, 1, self.player1_size, self.player1_size)
+
+                    if self.player1_loc[1] - self.mov_val >= 0:
+                        self.player1_loc[1] -= self.mov_val
+                    else:
+                        self.player1_loc[1] = 0.01
+
+                    api.cuboid_on(self.player1_loc, 1, self.player1_size, self.player1_size)
+
                 if self.player1_action == Direction.Direction.RIGHT:
-                    for s in self.player1_loc:
-                        api.led_off(s)
-                    self.player1_loc[0][2] += 1
-                    self.player1_loc[1][2] += 1
-                    self.player1_loc[2][2] += 1
-                    self.player1_loc[3][2] += 1
-                    for s in self.player1_loc:
-                        api.led_on(s)
+                    api.cuboid_off(self.player1_loc, 1, self.player1_size, self.player1_size)
+
+                    if self.player1_loc[2] + self.mov_val <= 1:
+                        self.player1_loc[2] += self.mov_val
+                    else:
+                        self.player1_loc[2] = 0.99
+
+                    api.cuboid_on(self.player1_loc, 1, self.player1_size, self.player1_size)
+
                 if self.player1_action == Direction.Direction.LEFT:
-                    for s in self.player1_loc:
-                        api.led_off(s)
-                    self.player1_loc[0][2] -= 1
-                    self.player1_loc[1][2] -= 1
-                    self.player1_loc[2][2] -= 1
-                    self.player1_loc[3][2] -= 1
-                    for s in self.player1_loc:
-                        api.led_on(s)
+                    api.cuboid_off(self.player1_loc, 1, self.player1_size, self.player1_size)
+
+                    if self.player1_loc[2] - self.mov_val >= 0:
+                        self.player1_loc[2] -= self.mov_val
+                    else:
+                        self.player1_loc[2] = 0.01
+
+                    api.cuboid_on(self.player1_loc, 1, self.player1_size, self.player1_size)
+
                 Direction.direction = None
 
             # If Ball hits player1 wall
@@ -140,11 +148,6 @@ class PongMulti(Game.CubeGame, threading.Thread):
             if self.ball_loc[0] == 7 and any(loc in [self.ball_loc] for loc in self.player2_loc):
                 self.ball_loc[0] = 6
 
-            # Turn on new position
-            api.led_on(self.ball_loc)
-            for s in self.player1_loc:
-                api.led_on(s)
-
             for s in self.player2_loc:
                 api.led_on(s)
 
@@ -159,19 +162,11 @@ class PongMulti(Game.CubeGame, threading.Thread):
                     api.display()
                     time.sleep(1)
             # Turn on new position
-            #api.led_on(self.ball_loc)
-            api.cuboid_on(self.b_loc, self.b_size, self.b_size, self.b_size)
-            api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
-            
+            # api.led_on(self.ball_loc)
+            api.cuboid_on(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
+            api.cuboid_on(self.player1_loc, self.player1_size, 1, self.player1_size)
+            api.cuboid_on(self.player2_loc, self.player2_size, 1, self.player2_size)
+
             api.display()
 
             time.sleep(0.22)
-
-
-if __name__ == "__main__":
-    # Create new threads
-    thread1 = PongMulti()
-
-    # Start new Threads
-    thread1.start()
-    api.start()
