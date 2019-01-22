@@ -1,33 +1,78 @@
-import scipy.io.wavfile
-import pydub
-import matplotlib.pyplot as plt
-import numpy as np
-from numpy import fft as fft
-mp3 = pydub.AudioSegment.from_mp3("music.mp3")
+import threading
+import time
+import Direction
+import vCubeAPI as api
+import requests
+import Animations
+import Game
+import sys, math, wave, numpy
+from scipy.fftpack import dct
 
-mp3.export("music.wav", format="wav")
 
-rate, audData = scipy.io.wavfile.read("music.wav")
+class AudioVis(Game.CubeGame, threading.Thread):
+    _name = 'Audio Visualizer'
+    _version = 'v0.1'
 
-print(rate)
-print(audData)
+    _menu_frame = [0, 0, 1, 1, 0, 0, 0, 0,
+                   0, 0, 1, 1, 1, 1, 0, 0,
+                   0, 1, 1, 1, 1, 1, 1, 0,
+                   0, 0, 0, 0, 1, 0, 0, 0,
+                   0, 0, 1, 0, 1, 0, 0, 0,
+                   0, 0, 1, 1, 0, 0, 0, 0,
+                   0, 0, 0, 1, 0, 1, 0, 0,
+                   0, 0, 0, 0, 0, 1, 0, 0]
 
-channel1=audData[:,0] #left
-channel2=audData[:,1] #right
+    def __init__(self, cube_size, frame_size):
+        Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
+        threading.Thread.__init__(self)
+        self.finished = False
+        self.file_name = "music.wav"
+        self.status = 'stopped'
 
-#create a time variable in seconds
-time = np.arange(0, float(audData.shape[0]), 1) / rate
+        self.N = 8  # num of bars
+        self.HEIGHT = 8  # height of a bar
+        self.WIDTH = 8  # width of a bar
 
-fourier=fft.fft(channel1)
+        # process wave data
+        self.f = wave.open(self.file_name, 'rb')
+        self.params = self.f.getparams()
+        self.nchannels, self.sampwidth, self.framerate, self.nframes = self.params[:4]
+        self.str_data = self.f.readframes(self.nframes)
+        self.f.close()
+        self.wave_data = numpy.frombuffer(self.str_data, dtype=numpy.short)
+        self.wave_data.shape = -1, 2
+        self.wave_data = self.wave_data.T
 
-#plot amplitude (or loudness) over time
-plt.figure(1)
-plt.subplot(211)
-plt.plot(time, channel1, linewidth=0.01, alpha=0.7, color='#ff7f00')
-plt.xlabel('Time (s)')
-plt.ylabel('Amplitude')
-plt.subplot(212)
-plt.plot(time, channel2, linewidth=0.01, alpha=0.7, color='#ff7f00')
-plt.xlabel('Time (s)')
-plt.ylabel('Amplitude')
-plt.show()
+        self.num = self.nframes
+
+
+    def get_menu_frame(self):
+        return self._menu_frame
+
+    def has_menu_animation(self):
+        return True
+
+    def start_game(self):
+        pass
+
+    def play_animation(self):
+        an = Animations.TickerAnimation("audiovis")
+        an.start()
+        an.join()
+
+    def done(self):
+        pass
+
+    def run(self):
+        num = int(self.num)
+        h = abs(dct(self.wave_data[0][self.nframes - num:self.nframes - num + self.N]))
+        h = [min(self.HEIGHT, int(i ** (1 / 2.5) * self.HEIGHT / 100)) for i in h]
+
+
+
+        while not self.finished:
+            if Direction.direction == Direction.Direction.BACK:
+                self.finished = True
+
+
+
