@@ -2,12 +2,14 @@ import threading
 import time
 import Direction
 import vCubeAPI as api
-import requests
 import Animations
 import Game
-import sys, math, wave, numpy
+import wave
+import numpy
 from scipy.fftpack import dct
 import Util as util
+import simpleaudio as sa
+
 
 
 class AudioVis(Game.CubeGame, threading.Thread):
@@ -29,17 +31,17 @@ class AudioVis(Game.CubeGame, threading.Thread):
         self.finished = False
         self.file_name = "music.wav"
         self.status = 'stopped'
-        self.chunk = 1024
         self.N = self.cube_size  # num of bars
         self.HEIGHT = self.cube_size  # height of a bar
         self.WIDTH = self.cube_size  # width of a bar
 
         # process wave data
         self.f = wave.open(self.file_name, 'rb')
-
         self.params = self.f.getparams()
         self.nchannels, self.sampwidth, self.framerate, self.nframes = self.params[:4]
         self.str_data = self.f.readframes(self.nframes)
+        self.f.close()
+
         self.wave_data = numpy.frombuffer(self.str_data, dtype=numpy.short)
         self.wave_data.shape = -1, 2
         self.wave_data = self.wave_data.T
@@ -51,7 +53,6 @@ class AudioVis(Game.CubeGame, threading.Thread):
         self.fps = 10
 
         self.frames = []
-
 
     def get_menu_frame(self):
         return self._menu_frame
@@ -71,6 +72,7 @@ class AudioVis(Game.CubeGame, threading.Thread):
         pass
 
     def run(self):
+        sa.WaveObject.from_wave_file(self.file_name).play()
         while not self.finished:
             if Direction.direction == Direction.Direction.BACK:
                 self.finished = True
@@ -94,4 +96,3 @@ class AudioVis(Game.CubeGame, threading.Thread):
                 self.finished = True
 
             time.sleep(1 / self.fps)
-
