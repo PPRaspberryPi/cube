@@ -102,7 +102,8 @@ class LEDCube(threading.Thread):
 def register_all():
     if led_cube is not None:
         led_cube.register(Snake.Snake(api.cubeSize, frame_size), Pong.Pong(api.cubeSize, frame_size),
-                          PongMulti.PongMulti(api.cubeSize, frame_size), Weather.Weather(api.cubeSize, frame_size), FFT.AudioVis(api.cubeSize, frame_size))
+                          PongMulti.PongMulti(api.cubeSize, frame_size), Weather.Weather(api.cubeSize, frame_size),
+                          FFT.AudioVis(api.cubeSize, frame_size))
 
 
 frame_size = (8, 8)
