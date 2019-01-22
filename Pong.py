@@ -52,12 +52,15 @@ class Pong(Game.CubeGame, threading.Thread):
         an.join()
 
     def done(self):
-        pass
+        for x in range(0, 8):
+            api.led_on([0, x, 0], [7, x, 0], [0, x, 7], [7, x, 7])
+            api.display()
+            time.sleep(1)
 
     def run(self):
         while not self.failed:
             # Turn off last position
-            #api.led_off(self.ball_loc)
+            # api.led_off(self.ball_loc)
 
             # Ball moving
             """
@@ -80,7 +83,6 @@ class Pong(Game.CubeGame, threading.Thread):
 
             if self.b_loc[2] - self.b_radius < 0 or self.b_loc[2] + self.b_radius > 1:
                 self.ball_vel_z *= -1
-
 
             # Player moving
             self.player_action = Direction.direction
@@ -125,17 +127,14 @@ class Pong(Game.CubeGame, threading.Thread):
                 Direction.direction = None
 
             if self.b_loc[1] - self.b_radius < 0:
-                if not ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
-                        self.failed = True
+                if not ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (
+                        self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
+                    self.failed = True
 
-                        # Timer for cooldown
-                        for x in range(0, 8):
-                            api.led_on([0, x, 0], [7, x, 0], [0, x, 7], [7, x, 7])
-                            api.display()
-                            time.sleep(1)
+                    self.done()
 
             # Turn on new position
-            #api.led_on(self.ball_loc)
+            # api.led_on(self.ball_loc)
             api.cuboid_on(self.b_loc, self.b_size, self.b_size, self.b_size)
             api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
 

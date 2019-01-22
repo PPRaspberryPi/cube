@@ -246,6 +246,5 @@ def cuboid_off(target_location, size_x, size_y, size_z):
                 cube.buffer_cubes[((int(np.ceil(x_center - half_x + r_x)) % cubeSize) + ((int(np.ceil(y_center - half_y + r_y)) % cubeSize) * cubeSize) + ((int(np.ceil(z_center - half_z + r_z)) % cubeSize) * (cubeSize**2)))].setOff()
 
 
-
 def start():
     cube.main()

@@ -26,7 +26,8 @@ class Weather(Game.CubeGame, threading.Thread):
         threading.Thread.__init__(self)
         self.failed = False
 
-        self.url = "http://api.openweathermap.org/data/2.5/weather?q=Duisburg&appid=ec6a8c233a22cc97020c5f60c46fb90f"
+        self.url = "http://api.openweathermap.org/data/2.5/weather?id=2934691&units=metric&appid" \
+                   "=ec6a8c233a22cc97020c5f60c46fb90f "
 
     def get_menu_frame(self):
         return self._menu_frame
