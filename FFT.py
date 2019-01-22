@@ -15,14 +15,14 @@ class AudioVis(Game.CubeGame, threading.Thread):
     _name = 'Audio Visualizer'
     _version = 'v0.1'
 
-    _menu_frame = [0, 0, 1, 1, 0, 0, 0, 0,
-                   0, 0, 1, 1, 1, 1, 0, 0,
-                   0, 1, 1, 1, 1, 1, 1, 0,
-                   0, 0, 0, 0, 1, 0, 0, 0,
-                   0, 0, 1, 0, 1, 0, 0, 0,
-                   0, 0, 1, 1, 0, 0, 0, 0,
-                   0, 0, 0, 1, 0, 1, 0, 0,
-                   0, 0, 0, 0, 0, 1, 0, 0]
+    _menu_frame = [1, 0, 0, 0, 0, 0, 0, 0,
+                   1, 0, 0, 0, 0, 0, 0, 0,
+                   1, 0, 0, 0, 0, 0, 0, 0,
+                   1, 0, 0, 0, 0, 0, 0, 0,
+                   1, 1, 0, 0, 0, 0, 0, 0,
+                   1, 1, 1, 0, 0, 0, 0, 0,
+                   1, 1, 1, 1, 1, 0, 0, 0,
+                   1, 1, 1, 1, 1, 1, 1, 1]
 
     def __init__(self, cube_size, frame_size):
         Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
@@ -55,6 +55,7 @@ class AudioVis(Game.CubeGame, threading.Thread):
 
         self.num = self.nframes
 
+
     def get_menu_frame(self):
         return self._menu_frame
 
@@ -81,9 +82,24 @@ class AudioVis(Game.CubeGame, threading.Thread):
             self.data = self.f.readframes(self.chunk)
             num = int(self.num)
             h = abs(dct(self.wave_data[0][self.nframes - num:self.nframes - num + self.N]))
-            h = [min(self.HEIGHT, int(i ** (1 / 2.5) * self.HEIGHT / 100)) for i in h]
+            h = [min(self.HEIGHT, int(i ** (1 / 2.5) * self.HEIGHT / 100)) * self.amplifier for i in h]
 
-            api.change_face(api.Face.FRONT, 0, util.construct_2D_audio_frame(self.cube_size, h))
+            self.frames = [h] + self.frames
+
+            i = 0
+            for f in self.frames:
+                if i < self.cube_size:
+                    api.change_face(api.Face.FRONT, self.cube_size - 1 - i, util.construct_2D_audio_frame(self.cube_size, f))
+                    i += 1
+                else:
+                    self.frames.remove(f)
+
+            self.num -= (1 / self.fps) * self.framerate
+
+            if self.num < 0:
+                self.finished = True
+
+            time.sleep(1 / self.fps)
 
         self.stream.stop.stream()
         self.close()
