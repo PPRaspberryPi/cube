@@ -55,6 +55,12 @@ class AudioVis(Game.CubeGame, threading.Thread):
 
         self.num = self.nframes
 
+        self.amplifier = 12
+
+        self.fps = 10
+
+        self.frames = []
+
 
     def get_menu_frame(self):
         return self._menu_frame
@@ -102,6 +108,5 @@ class AudioVis(Game.CubeGame, threading.Thread):
             time.sleep(1 / self.fps)
 
         self.stream.stop.stream()
-        self.close()
         self.p.terminate()
         self.f.close()
