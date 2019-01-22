@@ -1,16 +1,9 @@
-# Import für die sleep funktionen
 import time
-# Import fürs multithreading (die dummy-library erlaubt Umgang mit threads)
-from multiprocessing.dummy import Pool
-
-# Dummy-library, welche (nicht implementierte) Funktionen der RPi.GPIO-library
-# bereitstellt, damit das Programm ordentlich kompiliert wird
+from enum import Enum
 import RPi.GPIO as IO
+import numpy as np
 
 IO.VERBOSE = False
-
-# numpy import für die arrays
-import numpy as np
 
 ###############
 
@@ -32,16 +25,25 @@ cubeSize = 8
 delay = 0.001
 
 # Array enthält die Namen der Anoden-Pins
-anodePins = np.array([[0, 1, 2], [3, 4, 5], [6, 7, 8], [9, 10, 11]])
+anodePins = [9, 10, 11]
 
 # Array enthält die Namen der Kathoden-Pins
-kathodePins = np.array([12, 13, 14, 15, 16, 17, 18, 19])
+kathodePins = [12, 13, 14, 15, 16, 17, 18, 19]
 
 # 512-Bit boolean-Array für die LED's
-leds = np.array([[[0 for x in range(cubeSize)] for y in range(cubeSize)] for z in range(cubeSize)])
+leds = [0 for x in range(cubeSize ** 3)]
+buffer_leds = [0 for y in range(cubeSize ** 3)]
 
 
 # 02: SOFTWARESEITIGE FUNKTIONALITÄTEN
+
+class Face(Enum):
+    FRONT = 1
+    BACK = 2
+    LEFT = 3
+    RIGHT = 4
+    UP = 5
+    DOWN = 6
 
 
 def led_on(*target_leds):
@@ -51,7 +53,7 @@ def led_on(*target_leds):
     :return: none
     """
     for x in target_leds:
-        leds[x[0]][x[1]][x[2]] = 1
+        buffer_leds[(x[0] % 8) + ((x[1] % 8) * 8) + ((x[2] % 8) * 64)] = 1
 
 
 def led_off(*target_leds):
@@ -61,112 +63,262 @@ def led_off(*target_leds):
     :return: none
     """
     for x in target_leds:
-        leds[x[0]][x[1]][x[2]] = 0
+        buffer_leds[(x[0] % 8) + ((x[1] % 8) * 8) + ((x[2] % 8) * 64)] = 0
+
+
+def led_to(*target_leds):
+    """
+    Schaltet beliebige Menge an LED's aus
+    :param target_leds: [<layer>, <Zeile im Layer>, <LED in der Zeile>, <state> 0 oder 1]
+    :return: none
+    """
+    for x in target_leds:
+        buffer_leds[(x[0] % 8) + ((x[1] % 8) * 8) + ((x[2] % 8) * 64)] = x[3]
+
+
+def clear_all():
+    for x in range(0, cubeSize ** 3):
+        buffer_leds[x] = 0
+
+
+def change_face(face: Face, face_num: int, frame):
+    face_num = face_num % 8
+    if face is Face.FRONT:
+        for x in range(0, cubeSize):
+            for y in range(0, cubeSize):
+                if frame[y + ((7 - x) * 8)] == 1:
+                    buffer_leds[(face_num % 8) + ((x % 8) * 8) + ((y % 8) * 64)] = 1
+                else:
+                    buffer_leds[(face_num % 8) + ((x % 8) * 8) + ((y % 8) * 64)] = 0
+
+    elif face is Face.BACK:
+        for x in range(0, cubeSize):
+            for y in range(0, cubeSize):
+                if frame[y + (x * 8)] == 1:
+                    buffer_leds[((7 - face_num) % 8) + ((x % 8) * 8) + ((y % 8) * 64)] = 1
+                else:
+                    buffer_leds[((7 - face_num) % 8) + ((x % 8) * 8) + ((y % 8) * 64)] = 0
+
+    elif face is Face.LEFT:
+        frame = list(reversed(frame))
+        for x in range(0, cubeSize):
+            for y in range(0, cubeSize):
+                if frame[x + (y * 8)] == 1:
+                    buffer_leds[(x % 8) + ((y % 8) * 8) + ((face_num % 8) * 64)] = 1
+                else:
+                    buffer_leds[(x % 8) + ((y % 8) * 8) + ((face_num % 8) * 64)] = 0
+
+    elif face is Face.RIGHT:
+        for x in range(0, cubeSize):
+            for y in range(0, cubeSize):
+                if frame[x + ((7 - y) * 8)] == 1:
+                    buffer_leds[(x % 8) + ((y % 8) * 8) + (((7 - face_num) % 8) * 64)] = 1
+                else:
+                    buffer_leds[(x % 8) + ((y % 8) * 8) + (((7 - face_num) % 8) * 64)] = 0
+
+    elif face is Face.UP:
+        for x in range(0, cubeSize):
+            for y in range(0, cubeSize):
+                if frame[x + (y * 8)] == 1:
+                    buffer_leds[(x % 8) + ((face_num % 8) * 8) + ((y % 8) * 64)] = 1
+                else:
+                    buffer_leds[(x % 8) + ((face_num % 8) * 8) + ((y % 8) * 64)] = 0
+
+    elif face is Face.DOWN:
+        for x in range(0, cubeSize):
+            for y in range(0, cubeSize):
+                if frame[x + (y * 8)] == 1:
+                    buffer_leds[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)] = 1
+                else:
+                    buffer_leds[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)] = 0
+    display()
+
+
+def draw_sun(target_location, size_x, size_y, size_z):
+    x = target_location[0] * (cubeSize - 1)
+    y = target_location[1] * (cubeSize - 1)
+    z = target_location[2] * (cubeSize - 1)
+
+    half_x = size_x / 2
+    half_y = size_y / 2
+    half_z = size_z / 2
+
+    if size_x % 2 == 0:
+        if x < 1:
+            x_center = 0.5
+        elif x > 6:
+            x_center = 6.5
+        else:
+            x_center = np.floor(x) + 0.5
+    else:
+        x_center = round(x)
+
+    if size_y % 2 == 0:
+        if y < 1:
+            y_center = 0.5
+        elif y > 6:
+            y_center = 6.5
+        else:
+            y_center = np.floor(y) + 0.5
+    else:
+        y_center = round(y)
+
+    if size_z % 2 == 0:
+        if z < 1:
+            z_center = 0.5
+        elif z > 6:
+            z_center = 6.5
+        else:
+            z_center = np.floor(z) + 0.5
+    else:
+        z_center = round(z)
+
+    for r_x in range(size_x):
+        for r_y in range(size_y):
+            for r_z in range(size_z):
+                if not ((r_x == 1 or r_x == (size_x - 2)) and (r_y == 1 or r_y == (size_y - 2)) and (
+                        r_z == 1 or r_z == (size_z - 2))) and not (((r_x == 0 or r_x == size_x - 1) and (
+                        r_y == 0 or r_y == 1 or r_y == size_y - 1 or r_y == size_y - 2)) or (
+                                                                           (r_y == 0 or r_y == size_y - 1) and (
+                                                                           r_x == 0 or r_x == 1 or r_x == size_x - 1 or r_x == size_x - 2)) or (
+                                                                           (r_y == 0 or r_y == size_y - 1) and (
+                                                                           r_z == 0 or r_z == 1 or r_z == size_z - 1 or r_z == size_z - 2)) or (
+                                                                           (r_z == 0 or r_z == size_z - 1) and (
+                                                                           r_y == 0 or r_y == 1 or r_y == size_y - 1 or r_y == size_y - 2)) or (
+                                                                           (r_x == 0 or r_x == size_x - 1) and (
+                                                                           r_z == 0 or r_z == 1 or r_z == size_z - 1 or r_z == size_z - 2)) or (
+                                                                           (r_z == 0 or r_z == size_z - 1) and (
+                                                                           r_x == 0 or r_x == 1 or r_x == size_x - 1 or r_x == size_x - 2))):
+                    buffer_leds[((int(np.ceil(x_center - half_x + r_x)) % cubeSize) + (
+                            (int(np.ceil(y_center - half_y + r_y)) % cubeSize) * cubeSize) + (
+                                         (int(np.ceil(z_center - half_z + r_z)) % cubeSize) * (
+                                         cubeSize ** 2)))] = 1
+
+
+def cuboid_on(target_location, size_x, size_y, size_z):
+    x = target_location[0] * (cubeSize - 1)
+    y = target_location[1] * (cubeSize - 1)
+    z = target_location[2] * (cubeSize - 1)
+
+    half_x = size_x / 2
+    half_y = size_y / 2
+    half_z = size_z / 2
+
+    if size_x % 2 == 0:
+        if x < 1:
+            x_center = 0.5
+        elif x > 6:
+            x_center = 6.5
+        else:
+            x_center = np.floor(x) + 0.5
+    else:
+        x_center = round(x)
+
+    if size_y % 2 == 0:
+        if y < 1:
+            y_center = 0.5
+        elif y > 6:
+            y_center = 6.5
+        else:
+            y_center = np.floor(y) + 0.5
+    else:
+        y_center = round(y)
+
+    if size_z % 2 == 0:
+        if z < 1:
+            z_center = 0.5
+        elif z > 6:
+            z_center = 6.5
+        else:
+            z_center = np.floor(z) + 0.5
+    else:
+        z_center = round(z)
+
+    for r_x in range(size_x):
+        for r_y in range(size_y):
+            for r_z in range(size_z):
+                buffer_leds[((int(np.ceil(x_center - half_x + r_x)) % cubeSize) + (
+                        (int(np.ceil(y_center - half_y + r_y)) % cubeSize) * cubeSize) + (
+                                     (int(np.ceil(z_center - half_z + r_z)) % cubeSize) * (cubeSize ** 2)))] = 1
+
+
+def cuboid_off(target_location, size_x, size_y, size_z):
+    x = target_location[0] * (cubeSize - 1)
+    y = target_location[1] * (cubeSize - 1)
+    z = target_location[2] * (cubeSize - 1)
+
+    half_x = int(size_x / 2)
+    half_y = int(size_y / 2)
+    half_z = int(size_z / 2)
+
+    if size_x % 2 == 0:
+        if x < 1:
+            x_center = 0.5
+        elif x > 6:
+            x_center = 6.5
+        else:
+            x_center = np.floor(x) + 0.5
+    else:
+        x_center = round(x)
+
+    if size_y % 2 == 0:
+        if y < 1:
+            y_center = 0.5
+        elif y > 6:
+            y_center = 6.5
+        else:
+            y_center = np.floor(y) + 0.5
+    else:
+        y_center = round(y)
+
+    if size_z % 2 == 0:
+        if z < 1:
+            z_center = 0.5
+        elif z > 6:
+            z_center = 6.5
+        else:
+            z_center = np.floor(z) + 0.5
+    else:
+        z_center = round(z)
+
+    for r_x in range(size_x):
+        for r_y in range(size_y):
+            for r_z in range(size_z):
+                buffer_leds[((int(np.ceil(x_center - half_x + r_x)) % cubeSize) + (
+                        (int(np.ceil(y_center - half_y + r_y)) % cubeSize) * cubeSize) + (
+                                     (int(np.ceil(z_center - half_z + r_z)) % cubeSize) * (cubeSize ** 2)))] = 0
 
 
 # 03: HARDWARESEITIGE FUNKTIONALITÄTEN
 
+def display():
+    leds = buffer_leds
 
-def led_setup():
+
+def setup_pins():
     """
     Setup der Pins
     :return: none
     """
     IO.setmode(IO.BCM)
-    for x in np.ravel(anodePins):
+    for x in anodePins + kathodePins:
         IO.setup(x, IO.OUT)
 
 
-def get_set(x, y):
-    """
-    Erzeugung von 16Bit-Informationen, welche an die Shift-Registerpaare
-    übergeben werden.
-    :param x: Layer (Eingabebereich: 0 - 7)
-    :param y: Paare aus y-ten Zeilen innerhalb des Arrays (Eingabebereich: 0 - 3)
-    :return: Eindimensionales 16er Array
-    """
-    return np.ravel(leds[x, (y * 2):(y * 2 + 2), 0:])
-
-
-def get_pins(y):
-    """
-    :param y:
-    :return: Dreistelliges Array, in dem die Pins gespeichert sind, die für das aktuelle LED-Set zuständig sind
-    """
-    return anodePins[y, 0:]
-
-
 def print_registers(args):
-    """
-    Gibt Informationen an die Pins weiter
-    :param args: Zweidimensionales Array für LED's und Pins
-    :return: none
-    """
-
-    # Auflösen des Parametertupels
-    # sub_leds enthält 16-Bit Input für Schieberegister
-    sub_leds = args[0]
-    # sub_pins enthält die für diese Schieberegister zuständigen Pins
-    sub_pins = args[1]
-
-    for x in sub_leds:
+    for x in leds:
         # Serieller Input über den ser-Pin
-        IO.output(sub_pins[0], x)
+        IO.output(anodePins[0], x)
         time.sleep(delay)
 
         # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
-        IO.output(sub_pins[1], 1)
+        IO.output(anodePins[1], 1)
         time.sleep(delay)
-        IO.output(sub_pins[1], 0)
+        IO.output(anodePins[1], 0)
         time.sleep(delay)
 
-    # rck-bit down Flanke. Gibt 16-Bit Informationen aus
-    IO.output(sub_pins[2], 1)
+    # rck-bit
+    IO.output(anodePins[2], 1)
     time.sleep(delay)
-    IO.output(sub_pins[2], 0)
+    IO.output(anodePins[2], 0)
     time.sleep(delay)
-
-
-# 04: PROGRAMMVERHALTEN
-
-# Setup-Methode der IO-pins
-led_setup()
-
-for x in range(kathodePins.size):
-    # Setzt Pin, welcher den NPN-Transistor des aktuellen layers steuert auf 1
-    IO.output(kathodePins[x], 1)
-    time.sleep(delay)
-
-    # THREADING DER VIER SCHIEBEREGISTERPAARE
-    # benutzt die Pool Klasse der multiprocessing.dummy Library
-    # pool.map ruft die print_registers methode mit einem iterator als parameter auf
-    # der iterator ist in dem fall [0,1,2,3], also gibt es insgesamt vier funktionsaufrufe
-    # der parameter für print_registers ist das Tupel aus get_set und get_pins
-    # tupel deswegen, weil die map funktion nur über einen Parameter mappen kann
-    # get_set liefert das 16 stellige array als input für die schieberegister
-    # get_pins liefert die für das jeweilie Set zuständigen IO Pins
-    # das tupel wird in der print_registers methode wieder aufgelöst
-
-    with Pool(4) as pool:
-        pool.map(print_registers, [(get_set(x, y), get_pins(y)) for y in [0, 1, 2, 3]])
-
-    # setzt layer pin wieder auf 0
-    IO.output(kathodePins[x], 0)
-    time.sleep(delay)
-
-# TO DO:
-
-# 01: SYNCHRONISATION VON PROGRAMMCODE UND API
-# irgendwie muss verhindert werden, dass das led array geändert wird, WÄHREND die api das array ausliest
-# das ist auf jeden fall der allerwichtigste punkt!
-
-# 02: SLEEP FUNKTIONEN
-# ich hab die zwar eingepflegt aber das genaue verhalten muss nochmal geprüft werden
-# ein kompletter durchgang enthält im moment 52 sleeps
-# davon sind 48 durch threading parallelisiert
-# ergibt also effektiv 16 sleeps (1 + 16 * 3 / 4 + 2 + 1)
-
-# 03: REFACTORING
-# keine ahnung ich hab alles ohne klasse programmiert. das geht bestimmt auch schöner. queue python pros
-# vieles ist bestimmt noch hässlich oder unübersichtlich
-# vielleicht halten wir uns an den PEP 8 style guide (den hab ich selber nur noch nicht drauf)
