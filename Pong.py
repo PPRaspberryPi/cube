@@ -22,8 +22,8 @@ class Pong(Game.CubeGame, threading.Thread):
     def __init__(self, cube_size, frame_size):
         Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
-        self.b_loc = [3 / cube_size, 1 / cube_size, 2 / cube_size]
-        self.b_size = 2
+        self.b_loc = [0.5, 0.5, 0.5]
+        self.b_size = 1
         self.b_radius = (self.b_size / self.cube_size) / 2
         self.ball_vel_x = 0.01
         self.ball_vel_y = 0.01
@@ -125,8 +125,7 @@ class Pong(Game.CubeGame, threading.Thread):
                 Direction.direction = None
 
             if self.b_loc[1] - self.b_radius < 0:
-                if not (self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius):
-                    if not (self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius):
+                if not ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
                         self.failed = True
 
                         # Timer for cooldown

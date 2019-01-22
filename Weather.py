@@ -56,6 +56,8 @@ class Weather(Game.CubeGame, threading.Thread):
         # 7xx Atmosphere (Fog)
         # 800 Clear
         # 80x Clouds
+        rain = Animations.Rain(0.5, self.cube_size, 1)
+        rain.play()
         while not self.failed:
             self.direction = Direction.direction
             if self.direction == Direction.Direction.DOWN:
