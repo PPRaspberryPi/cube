@@ -55,7 +55,6 @@ def led_on(*target_leds):
     """
     for x in target_leds:
         buffer_leds[(x[0] % cubeSize) + ((x[1] % cubeSize) * cubeSize) + ((x[2] % cubeSize) * (cubeSize ** 2))] = 1
-        
 
 
 def led_off(*target_leds):
@@ -89,50 +88,62 @@ def change_face(face: Face, face_num: int, frame):
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
                 if frame[y + (((cubeSize - 1) - x) * cubeSize)] == 1:
-                    buffer_leds[(face_num % cubeSize) + ((x % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 1
+                    buffer_leds[
+                        (face_num % cubeSize) + ((x % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 1
                 else:
-                    buffer_leds[(face_num % cubeSize) + ((x % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 0
+                    buffer_leds[
+                        (face_num % cubeSize) + ((x % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 0
 
     elif face is Face.BACK:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
                 if frame[y + (x * cubeSize)] == 1:
-                    buffer_leds[(((cubeSize - 1) - face_num) % cubeSize) + ((x % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 1
+                    buffer_leds[(((cubeSize - 1) - face_num) % cubeSize) + ((x % cubeSize) * cubeSize) + (
+                                (y % cubeSize) * (cubeSize ** 2))] = 1
                 else:
-                    buffer_leds[(((cubeSize - 1) - face_num) % cubeSize) + ((x % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 0
+                    buffer_leds[(((cubeSize - 1) - face_num) % cubeSize) + ((x % cubeSize) * cubeSize) + (
+                                (y % cubeSize) * (cubeSize ** 2))] = 0
 
     elif face is Face.LEFT:
         frame = list(reversed(frame))
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
                 if frame[x + (y * cubeSize)] == 1:
-                    buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + ((face_num % cubeSize) * (cubeSize ** 2))] = 1
+                    buffer_leds[
+                        (x % cubeSize) + ((y % cubeSize) * cubeSize) + ((face_num % cubeSize) * (cubeSize ** 2))] = 1
                 else:
-                    buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + ((face_num % cubeSize) * (cubeSize ** 2))] = 0
+                    buffer_leds[
+                        (x % cubeSize) + ((y % cubeSize) * cubeSize) + ((face_num % cubeSize) * (cubeSize ** 2))] = 0
 
     elif face is Face.RIGHT:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
                 if frame[x + (((cubeSize - 1) - y) * cubeSize)] == 1:
-                    buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 1
+                    buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + (
+                                (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 1
                 else:
-                    buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 0
+                    buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + (
+                                (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 0
 
     elif face is Face.UP:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
                 if frame[x + (y * cubeSize)] == 1:
-                    buffer_leds[(x % cubeSize) + ((face_num % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 1
+                    buffer_leds[
+                        (x % cubeSize) + ((face_num % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 1
                 else:
-                    buffer_leds[(x % cubeSize) + ((face_num % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 0
+                    buffer_leds[
+                        (x % cubeSize) + ((face_num % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 0
 
     elif face is Face.DOWN:
         for x in range(0, cubeSize):
             for y in range(0, cubeSize):
                 if frame[x + (y * cubeSize)] == 1:
-                    buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 1
+                    buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + (
+                                (y % cubeSize) * (cubeSize ** 2))] = 1
                 else:
-                    buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + ((y % cubeSize) * (cubeSize ** 2))] = 0
+                    buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + (
+                                (y % cubeSize) * (cubeSize ** 2))] = 0
     display()
 
 
@@ -308,20 +319,21 @@ def setup_pins():
         IO.setup(x, IO.OUT)
 
 
-def print_registers(args):
-    for x in leds:
-        # Serieller Input über den ser-Pin
-        IO.output(anodePins[0], x)
-        time.sleep(delay)
+def print_registers():
+    while True:
+        for x in leds:
+            # Serieller Input über den ser-Pin
+            IO.output(anodePins[0], x)
+            time.sleep(delay)
 
-        # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
-        IO.output(anodePins[1], 1)
-        time.sleep(delay)
-        IO.output(anodePins[1], 0)
-        time.sleep(delay)
+            # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
+            IO.output(anodePins[1], 1)
+            time.sleep(delay)
+            IO.output(anodePins[1], 0)
+            time.sleep(delay)
 
-    # rck-bit
-    IO.output(anodePins[2], 1)
-    time.sleep(delay)
-    IO.output(anodePins[2], 0)
-    time.sleep(delay)
+        # rck-bit
+        IO.output(anodePins[2], 1)
+        time.sleep(delay)
+        IO.output(anodePins[2], 0)
+        time.sleep(delay)
