@@ -27,7 +27,7 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
         # Ball
         self.ball_size = 1
-        self.ball_loc = [0.5, 0.5, 0.5]
+        self.ball_loc = [0.4, 0.6, 0.5]
         self.ball_radius = (self.ball_size / self.cube_size) / 2
         self.ball_vel_x = 0.01
         self.ball_vel_y = 0.01
@@ -140,12 +140,18 @@ class PongMulti(Game.CubeGame, threading.Thread):
             # If Ball hits player1 wall
             if self.ball_loc[0] == 0 and not any(loc in [self.ball_loc] for loc in self.player1_loc):
                 self.player2_score += 1
-                # self.failed = True
+                api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
+                self.ball_loc = [0.4, 0.6, 0.5]
+                api.cuboid_on(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
+                time.sleep(3)
 
             # If Ball hits player2 wall
-            if self.ball_loc[0] == 7 and not any(loc in [self.ball_loc] for loc in self.player2_loc):
+            if self.ball_loc[0] == 1 and not any(loc in [self.ball_loc] for loc in self.player2_loc):
                 self.player1_score += 1
-                # self.failed = True
+                api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
+                self.ball_loc = [0.4, 0.6, 0.5]
+                api.cuboid_on(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
+                time.sleep(3)
 
             # If Ball hits the paddle bounce off of it and do not go into the paddle P1
             if self.ball_loc[0] == 0 and any(loc in [self.ball_loc] for loc in self.player1_loc):
@@ -170,4 +176,4 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
             api.display()
 
-            time.sleep(0.22)
+            time.sleep(0.02)
