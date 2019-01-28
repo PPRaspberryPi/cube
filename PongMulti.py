@@ -25,6 +25,9 @@ class PongMulti(Game.CubeGame, threading.Thread):
         Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
 
+        self.an = None
+
+
         # Ball
         self.ball_size = 1
         self.ball_loc = [0.4, 0.6, 0.5]
@@ -61,9 +64,17 @@ class PongMulti(Game.CubeGame, threading.Thread):
         pass
 
     def play_animation(self):
-        an = Animations.TickerAnimation("pongmulti")
-        an.start()
-        an.join()
+        self.an = Animations.TickerAnimation("pongmulti")
+        self.an.start()
+
+    def close_animation(self):
+        self.an.stop()
+
+    def stopped_animation(self):
+        return self.an.stopped()
+
+    def is_animation_alive(self):
+        return self.an.is_alive()
 
     def done(self):
         for x in range(0, 8):

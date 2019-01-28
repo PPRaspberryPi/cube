@@ -49,27 +49,26 @@ class LEDCube(threading.Thread):
                     if self.cube_games[self.current_item].has_menu_animation():
                         self.cube_games[self.current_item].play_animation()
 
-                    if self.current_item > 0:
-                        api.change_face(api.Face.LEFT, 0, Frames.arrow_left)
-                    if self.current_item < len(self.cube_games) - 1:
-                        api.change_face(api.Face.RIGHT, 0, Frames.arrow_right)
-
-                    self.show_2d_frame(self.cube_games[self.current_item].get_menu_frame())
-
                     while not updated:
+
+                        self.show_menu_state()
+
                         if api.cube.pressed_enter:
+                            self.cube_games[self.current_item].close_animation()
                             self.current_game = self.cube_games[self.current_item]
                             api.cube.pressed_enter = True
                             updated = True
 
                         if Direction.direction == Direction.Direction.RIGHT and self.current_item < len(
                                 self.cube_games) - 1:
+                            self.cube_games[self.current_item].close_animation()
                             self.current_item += 1
                             Direction.direction = None
                             api.clear_all()
                             updated = True
 
                         if Direction.direction == Direction.Direction.LEFT and self.current_item > 0:
+                            self.cube_games[self.current_item].close_animation()
                             self.current_item -= 1
                             Direction.direction = None
                             api.clear_all()
@@ -78,6 +77,8 @@ class LEDCube(threading.Thread):
                         # Otherwise we will get array out of bounds exception (similar to mathf.clamp)
                         # self.current_item = max(0, min(self.current_item, len(self.cube_games) - 1))
                         time.sleep(0.2)
+
+
 
                 api.clear_all()
                 self.start_game(self.current_item)
@@ -98,6 +99,14 @@ class LEDCube(threading.Thread):
     def kill_game(self, game_id):
         pass
 
+    def show_menu_state(self):
+        if not self.cube_games[self.current_item].is_animation_alive():
+            if self.current_item > 0:
+                api.change_face(api.Face.LEFT, 0, Frames.arrow_left)
+            if self.current_item < len(self.cube_games) - 1:
+                api.change_face(api.Face.RIGHT, 0, Frames.arrow_right)
+
+            self.show_2d_frame(self.cube_games[self.current_item].get_menu_frame())
 
 def register_all():
     if led_cube is not None:

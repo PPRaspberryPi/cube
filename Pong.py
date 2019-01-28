@@ -22,6 +22,9 @@ class Pong(Game.CubeGame, threading.Thread):
     def __init__(self, cube_size, frame_size):
         Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
+
+        self.an = None
+
         self.b_loc = [0.5, 0.5, 0.5]
         self.b_size = 1
         self.b_radius = (self.b_size / self.cube_size) / 2
@@ -47,9 +50,17 @@ class Pong(Game.CubeGame, threading.Thread):
         pass
 
     def play_animation(self):
-        an = Animations.TickerAnimation("pong")
-        an.start()
-        an.join()
+        self.an = Animations.TickerAnimation("pong")
+        self.an.start()
+
+    def close_animation(self):
+        self.an.stop()
+
+    def stopped_animation(self):
+        return self.an.stopped()
+
+    def is_animation_alive(self):
+        return self.an.is_alive()
 
     def done(self):
         for x in range(0, 8):

@@ -8,8 +8,7 @@ import wave
 import numpy
 from scipy.fftpack import dct
 import Util as util
-import simpleaudio as sa
-
+#import simpleaudio as sa
 
 
 class AudioVis(Game.CubeGame, threading.Thread):
@@ -28,6 +27,8 @@ class AudioVis(Game.CubeGame, threading.Thread):
     def __init__(self, cube_size, frame_size):
         Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
+        self.an = None
+
         self.finished = False
         self.file_name = "music.wav"
         self.status = 'stopped'
@@ -64,15 +65,23 @@ class AudioVis(Game.CubeGame, threading.Thread):
         pass
 
     def play_animation(self):
-        an = Animations.TickerAnimation("audiovis")
-        an.start()
-        an.join()
+        self.an = Animations.TickerAnimation("audiovis")
+        self.an.start()
+
+    def close_animation(self):
+        self.an.stop()
+
+    def stopped_animation(self):
+        return self.an.stopped()
+
+    def is_animation_alive(self):
+        return self.an.is_alive()
 
     def done(self):
         pass
 
     def run(self):
-        sa.WaveObject.from_wave_file(self.file_name).play()
+        #sa.WaveObject.from_wave_file(self.file_name).play()
         while not self.finished:
             if Direction.direction == Direction.Direction.BACK:
                 self.finished = True
@@ -82,13 +91,18 @@ class AudioVis(Game.CubeGame, threading.Thread):
 
             self.frames = [h] + self.frames
 
+            """
             i = 0
             for f in self.frames:
                 if i < self.cube_size:
-                    api.change_face(api.Face.FRONT, self.cube_size - 1 - i, util.construct_2D_audio_frame(self.cube_size, f))
+                    api.change_face(api.Face.FRONT, i, util.construct_2D_audio_frame(self.cube_size, f))
                     i += 1
                 else:
                     self.frames.remove(f)
+                    """
+
+            for x in range(self.cube_size):
+                api.change_face(api.Face.FRONT, self.cube_size - 1 - x, util.construct_2D_audio_frame(self.cube_size, h, x))
 
             self.num -= (1 / self.fps) * self.framerate
 
