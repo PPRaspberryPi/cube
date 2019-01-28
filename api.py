@@ -309,6 +309,10 @@ def display():
     leds = buffer_leds
 
 
+def start():
+    setup_pins()
+    print_registers()
+
 def setup_pins():
     """
     Setup der Pins
