@@ -29,7 +29,7 @@ delay = 0.001
 anodePins = [9, 10, 11]
 
 # Array enthält die Namen der Kathoden-Pins
-kathodePins = [12, 13, 14, 15, 16, 17, 18, 19]
+kathodePins = [24, 23, 22, 27, ]
 
 # 512-Bit boolean-Array für die LED's
 leds = [0 for x in range(cubeSize ** 3)]
@@ -321,19 +321,23 @@ def setup_pins():
 
 def print_registers():
     while True:
-        for x in leds:
-            # Serieller Input über den ser-Pin
-            IO.output(anodePins[0], x)
+        for y in kathodePins:
+            for x in leds:
+                # Serieller Input über den ser-Pin
+                IO.output(anodePins[0], x)
+                time.sleep(delay)
+
+                # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
+                IO.output(anodePins[1], 1)
+                time.sleep(delay)
+                IO.output(anodePins[1], 0)
+                time.sleep(delay)
+
+            # rck-bit
+            IO.output(anodePins[2], 1)
+            time.sleep(delay)
+            IO.output(anodePins[2], 0)
             time.sleep(delay)
 
-            # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
-            IO.output(anodePins[1], 1)
-            time.sleep(delay)
-            IO.output(anodePins[1], 0)
-            time.sleep(delay)
-
-        # rck-bit
-        IO.output(anodePins[2], 1)
-        time.sleep(delay)
-        IO.output(anodePins[2], 0)
-        time.sleep(delay)
+            IO.output(y - 1, 0)
+            IO.output(y, 1)

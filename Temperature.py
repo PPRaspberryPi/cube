@@ -6,7 +6,7 @@ import bpm280
 
 
 
-class AudioVis(Game.CubeGame, threading.Thread):
+class Temperature(Game.CubeGame, threading.Thread):
     _name = 'Audio Visualizer'
     _version = 'v0.1'
 
