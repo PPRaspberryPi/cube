@@ -4,6 +4,7 @@ import time
 from enum import Enum
 import RPi.GPIO as IO
 import numpy as np
+import Direction
 
 # import keyboard
 
@@ -318,9 +319,53 @@ def display(leds):
 def start():
     setup_pins()
     p = multiprocessing.Process(target=print_registers, args=(leds,))
+    gamepad1 = multiprocessing.Process(target=gamepad1)
+    gamepad2 = multiprocessing.Process(target=gamepad2)
     p.start()
+    gamepad1.start()
+    gamepad2.start()
     p.join()
 
+
+def gamepad1():
+    while True:
+    try:
+        events = get_gamepad()
+    except Exception:
+        print("no gamepad found")
+    for eve in events:
+        if eve.code == "ABS_Y" and eve.state == 0:
+            Direction.direction = Direction.Direction.UP
+        if eve.code == "ABS_Y" and eve.state == 255:
+            Direction.direction = Direction.Direction.DOWN
+        if eve.code == "ABS_X" and eve.state == 255:
+            Direction.direction = Direction.Direction.RIGHT
+        if eve.code == "ABS_X" and eve.state == 0:
+            Direction.direction = Direction.Direction.LEFT
+        if eve.code == "BTN_THUMB2" and eve.state == 1:
+            Direction.direction = Direction.Direction.BACK
+        if eve.code == "BTN_TRIGGER" and eve.state == 1:
+            Direction.direction = Direction.Direction.FORTH
+
+def gamepad2():
+    while True:
+    try:
+        events = get_gamepad()
+    except Exception:
+        print("no gamepad found")
+    for eve in events:
+        if eve.code == "ABS_Y" and eve.state == 0:
+            Direction.direction2 = Direction.Direction.UP
+        if eve.code == "ABS_Y" and eve.state == 255:
+            Direction.direction2 = Direction.Direction.DOWN
+        if eve.code == "ABS_X" and eve.state == 255:
+            Direction.direction2 = Direction.Direction.RIGHT
+        if eve.code == "ABS_X" and eve.state == 0:
+            Direction.direction2 = Direction.Direction.LEFT
+        if eve.code == "BTN_THUMB2" and eve.state == 1:
+            Direction.direction2 = Direction.Direction.BACK
+        if eve.code == "BTN_TRIGGER" and eve.state == 1:
+            Direction.direction2 = Direction.Direction.FORTH
 
 def setup_pins():
     """
