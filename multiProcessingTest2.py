@@ -8,7 +8,7 @@ leds = multiprocessing.Array('i', cube_size)
 
 def display(leds):
     """for i, num in enumerate(buffer_leds):
-        leds[i] = num"""
+        leds[i] = num """
     leds[:] = buffer_leds
     print("changed array")
 
