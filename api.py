@@ -3,6 +3,7 @@ import time
 from enum import Enum
 import RPi.GPIO as IO
 import numpy as np
+#import keyboard
 
 IO.VERBOSE = False
 
@@ -29,11 +30,13 @@ delay = 0.001
 anodePins = [9, 10, 11]
 
 # Array enthält die Namen der Kathoden-Pins
-kathodePins = [12, 13, 14, 15, 16, 17, 18, 19]
+kathodePins = [24, 23, 22, 27, ]
 
 # 512-Bit boolean-Array für die LED's
 leds = [0 for x in range(cubeSize ** 3)]
 buffer_leds = [0 for y in range(cubeSize ** 3)]
+
+pressed_enter = False
 
 
 # 02: SOFTWARESEITIGE FUNKTIONALITÄTEN
@@ -99,10 +102,10 @@ def change_face(face: Face, face_num: int, frame):
             for y in range(0, cubeSize):
                 if frame[y + (x * cubeSize)] == 1:
                     buffer_leds[(((cubeSize - 1) - face_num) % cubeSize) + ((x % cubeSize) * cubeSize) + (
-                                (y % cubeSize) * (cubeSize ** 2))] = 1
+                            (y % cubeSize) * (cubeSize ** 2))] = 1
                 else:
                     buffer_leds[(((cubeSize - 1) - face_num) % cubeSize) + ((x % cubeSize) * cubeSize) + (
-                                (y % cubeSize) * (cubeSize ** 2))] = 0
+                            (y % cubeSize) * (cubeSize ** 2))] = 0
 
     elif face is Face.LEFT:
         frame = list(reversed(frame))
@@ -120,10 +123,10 @@ def change_face(face: Face, face_num: int, frame):
             for y in range(0, cubeSize):
                 if frame[x + (((cubeSize - 1) - y) * cubeSize)] == 1:
                     buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + (
-                                (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 1
+                            (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 1
                 else:
                     buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + (
-                                (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 0
+                            (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 0
 
     elif face is Face.UP:
         for x in range(0, cubeSize):
@@ -140,10 +143,10 @@ def change_face(face: Face, face_num: int, frame):
             for y in range(0, cubeSize):
                 if frame[x + (y * cubeSize)] == 1:
                     buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + (
-                                (y % cubeSize) * (cubeSize ** 2))] = 1
+                            (y % cubeSize) * (cubeSize ** 2))] = 1
                 else:
                     buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + (
-                                (y % cubeSize) * (cubeSize ** 2))] = 0
+                            (y % cubeSize) * (cubeSize ** 2))] = 0
     display()
 
 
@@ -309,6 +312,11 @@ def display():
     leds = buffer_leds
 
 
+def start():
+    setup_pins()
+    print_registers()
+
+
 def setup_pins():
     """
     Setup der Pins
@@ -321,19 +329,23 @@ def setup_pins():
 
 def print_registers():
     while True:
-        for x in leds:
-            # Serieller Input über den ser-Pin
-            IO.output(anodePins[0], x)
-            time.sleep(delay)
+        for y in range(8):
+            IO.output(kathodePins[y], 1)
+            for x in leds[y * 64: (y + 1) * 64]:
+                # Serieller Input über den ser-Pin
+                IO.output(anodePins[0], x)
+                time.sleep(delay)
 
-            # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
-            IO.output(anodePins[1], 1)
-            time.sleep(delay)
-            IO.output(anodePins[1], 0)
-            time.sleep(delay)
+                # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
+                IO.output(anodePins[1], 1)
+                time.sleep(delay)
+                IO.output(anodePins[1], 0)
+                time.sleep(delay)
 
-        # rck-bit
-        IO.output(anodePins[2], 1)
-        time.sleep(delay)
-        IO.output(anodePins[2], 0)
-        time.sleep(delay)
+            # rck-bit
+            IO.output(anodePins[2], 1)
+            time.sleep(delay)
+            IO.output(anodePins[2], 0)
+            time.sleep(delay * 10)
+
+            IO.output(kathodePins[y], 0)

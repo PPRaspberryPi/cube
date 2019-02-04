@@ -37,7 +37,7 @@ right = 3
 down = 4
 
 
-class controller():
+class Controller():
 
     def __init__(self, eventnum):
         """
@@ -64,35 +64,31 @@ class controller():
             if event.type == ecodes.EV_ABS:
                 if event.value == 0:
                     if event.code == 1:
-                        return up
+                        print( up)
                     if event.code == 0:
-                        return left
+                        print( left)
                 if event.value == 255:
                     if event.code == 0:
-                        return right
+                        print( right)
                     if event.code == 1:
-                        return down
+                        print( down)
             if event.type == ecodes.EV_KEY:
                 if event.value == 1:
                     if event.code == self.xBtn:
-                        return self.xBtn
-                    elif event.code == self.oBtn:
-                        return self.oBtn
-                    elif event.code == self.viereckBtn:
-                        return self.viereckBtn
-                    elif event.code == self.dreieckBtn:
-                        return self.dreieckBtn
+                        print(self.xBtn)
+                    elif event.code == self.yBtn:
+                        print(self.yBtn)
+                    elif event.code == self.aBtn:
+                        print(self.aBtn)
+                    elif event.code == self.bBtn:
+                        print(self.bBtn)
 
                     elif event.code == self.start:
-                        return self.start
+                        print(self.start)
                     elif event.code == self.select:
-                        return self.select
+                        print(self.select)
 
-                    elif event.code == self.lTrig_1:
-                        return self.lTrig_1
-                    elif event.code == self.lTrig_2:
-                        return self.lTrig_2
-                    elif event.code == self.rTrig_1:
-                        return self.rTrig_1
-                    elif event.code == self.rTrig_2:
-                        return self.rTrig_2
+                    elif event.code == self.lTrig:
+                        print(self.lTrig)
+                    elif event.code == self.rTrig:
+                        print(self.rTrig)

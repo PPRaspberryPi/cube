@@ -11,3 +11,4 @@ class Direction(Enum):
 
 
 direction = Direction.UP
+direction2 = Direction.UP

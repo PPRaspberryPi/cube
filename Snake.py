@@ -26,6 +26,8 @@ class Snake(Game.CubeGame, threading.Thread):
     def __init__(self, cube_size, frame_size):
         Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
+        self.an = None
+
         self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
         self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
         self.direction = Direction.Direction.UP
@@ -44,9 +46,17 @@ class Snake(Game.CubeGame, threading.Thread):
         pass
 
     def play_animation(self):
-        an = Animations.TickerAnimation("snake")
-        an.start()
-        an.join()
+        self.an = Animations.TickerAnimation("snake")
+        self.an.start()
+
+    def close_animation(self):
+        self.an.stop()
+
+    def stopped_animation(self):
+        return self.an.stopped()
+
+    def is_animation_alive(self):
+        return self.an.is_alive()
 
     def done(self):
         pass

@@ -24,6 +24,9 @@ class Weather(Game.CubeGame, threading.Thread):
     def __init__(self, cube_size, frame_size):
         Game.CubeGame.__init__(self, cube_size, frame_size, self._name)
         threading.Thread.__init__(self)
+
+        self.an = None
+
         self.failed = False
 
         self.url = "http://api.openweathermap.org/data/2.5/weather?id=2934691&units=metric&appid" \
@@ -39,9 +42,17 @@ class Weather(Game.CubeGame, threading.Thread):
         pass
 
     def play_animation(self):
-        an = Animations.TickerAnimation("weather")
-        an.start()
-        an.join()
+        self.an = Animations.TickerAnimation("weather")
+        self.an.start()
+
+    def close_animation(self):
+        self.an.stop()
+
+    def stopped_animation(self):
+        return self.an.stopped()
+
+    def is_animation_alive(self):
+        return self.an.is_alive()
 
     def done(self):
         pass

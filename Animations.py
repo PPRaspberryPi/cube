@@ -8,8 +8,15 @@ import random
 class TickerAnimation(threading.Thread):
 
     def __init__(self, game_name):
-        super().__init__()
+        super(TickerAnimation, self).__init__()
+        self._stop_event = threading.Event()
         self.game_name = game_name
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
 
     def run(self):
         for l in self.game_name:
