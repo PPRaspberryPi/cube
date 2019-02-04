@@ -10,7 +10,7 @@ import vCubeAPI as api
 
 class PongMulti(Game.CubeGame, threading.Thread):
     _name = 'PongMultiplayer'
-    _version = 'v0.1'
+    _version = 'v0.2'
 
     _menu_frame = [0, 1, 0, 0, 0, 1, 0, 0,
                    0, 0, 1, 0, 1, 0, 0, 0,
