@@ -2,10 +2,12 @@
 import multiprocessing
 import time
 from enum import Enum
+
 import RPi.GPIO as IO
 import numpy as np
-import Direction
 from inputs import get_gamepad
+
+import Direction
 
 # import keyboard
 
@@ -348,6 +350,7 @@ def gamepad1():
             if eve.code == "BTN_TRIGGER" and eve.state == 1:
                 Direction.direction = Direction.Direction.FORTH
 
+
 def gamepad2():
     while True:
         try:
@@ -367,6 +370,7 @@ def gamepad2():
                 Direction.direction2 = Direction.Direction.BACK
             if eve.code == "BTN_TRIGGER" and eve.state == 1:
                 Direction.direction2 = Direction.Direction.FORTH
+
 
 def setup_pins():
     """
