@@ -1,9 +1,11 @@
 # Import für die sleep funktionen
+import multiprocessing
 import time
 from enum import Enum
 import RPi.GPIO as IO
 import numpy as np
-#import keyboard
+
+# import keyboard
 
 IO.VERBOSE = False
 
@@ -33,8 +35,10 @@ anodePins = [9, 10, 11]
 kathodePins = [24, 23, 22, 27, ]
 
 # 512-Bit boolean-Array für die LED's
-leds = [0 for x in range(cubeSize ** 3)]
-buffer_leds = [0 for y in range(cubeSize ** 3)]
+# leds = [0 for x in range(cubeSize ** 3)]
+# buffer_leds = [0 for y in range(cubeSize ** 3)]
+buffer_leds = [0 for x in range(cubeSize ** 3)]
+leds = multiprocessing.Array('i', cubeSize ** 3)
 
 pressed_enter = False
 
@@ -147,7 +151,7 @@ def change_face(face: Face, face_num: int, frame):
                 else:
                     buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + (
                             (y % cubeSize) * (cubeSize ** 2))] = 0
-    display()
+    display(leds)
 
 
 def draw_sun(target_location, size_x, size_y, size_z):
@@ -307,14 +311,15 @@ def cuboid_off(target_location, size_x, size_y, size_z):
 
 # 03: HARDWARESEITIGE FUNKTIONALITÄTEN
 
-def display():
-    global leds
-    leds = buffer_leds
+def display(leds):
+    leds[:] = buffer_leds
 
 
 def start():
     setup_pins()
-    print_registers()
+    p = multiprocessing.Process(target=print_registers, args=(leds,))
+    p.start()
+    p.join()
 
 
 def setup_pins():
@@ -327,25 +332,26 @@ def setup_pins():
         IO.setup(x, IO.OUT)
 
 
-def print_registers():
+def print_registers(leds):
     while True:
         for y in range(8):
             IO.output(kathodePins[y], 1)
-            for x in leds[y * 64: (y + 1) * 64]:
-                # Serieller Input über den ser-Pin
-                IO.output(anodePins[0], x)
-                time.sleep(delay)
+            for z in range(8):
+                for x in range(8):
+                    # Serieller Input über den ser-Pin cube.buffer_cubes[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)].setOn()
+                    IO.output(anodePins[0], leds[x + y * 8 + z * cubeSize ** 2])
+                    # time.sleep(delay)
 
-                # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
-                IO.output(anodePins[1], 1)
-                time.sleep(delay)
-                IO.output(anodePins[1], 0)
-                time.sleep(delay)
+                    # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
+                    IO.output(anodePins[1], 1)
+                    # time.sleep(delay)
+                    IO.output(anodePins[1], 0)
+                    # time.sleep(delay)
 
             # rck-bit
             IO.output(anodePins[2], 1)
-            time.sleep(delay)
+            # time.sleep(delay)
             IO.output(anodePins[2], 0)
-            time.sleep(delay * 10)
+            time.sleep(delay)
 
             IO.output(kathodePins[y], 0)
