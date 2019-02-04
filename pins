@@ -1,0 +1,9 @@
+   
+	VCC	Q1
+	Q0	Q2
+	DS	Q3
+	OE	Q4
+	STR	Q5
+	SH	Q6
+	MSTR	Q7
+	OUT	GND
