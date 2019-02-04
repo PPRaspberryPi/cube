@@ -102,7 +102,7 @@ class PongMulti(Game.CubeGame, threading.Thread):
             if self.ball_loc[2] - self.ball_radius < 0 or self.ball_loc[2] + self.ball_radius > 1:
                 self.ball_vel_z *= -1
 
-            # Player moving
+            # Player1 moving
             self.player1_action = Direction.direction
 
             if self.player1_action is not None:
@@ -147,6 +147,52 @@ class PongMulti(Game.CubeGame, threading.Thread):
                     api.cuboid_on(self.player1_loc, self.player1_size, self.player1_size, 1)
 
                 Direction.direction = None
+
+            # Player2 moving
+            self.player2_action = Direction.direction2
+
+            if self.player2_action is not None:
+                if self.player2_action == Direction.Direction.UP:
+                    api.cuboid_off(self.player2_loc, self.player2_size, self.player2_size, 1)
+
+                    if self.player2_loc[1] + self.mov_val <= 1:
+                        self.player2_loc[1] += self.mov_val
+                    else:
+                        self.player2_loc[1] = 0.99
+
+                    api.cuboid_on(self.player2_loc, self.player2_size, self.player2_size, 1)
+
+                if self.player2_action == Direction.Direction.DOWN:
+                    api.cuboid_off(self.player2_loc, self.player2_size, self.player2_size, 1)
+
+                    if self.player2_loc[1] - self.mov_val >= 0:
+                        self.player2_loc[1] -= self.mov_val
+                    else:
+                        self.player2_loc[1] = 0.01
+
+                    api.cuboid_on(self.player2_loc, self.player2_size, self.player2_size, 1)
+
+                if self.player2_action == Direction.Direction.BACK:
+                    api.cuboid_off(self.player2_loc, self.player2_size, self.player2_size, 1)
+
+                    if self.player2_loc[0] + self.mov_val <= 1:
+                        self.player2_loc[0] += self.mov_val
+                    else:
+                        self.player2_loc[0] = 0.99
+
+                    api.cuboid_on(self.player2_loc, self.player2_size, self.player2_size, 1)
+
+                if self.player2_action == Direction.Direction.FORTH:
+                    api.cuboid_off(self.player2_loc, self.player2_size, self.player2_size, 1)
+
+                    if self.player2_loc[0] - self.mov_val >= 0:
+                        self.player2_loc[0] -= self.mov_val
+                    else:
+                        self.player2_loc[0] = 0.01
+
+                    api.cuboid_on(self.player2_loc, self.player2_size, self.player2_size, 1)
+
+                Direction.direction2 = None
 
             # If Ball hits player1 wall
             if self.ball_loc[0] == 0 and not any(loc in [self.ball_loc] for loc in self.player1_loc):
