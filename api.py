@@ -99,10 +99,10 @@ def change_face(face: Face, face_num: int, frame):
             for y in range(0, cubeSize):
                 if frame[y + (x * cubeSize)] == 1:
                     buffer_leds[(((cubeSize - 1) - face_num) % cubeSize) + ((x % cubeSize) * cubeSize) + (
-                                (y % cubeSize) * (cubeSize ** 2))] = 1
+                            (y % cubeSize) * (cubeSize ** 2))] = 1
                 else:
                     buffer_leds[(((cubeSize - 1) - face_num) % cubeSize) + ((x % cubeSize) * cubeSize) + (
-                                (y % cubeSize) * (cubeSize ** 2))] = 0
+                            (y % cubeSize) * (cubeSize ** 2))] = 0
 
     elif face is Face.LEFT:
         frame = list(reversed(frame))
@@ -120,10 +120,10 @@ def change_face(face: Face, face_num: int, frame):
             for y in range(0, cubeSize):
                 if frame[x + (((cubeSize - 1) - y) * cubeSize)] == 1:
                     buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + (
-                                (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 1
+                            (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 1
                 else:
                     buffer_leds[(x % cubeSize) + ((y % cubeSize) * cubeSize) + (
-                                (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 0
+                            (((cubeSize - 1) - face_num) % cubeSize) * (cubeSize ** 2))] = 0
 
     elif face is Face.UP:
         for x in range(0, cubeSize):
@@ -140,10 +140,10 @@ def change_face(face: Face, face_num: int, frame):
             for y in range(0, cubeSize):
                 if frame[x + (y * cubeSize)] == 1:
                     buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + (
-                                (y % cubeSize) * (cubeSize ** 2))] = 1
+                            (y % cubeSize) * (cubeSize ** 2))] = 1
                 else:
                     buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + (
-                                (y % cubeSize) * (cubeSize ** 2))] = 0
+                            (y % cubeSize) * (cubeSize ** 2))] = 0
     display()
 
 
@@ -313,6 +313,7 @@ def start():
     setup_pins()
     print_registers()
 
+
 def setup_pins():
     """
     Setup der Pins
@@ -325,8 +326,9 @@ def setup_pins():
 
 def print_registers():
     while True:
-        for y in kathodePins:
-            for x in leds:
+        for y in range(8):
+            IO.output(kathodePins[y], 1)
+            for x in leds[y * 64: (y + 1) * 64]:
                 # Serieller Input über den ser-Pin
                 IO.output(anodePins[0], x)
                 time.sleep(delay)
@@ -341,7 +343,6 @@ def print_registers():
             IO.output(anodePins[2], 1)
             time.sleep(delay)
             IO.output(anodePins[2], 0)
-            time.sleep(delay)
+            time.sleep(delay * 10)
 
-            IO.output(y - 1, 0)
-            IO.output(y, 1)
+            IO.output(kathodePins[y], 0)
