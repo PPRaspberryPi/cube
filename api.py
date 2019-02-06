@@ -339,7 +339,6 @@ def gamepad1(dir):
             print("no gamepad found")
         for eve in events:
             if eve.code == "ABS_Y" and eve.state == 0:
-                print("p1")
                 dir.value = 1
             if eve.code == "ABS_Y" and eve.state == 255:
                 dir.value = 2
@@ -364,7 +363,6 @@ def gamepad2(dir):
         for eve in events:
             if eve.code == "ABS_Y" and eve.state == 0:
                 dir.value = 1
-                print("p2")
             if eve.code == "ABS_Y" and eve.state == 255:
                 dir.value = 2
             if eve.code == "ABS_X" and eve.state == 255:

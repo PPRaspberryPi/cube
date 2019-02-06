@@ -194,6 +194,13 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
                 Direction.direction_p_2.value = 0
 
+            if self.ball_loc[2] - self.ball_radius < 0:
+                if not ((self.player1_loc[1] + self.player1_radius > self.player1_loc[1] > self.player1_loc[1] - self.player1_radius) and (
+                        self.player1_loc[0] + self.player1_radius > self.player1_loc[0] > self.player1_loc[0] - self.player1_radius)):
+                    self.failed = True
+
+                    self.done()
+
             # If Ball hits player1 wall
             if self.ball_loc[2] == 0 and not any(loc in [self.ball_loc] for loc in self.player1_loc):
                 self.player2_score += 1
