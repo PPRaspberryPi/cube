@@ -194,28 +194,24 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
                 Direction.direction_p_2.value = 0
 
+            # If Ball hits player1 wall
             if self.ball_loc[2] - self.ball_radius < 0:
                 if not ((self.player1_loc[1] + self.player1_radius > self.ball_loc[1] > self.player1_loc[1] - self.player1_radius) and (
-                        self.player1_loc[0] + self.player1_radius > self.ball_loc[0] > self.player1_loc[0] - self.player1_radius)):
-                    self.failed = True
-
-                    self.done()
-
-            # If Ball hits player1 wall
-            if self.ball_loc[2] == 0 and not any(loc in [self.ball_loc] for loc in self.player1_loc):
-                self.player2_score += 1
-                api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
-                self.ball_loc = [0.4, 0.6, 0.5]
-                api.cuboid_on(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
-                time.sleep(3)
+                        self.player1_loc[0] + self.player1_radius > self.ball_loc[0] > self.player1_loc[0] - self.player1_radius)):                self.player2_score += 1
+                    api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
+                    self.ball_loc = [0.4, 0.6, 0.5]
+                    api.cuboid_on(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
+                    time.sleep(3)
 
             # If Ball hits player2 wall
-            if self.ball_loc[2] == 1 and not any(loc in [self.ball_loc] for loc in self.player2_loc):
-                self.player1_score += 1
-                api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
-                self.ball_loc = [0.4, 0.6, 0.5]
-                api.cuboid_on(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
-                time.sleep(3)
+            if self.ball_loc[2] + self.ball_radius > 1:
+                if not ((self.player2_loc[1] + self.player2_radius > self.ball_loc[1] > self.player2_loc[1] - self.player2_radius) and (
+                        self.player2_loc[0] + self.player2_radius > self.ball_loc[0] > self.player2_loc[0] - self.player2_radius)):
+                    self.player1_score += 1
+                    api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
+                    self.ball_loc = [0.4, 0.6, 0.5]
+                    api.cuboid_on(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
+                    time.sleep(3)
 
             # If Ball hits the paddle bounce off of it and do not go into the paddle P1
             if self.ball_loc[0] == 0 and any(loc in [self.ball_loc] for loc in self.player1_loc):
