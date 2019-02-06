@@ -51,7 +51,7 @@ class AudioVis(Game.CubeGame, threading.Thread):
 
         self.amplifier = 12
 
-        self.fps = 60
+        self.fps = 24
 
         self.frames = []
 
