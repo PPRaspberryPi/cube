@@ -41,7 +41,7 @@ class Exit(Game.CubeGame, threading.Thread):
         pass
 
     def play_animation(self):
-        self.an = Animations.TickerAnimation("weather")
+        self.an = Animations.TickerAnimation("exit")
         self.an.start()
 
     def close_animation(self):
