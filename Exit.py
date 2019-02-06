@@ -1,3 +1,4 @@
+import os
 import threading
 import time
 
@@ -6,6 +7,7 @@ import api
 import requests
 import Animations
 import Game
+from subprocess import call
 
 
 class Exit(Game.CubeGame, threading.Thread):
@@ -55,5 +57,5 @@ class Exit(Game.CubeGame, threading.Thread):
         pass
 
     def run(self):
-        
+        os.system("sudo shutdown -h now")
         Direction.direction_p_1.value = 0
