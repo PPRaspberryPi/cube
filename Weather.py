@@ -84,6 +84,7 @@ class Weather(Game.CubeGame, threading.Thread):
             anim = Animations.Sun()
         elif weather == "Clouds":
             anim = Animations.Clouds(1, self.cube_size, 0.3)
+        anim = Animations.Sun()
         anim.start()
         anim.join()
         Direction.direction_p_1.value = 0
