@@ -62,6 +62,8 @@ class Rain(threading.Thread):
 
             time.sleep(1 / self.speed)
 
+            api.display(api.leds)
+
 
 class Snow(threading.Thread):
 
@@ -92,6 +94,8 @@ class Snow(threading.Thread):
 
             time.sleep(1 / self.speed)
 
+            api.display(api.leds)
+
 
 class Fog:
 
@@ -121,6 +125,8 @@ class Fog:
                 api.cuboid_on(x, 1, 1, 3)
 
             time.sleep(1 / self.speed)
+
+            api.display(api.leds)
 
 
 class Clouds(threading.Thread):
@@ -158,6 +164,8 @@ class Clouds(threading.Thread):
 
             time.sleep(1 / self.speed)
 
+            api.display(api.leds)
+
 
 class Sun(threading.Thread):
 
@@ -166,5 +174,7 @@ class Sun(threading.Thread):
 
     def run(self):
         api.draw_sun([0.5, 0.5, 0.5], 8, 8, 8)
+        api.display(api.leds)
         while True:
             time.sleep(0.5)
+
