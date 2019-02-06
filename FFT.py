@@ -30,7 +30,7 @@ class AudioVis(Game.CubeGame, threading.Thread):
         self.an = None
 
         self.finished = False
-        self.file_name = "wagner.wav"
+        self.file_name = "music.wav"
         self.status = 'stopped'
         self.N = self.cube_size  # num of bars
         self.HEIGHT = self.cube_size  # height of a bar
