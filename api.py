@@ -324,10 +324,10 @@ def start():
     setup_pins()
     p = multiprocessing.Process(target=print_registers, args=(leds,))
     pad1 = multiprocessing.Process(target=gamepad1, args=(Direction.direction_p_1,))
-    # pad2 = multiprocessing.Process(target=gamepad2, args=(Direction.direction_p_2,))
+    pad2 = multiprocessing.Process(target=gamepad2, args=(Direction.direction_p_2,))
     p.start()
     pad1.start()
-    # pad2.start()
+    pad2.start()
     p.join()
 
 
