@@ -381,6 +381,7 @@ def get_pressed_enter():
     global pressed_enter
     if Direction.direction_p_1.value == 7:
         pressed_enter = True
+    return pressed_enter
 
 
 def set_pressed_enter(pressed):
