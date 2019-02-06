@@ -334,7 +334,7 @@ def start():
 def gamepad1(dir):
     while True:
         try:
-            events = get_gamepad()
+            events = get_gamepad(0)
         except Exception:
             print("no gamepad found")
         for eve in events:
@@ -358,7 +358,7 @@ def gamepad1(dir):
 def gamepad2(dir):
     while True:
         try:
-            events = get_gamepad()
+            events = get_gamepad(1)
         except Exception:
             print("no gamepad found")
         for eve in events:
