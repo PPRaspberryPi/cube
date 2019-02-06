@@ -37,7 +37,7 @@ delay = 0.01
 anodePins = [9, 25, 4]
 
 # Array enthält die Namen der Kathoden-Pins
-kathodePins = [14,15,17,18,27,22,23,24]
+kathodePins = [14, 15, 17, 18, 27, 22, 23, 24]
 
 # 512-Bit boolean-Array für die LED's
 # leds = [0 for x in range(cubeSize ** 3)]
@@ -323,15 +323,15 @@ def display(leds):
 def start():
     setup_pins()
     p = multiprocessing.Process(target=print_registers, args=(leds,))
-    pad1 = multiprocessing.Process(target=gamepad1)
-    #pad2 = multiprocessing.Process(target=gamepad2)
+    pad1 = multiprocessing.Process(target=gamepad1, args=(Direction.direction_p_1,))
+    # pad2 = multiprocessing.Process(target=gamepad2, args=(Direction.direction_p_2,))
     p.start()
     pad1.start()
-    #pad2.start()
+    # pad2.start()
     p.join()
 
 
-def gamepad1():
+def gamepad1(dir):
     while True:
         try:
             events = get_gamepad()
@@ -339,22 +339,22 @@ def gamepad1():
             print("no gamepad found")
         for eve in events:
             if eve.code == "ABS_Y" and eve.state == 0:
-                Direction.direction = Direction.Direction.UP
+                dir.value = 1
             if eve.code == "ABS_Y" and eve.state == 255:
-                Direction.direction = Direction.Direction.DOWN
+                dir.value = 2
             if eve.code == "ABS_X" and eve.state == 255:
-                Direction.direction = Direction.Direction.RIGHT
+                dir.value = 4
             if eve.code == "ABS_X" and eve.state == 0:
-                Direction.direction = Direction.Direction.LEFT
+                dir.value = 3
             if eve.code == "BTN_THUMB2" and eve.state == 1:
-                Direction.direction = Direction.Direction.BACK
+                dir.value = 5
             if eve.code == "BTN_TRIGGER" and eve.state == 1:
-                Direction.direction = Direction.Direction.FORTH
+                dir.value = 6
             if eve.code == "BTN_BASE4" and eve.state == 1:
-                pressed_enter = True
+                dir.value = 7
 
 
-def gamepad2():
+def gamepad2(dir):
     while True:
         try:
             events = get_gamepad()
@@ -362,19 +362,30 @@ def gamepad2():
             print("no gamepad found")
         for eve in events:
             if eve.code == "ABS_Y" and eve.state == 0:
-                Direction.direction2 = Direction.Direction.UP
+                dir.value = 1
             if eve.code == "ABS_Y" and eve.state == 255:
-                Direction.direction2 = Direction.Direction.DOWN
+                dir.value = 2
             if eve.code == "ABS_X" and eve.state == 255:
-                Direction.direction2 = Direction.Direction.RIGHT
+                dir.value = 4
             if eve.code == "ABS_X" and eve.state == 0:
-                Direction.direction2 = Direction.Direction.LEFT
+                dir.value = 3
             if eve.code == "BTN_THUMB2" and eve.state == 1:
-                Direction.direction2 = Direction.Direction.BACK
+                dir.value = 5
             if eve.code == "BTN_TRIGGER" and eve.state == 1:
-                Direction.direction2 = Direction.Direction.FORTH
+                dir.value = 6
             if eve.code == "BTN_BASE4" and eve.state == 1:
-                pressed_enter = True
+                dir.value = 7
+
+
+def get_pressed_enter():
+    global pressed_enter
+    if Direction.direction_p_1.value == 7:
+        pressed_enter = True
+
+
+def set_pressed_enter(pressed):
+    global pressed_enter
+    pressed_enter = pressed
 
 
 def setup_pins():
@@ -390,22 +401,22 @@ def setup_pins():
 def print_registers(leds):
     while True:
         for y in range(8):
-            
+
             for z in range(8):
                 for x in range(8):
                     # Serieller Input über den ser-Pin cube.buffer_cubes[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)].setOn()
-                    IO.output(anodePins[0], leds[x + (y * 8) + (64 - (z+2)%8 * cubeSize ** 2)])
-                    #time.sleep(delay)
+                    IO.output(anodePins[0], leds[x + (y * 8) + (64 - (z + 2) % 8 * cubeSize ** 2)])
+                    # time.sleep(delay)
 
                     # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
                     IO.output(anodePins[1], 1)
-                    #time.sleep(delay)
+                    # time.sleep(delay)
                     IO.output(anodePins[1], 0)
-                    #time.sleep(delay)
+                    # time.sleep(delay)
 
             # rck-bit
             IO.output(anodePins[2], 1)
-            #time.sleep(delay)
+            # time.sleep(delay)
             IO.output(anodePins[2], 0)
             IO.output(kathodePins[y], 1)
             time.sleep(0.002)

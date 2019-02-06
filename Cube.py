@@ -8,7 +8,9 @@ import Snake
 import Pong
 import PongMulti
 import Weather
-#import FFT
+
+
+# import FFT
 
 
 class LEDCube(threading.Thread):
@@ -53,13 +55,13 @@ class LEDCube(threading.Thread):
 
                         self.show_menu_state()
 
-                        if api.pressed_enter:
+                        if api.get_pressed_enter():
                             self.cube_games[self.current_item].close_animation()
                             self.current_game = self.cube_games[self.current_item]
-                            api.pressed_enter = False
+                            api.set_pressed_enter(False)
                             updated = True
 
-                        if Direction.direction == Direction.Direction.RIGHT and self.current_item < len(
+                        if Direction.direction_p_1.value == int(Direction.Direction.RIGHT) and self.current_item < len(
                                 self.cube_games) - 1:
                             self.cube_games[self.current_item].close_animation()
                             self.current_item += 1
@@ -67,7 +69,7 @@ class LEDCube(threading.Thread):
                             api.clear_all()
                             updated = True
 
-                        if Direction.direction == Direction.Direction.LEFT and self.current_item > 0:
+                        if Direction.direction_p_1.value == int(Direction.Direction.LEFT) and self.current_item > 0:
                             self.cube_games[self.current_item].close_animation()
                             self.current_item -= 1
                             Direction.direction = None
@@ -78,15 +80,13 @@ class LEDCube(threading.Thread):
                         # self.current_item = max(0, min(self.current_item, len(self.cube_games) - 1))
                         time.sleep(0.2)
 
-
-
                 api.clear_all()
                 self.start_game(self.current_item)
                 api.clear_all()
                 # Reset everything for next menu launch
                 self.reset_all()
                 register_all()
-                api.pressed_enter = False
+                api.set_pressed_enter(False)
                 self.current_game = None
 
     def show_2d_frame(self, frame):
@@ -107,6 +107,7 @@ class LEDCube(threading.Thread):
                 api.change_face(api.Face.RIGHT, 0, Frames.arrow_right)
 
             self.show_2d_frame(self.cube_games[self.current_item].get_menu_frame())
+
 
 def register_all():
     if led_cube is not None:
