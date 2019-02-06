@@ -29,16 +29,17 @@ class TickerAnimation(threading.Thread):
         time.sleep(0.5)
 
 
-class Rain:
+class Rain(threading.Thread):
 
     def __init__(self, intensity, cube_size, speed):
+        super(Rain, self).__init__()
         self.intensity = int(intensity * 10)
         self.cube_size = cube_size
         self.speed = int(speed * 10)
         self.rain_drops = []
         self.fall_speed = 1 / (self.cube_size - 1)
 
-    def play(self):
+    def run(self):
         while True:
             for x in self.rain_drops:
                 api.cuboid_off(x, 1, 2, 1)
@@ -62,16 +63,17 @@ class Rain:
             time.sleep(1 / self.speed)
 
 
-class Snow:
+class Snow(threading.Thread):
 
     def __init__(self, intensity, cube_size, speed):
+        super(Snow, self).__init__()
         self.intensity = int(intensity * 10)
         self.cube_size = cube_size
         self.speed = int(speed * 10)
         self.snow_drops = []
         self.fall_speed = 1 / (self.cube_size - 1)
 
-    def play(self):
+    def run(self):
         while True:
             for x in self.snow_drops:
                 api.cuboid_off(x, 1, 1, 1)
@@ -94,13 +96,14 @@ class Snow:
 class Fog:
 
     def __init__(self, intensity, cube_size, speed):
+        super(Fog, self).__init__()
         self.intensity = int(intensity * 10)
         self.cube_size = cube_size
         self.speed = int(speed * 10)
         self.fog_stripes = []
         self.fall_speed = 1 / (self.cube_size - 1)
 
-    def play(self):
+    def run(self):
         while True:
             for x in self.fog_stripes:
                 api.cuboid_off(x, 1, 1, 3)
@@ -120,16 +123,17 @@ class Fog:
             time.sleep(1 / self.speed)
 
 
-class Clouds:
+class Clouds(threading.Thread):
 
     def __init__(self, intensity, cube_size, speed):
+        super(Clouds, self).__init__()
         self.intensity = int(intensity * 10) % 11
         self.cube_size = cube_size
         self.speed = int(speed * 10) % 11
         self.cloud_stripes = []
         self.fall_speed = 1 / (self.cube_size - 1)
 
-    def play(self):
+    def run(self):
         c = 0
         while True:
             for x in self.cloud_stripes:
@@ -155,9 +159,12 @@ class Clouds:
             time.sleep(1 / self.speed)
 
 
-class Sun:
+class Sun(threading.Thread):
 
-    def play(self):
+    def __init__(self):
+        super(Sun, self).__init__()
+
+    def run(self):
         api.draw_sun([0.5, 0.5, 0.5], 8, 8, 8)
         while True:
             time.sleep(0.5)

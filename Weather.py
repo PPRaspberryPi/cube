@@ -69,5 +69,6 @@ class Weather(Game.CubeGame, threading.Thread):
         # 800 Clear
         # 80x Clouds
         rain = Animations.Sun()
-        rain.play()
+        rain.start()
+        rain.join()
 
