@@ -30,7 +30,6 @@ class Snake(Game.CubeGame, threading.Thread):
 
         self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
         self.snake_loc = [[0, 2, 0], [0, 1, 0], [0, 0, 0]]
-        self.direction = Direction.Direction.UP
         self.snake_length = 3
         self.pickup_loc = [0, 7, 1]
         self.failed = False
@@ -62,6 +61,7 @@ class Snake(Game.CubeGame, threading.Thread):
         pass
 
     def run(self):
+        Direction.direction_p_1.value = int(Direction.Direction.UP)
         while not self.failed:
             if Direction.direction_p_1.value == 0:
                 Direction.direction_p_1.value = int(Direction.Direction.UP)
@@ -84,7 +84,7 @@ class Snake(Game.CubeGame, threading.Thread):
             elif Direction.direction_p_1.value == int(Direction.Direction.LEFT):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0], y[1], y[2] - 1]
-            elif Direction.direction_p_1.value == int( Direction.Direction.BACK):
+            elif Direction.direction_p_1.value == int(Direction.Direction.BACK):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0] + 1, y[1], y[2]]
             elif Direction.direction_p_1.value == int(Direction.Direction.FORTH):
