@@ -84,10 +84,10 @@ class Snake(Game.CubeGame, threading.Thread):
             elif Direction.direction_p_1.value == int(Direction.Direction.LEFT):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0], y[1], y[2] - 1]
-            elif Direction.direction_p_1.value == int(Direction.Direction.BACK):
+            elif Direction.direction_p_1.value == int(Direction.Direction.FORTH):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0] + 1, y[1], y[2]]
-            elif Direction.direction_p_1.value == int(Direction.Direction.FORTH):
+            elif Direction.direction_p_1.value == int(Direction.Direction.BACK):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0] - 1, y[1], y[2]]
             for s in self.snake_loc:
