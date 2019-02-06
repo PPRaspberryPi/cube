@@ -29,7 +29,7 @@ class Pong(Game.CubeGame, threading.Thread):
         self.b_size = 1
         self.b_radius = (self.b_size / self.cube_size) / 2
         self.ball_vel_x = 0.01
-        self.ball_vel_y = 0.01
+        self.ball_vel_y = 0.005
         self.ball_vel_z = 0.01
         self.failed = False
         self.player_action = None
@@ -135,7 +135,7 @@ class Pong(Game.CubeGame, threading.Thread):
                         self.p_loc[2] = 0.01
 
                     api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
-                Direction.direction = None
+                Direction.direction_p_1.value = 0
 
             if self.b_loc[1] - self.b_radius < 0:
                 if not ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (

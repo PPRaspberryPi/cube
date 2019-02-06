@@ -96,6 +96,7 @@ class LEDCube(threading.Thread):
     def start_game(self, game_id):
         self.cube_games[game_id].start()
         self.cube_games[game_id].join()
+        Direction.direction_p_1.value = 0
 
     def kill_game(self, game_id):
         pass
