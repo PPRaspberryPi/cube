@@ -321,8 +321,8 @@ def display(leds):
     leds[:] = buffer_leds
 
 def display2():
-    global leds
-    leds = buffer_leds
+    global leds2
+    leds2 = buffer_leds
 
 
 def start():
@@ -337,7 +337,7 @@ def start():
 
 def start2():
     setup_pins()
-    print_registers(leds)
+    print_registers2()
 
 
 def gamepad1():
@@ -420,7 +420,7 @@ def print_registers(leds):
 
             IO.output(kathodePins[y], 0)
 
-def print_registers2(leds):
+def print_registers2():
     while True:
         for y in range(8):
             IO.output(kathodePins[y], 1)
