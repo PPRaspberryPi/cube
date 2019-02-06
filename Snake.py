@@ -63,9 +63,8 @@ class Snake(Game.CubeGame, threading.Thread):
 
     def run(self):
         while not self.failed:
-            self.direction = Direction.direction
-            if self.direction is None:
-                self.direction = Direction.Direction.UP
+            if Direction.direction_p_1.value == 0:
+                Direction.direction_p_1.value = int(Direction.Direction.UP)
             if self.snake_length > len(self.snake_loc):
                 self.snake_loc.append(self.snake_loc[len(self.snake_loc) - 1])
                 self.snake_length = len(self.snake_loc)
@@ -73,22 +72,22 @@ class Snake(Game.CubeGame, threading.Thread):
             api.led_off(self.snake_loc[self.snake_length - 1])
             for x in range(1, self.snake_length):
                 self.snake_loc[self.snake_length - x] = self.snake_loc[self.snake_length - x - 1]
-            if self.direction == Direction.Direction.UP:
+            if Direction.direction_p_1.value == int(Direction.Direction.UP):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0], y[1] + 1, y[2]]
-            elif self.direction == Direction.Direction.DOWN:
+            elif Direction.direction_p_1.value == int(Direction.Direction.DOWN):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0], y[1] - 1, y[2]]
-            elif self.direction == Direction.Direction.RIGHT:
+            elif Direction.direction_p_1.value == int(Direction.Direction.RIGHT):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0], y[1], y[2] + 1]
-            elif self.direction == Direction.Direction.LEFT:
+            elif Direction.direction_p_1.value == int(Direction.Direction.LEFT):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0], y[1], y[2] - 1]
-            elif self.direction == Direction.Direction.BACK:
+            elif Direction.direction_p_1.value == int( Direction.Direction.BACK):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0] + 1, y[1], y[2]]
-            elif self.direction == Direction.Direction.FORTH:
+            elif Direction.direction_p_1.value == int(Direction.Direction.FORTH):
                 y = self.snake_loc[0]
                 self.snake_loc[0] = [y[0] - 1, y[1], y[2]]
             for s in self.snake_loc:
@@ -118,5 +117,5 @@ class Snake(Game.CubeGame, threading.Thread):
                     if self.pickup_loc not in self.snake_loc:
                         found_spawn = True
 
-            api.display()
+            api.display(api.leds)
             time.sleep(0.2)
