@@ -11,12 +11,11 @@ class Direction(IntEnum):
     FORTH = 6
     ENTER = 7
 
-
-direction = Direction.UP
-direction2 = Direction.UP
-
 direction_p_1 = multiprocessing.Value('i')
 direction_p_2 = multiprocessing.Value('i')
+
+direction = direction_p_1
+direction2 = direction_p_2
 
 direction_p_1.value = 1
 direction_p_2.value = 1

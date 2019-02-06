@@ -8,7 +8,7 @@ import wave
 import numpy
 from scipy.fftpack import dct
 import Util as util
-#import simpleaudio as sa
+import simpleaudio as sa
 
 
 class AudioVis(Game.CubeGame, threading.Thread):
@@ -51,7 +51,7 @@ class AudioVis(Game.CubeGame, threading.Thread):
 
         self.amplifier = 12
 
-        self.fps = 10
+        self.fps = 60
 
         self.frames = []
 
@@ -81,9 +81,9 @@ class AudioVis(Game.CubeGame, threading.Thread):
         pass
 
     def run(self):
-        #sa.WaveObject.from_wave_file(self.file_name).play()
+        sa.WaveObject.from_wave_file(self.file_name).play()
         while not self.finished:
-            if Direction.direction == Direction.Direction.BACK:
+            if Direction.direction_p_1 == int(Direction.Direction.BACK):
                 self.finished = True
             num = int(self.num)
             h = abs(dct(self.wave_data[0][self.nframes - num:self.nframes - num + self.N]))
