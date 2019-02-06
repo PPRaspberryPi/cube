@@ -1,8 +1,9 @@
-import threading
-import vCubeAPI as api
-import Direction
-import time
 import random
+import threading
+import time
+
+import Direction
+import vCubeAPI as api
 
 
 class MyThread(threading.Thread):

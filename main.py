@@ -1,4 +1,10 @@
-import pygame, sys, os, math, Direction
+import math
+import os
+import sys
+
+import pygame
+
+import Direction
 import vCube
 
 

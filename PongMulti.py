@@ -27,7 +27,6 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
         self.an = None
 
-
         # Ball
         self.ball_size = 1
         self.ball_loc = [0.4, 0.6, 0.5]
@@ -196,8 +195,10 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
             # If Ball hits player1 wall
             if self.ball_loc[2] - self.ball_radius < 0:
-                if not ((self.player1_loc[1] + self.player1_radius * 2 > self.ball_loc[1] > self.player1_loc[1] - self.player1_radius * 2) and (
-                        self.player1_loc[0] + self.player1_radius * 2 > self.ball_loc[0] > self.player1_loc[0] - self.player1_radius * 2)):
+                if not ((self.player1_loc[1] + self.player1_radius * 2 > self.ball_loc[1] > self.player1_loc[
+                    1] - self.player1_radius * 2) and (
+                                self.player1_loc[0] + self.player1_radius * 2 > self.ball_loc[0] > self.player1_loc[
+                            0] - self.player1_radius * 2)):
                     self.player2_score += 1
                     api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
                     self.ball_loc = [0.4, 0.6, 0.5]
@@ -206,8 +207,10 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
             # If Ball hits player2 wall
             if self.ball_loc[2] + self.ball_radius > 1:
-                if not ((self.player2_loc[1] + self.player2_radius * 2 > self.ball_loc[1] > self.player2_loc[1] - self.player2_radius * 2) and (
-                        self.player2_loc[0] + self.player2_radius * 2 > self.ball_loc[0] > self.player2_loc[0] - self.player2_radius * 2)):
+                if not ((self.player2_loc[1] + self.player2_radius * 2 > self.ball_loc[1] > self.player2_loc[
+                    1] - self.player2_radius * 2) and (
+                                self.player2_loc[0] + self.player2_radius * 2 > self.ball_loc[0] > self.player2_loc[
+                            0] - self.player2_radius * 2)):
                     self.player1_score += 1
                     api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
                     self.ball_loc = [0.4, 0.6, 0.5]

@@ -1,6 +1,7 @@
 # import evdev
-from evdev import InputDevice, categorize
 from multiprocessing import Pool
+
+from evdev import InputDevice, categorize
 
 
 def main(device):
@@ -13,9 +14,9 @@ def main(device):
 
     # evdev takes care of polling the controller in a loop
 
-            
     for event in gamepad.read_loop():
-        print("Pad",device,">>>", categorize(event))
+        print("Pad", device, ">>>", categorize(event))
+
 
 p = Pool(2)
-p.map(main,[17,18])
+p.map(main, [17, 18])

@@ -64,14 +64,14 @@ class Controller():
             if event.type == ecodes.EV_ABS:
                 if event.value == 0:
                     if event.code == 1:
-                        print( up)
+                        print(up)
                     if event.code == 0:
-                        print( left)
+                        print(left)
                 if event.value == 255:
                     if event.code == 0:
-                        print( right)
+                        print(right)
                     if event.code == 1:
-                        print( down)
+                        print(down)
             if event.type == ecodes.EV_KEY:
                 if event.value == 1:
                     if event.code == self.xBtn:

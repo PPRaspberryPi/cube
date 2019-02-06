@@ -2,8 +2,6 @@ import threading
 
 import Animations
 import Game
-import bpm280
-
 
 
 class Temperature(Game.CubeGame, threading.Thread):
@@ -41,6 +39,5 @@ class Temperature(Game.CubeGame, threading.Thread):
         pass
 
     def run(self):
-        #sa.WaveObject.from_wave_file(self.file_name).play()
+        # sa.WaveObject.from_wave_file(self.file_name).play()
         while not self.finished:
-

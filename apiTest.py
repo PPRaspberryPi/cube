@@ -72,6 +72,7 @@ def led_off(*target_leds):
     for x in target_leds:
         leds[x[0]][x[1]][x[2]] = 0
 
+
 def led_on(*target_leds):
     """
     Schaltet beliebige Menge an LED's an

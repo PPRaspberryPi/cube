@@ -1,9 +1,10 @@
 import threading
 import time
-import Direction
-import api
+
 import Animations
+import Direction
 import Game
+import api
 
 
 class Pong(Game.CubeGame, threading.Thread):

@@ -1,10 +1,9 @@
 import threading
-import time
 
-import Direction
-import api
 import requests
+
 import Animations
+import Direction
 import Game
 
 

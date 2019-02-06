@@ -23,6 +23,7 @@ def construct_2D_audio_frame(cube_size, val):
 
     return frame
 
+
 def construct_2D_audio_frame(cube_size, val, layer):
     """
     :param cube_size:
@@ -41,6 +42,7 @@ def construct_2D_audio_frame(cube_size, val, layer):
     frame = []
 
     for x in range(cube_size ** 2):
-        frame = frame + [1 if np.sqrt(translated_values[x % 8] * translated_values[layer]) >= int(np.ceil(((cube_size ** 2) - x) / 8)) - 1 else 0]
+        frame = frame + [1 if np.sqrt(translated_values[x % 8] * translated_values[layer]) >= int(
+            np.ceil(((cube_size ** 2) - x) / 8)) - 1 else 0]
 
     return frame

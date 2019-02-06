@@ -1,15 +1,16 @@
 import threading
 import time
+
 import Direction
+import Exit
 import FFT
-import api
-import Game as Game
 import FrameCollection2D as Frames
-import Snake
+import Game as Game
 import Pong
 import PongMulti
+import Snake
 import Weather
-import Exit
+import api
 
 
 class LEDCube(threading.Thread):
@@ -112,7 +113,8 @@ class LEDCube(threading.Thread):
 def register_all():
     if led_cube is not None:
         led_cube.register(Snake.Snake(api.cubeSize, frame_size), Pong.Pong(api.cubeSize, frame_size),
-                          PongMulti.PongMulti(api.cubeSize, frame_size), Weather.Weather(api.cubeSize, frame_size), FFT.AudioVis(api.cubeSize, frame_size), Exit.Exit(api.cubeSize, frame_size))
+                          PongMulti.PongMulti(api.cubeSize, frame_size), Weather.Weather(api.cubeSize, frame_size),
+                          FFT.AudioVis(api.cubeSize, frame_size), Exit.Exit(api.cubeSize, frame_size))
 
 
 frame_size = (8, 8)

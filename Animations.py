@@ -1,10 +1,10 @@
+import random
 import threading
 import time
 
 import Direction
-import api
 import FrameCollection2D as Frames
-import random
+import api
 
 
 class TickerAnimation(threading.Thread):
@@ -179,4 +179,3 @@ class Sun(threading.Thread):
         api.display(api.leds)
         while Direction.direction_p_1.value != 7:
             time.sleep(0.5)
-

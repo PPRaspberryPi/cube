@@ -1,14 +1,16 @@
 import threading
 import time
-import Direction
-import api
-import Animations
-import Game
 import wave
+
 import numpy
-from scipy.fftpack import dct
-import Util as util
 import simpleaudio as sa
+from scipy.fftpack import dct
+
+import Animations
+import Direction
+import Game
+import Util as util
+import api
 
 
 class AudioVis(Game.CubeGame, threading.Thread):
@@ -102,7 +104,8 @@ class AudioVis(Game.CubeGame, threading.Thread):
                     """
 
             for x in range(self.cube_size):
-                api.change_face(api.Face.FRONT, self.cube_size - 1 - x, util.construct_2D_audio_frame(self.cube_size, h, x))
+                api.change_face(api.Face.FRONT, self.cube_size - 1 - x,
+                                util.construct_2D_audio_frame(self.cube_size, h, x))
 
             self.num -= (1 / self.fps) * self.framerate
 

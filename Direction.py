@@ -11,6 +11,7 @@ class Direction(IntEnum):
     FORTH = 6
     ENTER = 7
 
+
 direction_p_1 = multiprocessing.Value('i')
 direction_p_2 = multiprocessing.Value('i')
 

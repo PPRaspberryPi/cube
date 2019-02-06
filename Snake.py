@@ -2,12 +2,11 @@ import random
 import threading
 import time
 
-import Direction
-import api
-import FrameCollection2D as Frames
-
 import Animations
+import Direction
+import FrameCollection2D as Frames
 import Game
+import api
 
 
 class Snake(Game.CubeGame, threading.Thread):

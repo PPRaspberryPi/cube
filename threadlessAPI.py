@@ -1,17 +1,15 @@
 # Import für die sleep funktionen
 import threading
 import time
-# Import fürs multithreading (die dummy-library erlaubt Umgang mit threads)
-from multiprocessing.dummy import Pool
-
-# Dummy-library, welche (nicht implementierte) Funktionen der RPi.GPIO-library
-# bereitstellt, damit das Programm ordentlich kompiliert wird
-# import RPi.GPIO as IO
-
-# IO.VERBOSE = False
 
 # numpy import für die arrays
 import numpy as np
+
+# Import fürs multithreading (die dummy-library erlaubt Umgang mit threads)
+# Dummy-library, welche (nicht implementierte) Funktionen der RPi.GPIO-library
+# bereitstellt, damit das Programm ordentlich kompiliert wird
+# import RPi.GPIO as IO
+# IO.VERBOSE = False
 
 ###############
 
