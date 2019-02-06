@@ -66,14 +66,14 @@ class LEDCube(threading.Thread):
                                 self.cube_games) - 1:
                             self.cube_games[self.current_item].close_animation()
                             self.current_item += 1
-                            Direction.direction_p_1.value = None
+                            Direction.direction_p_1.value = 0
                             api.clear_all()
                             updated = True
 
                         if Direction.direction_p_1.value == int(Direction.Direction.LEFT) and self.current_item > 0:
                             self.cube_games[self.current_item].close_animation()
                             self.current_item -= 1
-                            Direction.direction_p_1.value = None
+                            Direction.direction_p_1.value = 0
                             api.clear_all()
                             updated = True
 
