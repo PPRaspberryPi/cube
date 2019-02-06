@@ -25,7 +25,7 @@ class Pong(Game.CubeGame, threading.Thread):
 
         self.an = None
 
-        self.b_loc = [0.5, 0.5, 0.5]
+        self.b_loc = [0.3, 0.5, 0.5]
         self.b_size = 1
         self.b_radius = (self.b_size / self.cube_size) / 2
         self.ball_vel_x = 0.01
