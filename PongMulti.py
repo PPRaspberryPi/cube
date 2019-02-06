@@ -239,5 +239,5 @@ class PongMulti(Game.CubeGame, threading.Thread):
             api.cuboid_on(self.player2_loc, self.player2_size, self.player2_size, 1)
 
             api.display(api.leds)
-            print(ball_loc[0],ball_loc[1],ball_loc[2])
+            print(self.ball_loc[0],self.ball_loc[1],self.ball_loc[2])
             time.sleep(0.02)
