@@ -65,7 +65,7 @@ class Pong(Game.CubeGame, threading.Thread):
     def done(self):
         for x in range(0, 8):
             api.led_on([0, x, 0], [7, x, 0], [0, x, 7], [7, x, 7])
-            api.display()
+            api.display(api.leds)
             time.sleep(1)
 
     def run(self):
@@ -96,9 +96,9 @@ class Pong(Game.CubeGame, threading.Thread):
                 self.ball_vel_z *= -1
 
             # Player moving
-            self.player_action = Direction.direction
+            self.player_action = Direction.direction_p_1.value
             if self.player_action is not None:
-                if self.player_action == Direction.Direction.UP:
+                if self.player_action == int(Direction.Direction.UP):
 
                     api.cuboid_off(self.p_loc, self.p_size, 1, self.p_size)
 
@@ -108,7 +108,7 @@ class Pong(Game.CubeGame, threading.Thread):
                         self.p_loc[0] = 0.99
 
                     api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
-                if self.player_action == Direction.Direction.DOWN:
+                if self.player_action == int(Direction.Direction.DOWN):
                     api.cuboid_off(self.p_loc, self.p_size, 1, self.p_size)
 
                     if self.p_loc[0] - self.mov_val >= 0:
@@ -117,7 +117,7 @@ class Pong(Game.CubeGame, threading.Thread):
                         self.p_loc[0] = 0.01
 
                     api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
-                if self.player_action == Direction.Direction.RIGHT:
+                if self.player_action == int(Direction.Direction.RIGHT):
                     api.cuboid_off(self.p_loc, self.p_size, 1, self.p_size)
 
                     if self.p_loc[2] + self.mov_val <= 1:
@@ -126,7 +126,7 @@ class Pong(Game.CubeGame, threading.Thread):
                         self.p_loc[2] = 0.99
 
                     api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
-                if self.player_action == Direction.Direction.LEFT:
+                if self.player_action == int(Direction.Direction.LEFT):
                     api.cuboid_off(self.p_loc, self.p_size, 1, self.p_size)
 
                     if self.p_loc[2] - self.mov_val >= 0:
@@ -149,6 +149,6 @@ class Pong(Game.CubeGame, threading.Thread):
             api.cuboid_on(self.b_loc, self.b_size, self.b_size, self.b_size)
             api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
 
-            api.display()
+            api.display(api.leds)
 
             time.sleep(0.02)
