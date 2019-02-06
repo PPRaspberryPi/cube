@@ -70,19 +70,19 @@ class Weather(Game.CubeGame, threading.Thread):
         # 80x Clouds
 
         Direction.direction_p_1.value = 0
-        if weather == Thunderstorm:
+        if weather == "Thunderstorm":
             anim = Animations.Rain(1, self.cube_size, 1)
-        elif weather == Drizzle:
+        elif weather == "Drizzle":
             anim = Animations.Rain(0.2, self.cube_size, 1)
-        elif weather == Rain:
+        elif weather == "Rain":
             anim = Animations.Rain(0.5, self.cube_size, 1)
-        elif weather == Snow:
+        elif weather == "Snow":
             anim = Animations.Snow(0.7, self.cube_size, 1)
-        elif weather == Fog:
+        elif weather == "Fog":
             anim = Animations.Fog(0.5, self.cube_size, 1)
-        elif weather == Clear:
+        elif weather == "Clear":
             anim = Animations.Sun()
-        elif weather == Clouds:
+        elif weather == "Clouds":
             anim = Animations.Clouds(1, self.cube_size, 1)
         anim.start()
         anim.join()
