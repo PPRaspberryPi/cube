@@ -196,7 +196,8 @@ class PongMulti(Game.CubeGame, threading.Thread):
             # If Ball hits player1 wall
             if self.ball_loc[2] - self.ball_radius < 0:
                 if not ((self.player1_loc[1] + self.player1_radius > self.ball_loc[1] > self.player1_loc[1] - self.player1_radius) and (
-                        self.player1_loc[0] + self.player1_radius > self.ball_loc[0] > self.player1_loc[0] - self.player1_radius)):                self.player2_score += 1
+                        self.player1_loc[0] + self.player1_radius > self.ball_loc[0] > self.player1_loc[0] - self.player1_radius)): 
+                    self.player2_score += 1
                     api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
                     self.ball_loc = [0.4, 0.6, 0.5]
                     api.cuboid_on(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
