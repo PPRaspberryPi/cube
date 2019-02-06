@@ -195,7 +195,7 @@ class PongMulti(Game.CubeGame, threading.Thread):
                 Direction.direction_p_2.value = 0
 
             # If Ball hits player1 wall
-            if self.ball_loc[0] == 0 and not any(loc in [self.ball_loc] for loc in self.player1_loc):
+            if self.ball_loc[2] == 0 and not any(loc in [self.ball_loc] for loc in self.player1_loc):
                 self.player2_score += 1
                 api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
                 self.ball_loc = [0.4, 0.6, 0.5]
@@ -203,7 +203,7 @@ class PongMulti(Game.CubeGame, threading.Thread):
                 time.sleep(3)
 
             # If Ball hits player2 wall
-            if self.ball_loc[0] == 1 and not any(loc in [self.ball_loc] for loc in self.player2_loc):
+            if self.ball_loc[2] == 1 and not any(loc in [self.ball_loc] for loc in self.player2_loc):
                 self.player1_score += 1
                 api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
                 self.ball_loc = [0.4, 0.6, 0.5]
