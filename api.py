@@ -43,8 +43,7 @@ kathodePins = [14,15,17,18,27,22,23,24]
 # leds = [0 for x in range(cubeSize ** 3)]
 # buffer_leds = [0 for y in range(cubeSize ** 3)]
 buffer_leds = [0 for x in range(cubeSize ** 3)]
-leds = multiprocessing.Array('i', cubeSize ** 3)
-leds2 = [0 for x in range(cubeSize ** 3)]
+leds = [0 for x in range(cubeSize ** 3)]
 
 pressed_enter = False
 
@@ -157,7 +156,7 @@ def change_face(face: Face, face_num: int, frame):
                 else:
                     buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + (
                             (y % cubeSize) * (cubeSize ** 2))] = 0
-    display2()
+    display()
 
 
 def draw_sun(target_location, size_x, size_y, size_z):
@@ -317,27 +316,17 @@ def cuboid_off(target_location, size_x, size_y, size_z):
 
 # 03: HARDWARESEITIGE FUNKTIONALITÄTEN
 
-def display(leds):
+def display2(leds):
     leds[:] = buffer_leds
 
-def display2():
-    global leds2
-    leds2 = buffer_leds
+def display():
+    global leds
+    leds = buffer_leds
 
 
 def start():
     setup_pins()
-    p = multiprocessing.Process(target=print_registers, args=(leds,))
-    pad1 = multiprocessing.Process(target=gamepad1)
-    #pad2 = multiprocessing.Process(target=gamepad2)
-    p.start()
-    pad1.start()
-    #pad2.start()
-    p.join()
-
-def start2():
-    setup_pins()
-    print_registers2()
+    print_registers()
 
 
 def gamepad1():
@@ -396,35 +385,11 @@ def setup_pins():
         IO.setup(x, IO.OUT)
 
 
-def print_registers(leds):
+def print_registers():
     while True:
         for y in range(8):
             IO.output(kathodePins[y], 1)
-            for z in range(8):
-                for x in range(8):
-                    # Serieller Input über den ser-Pin cube.buffer_cubes[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)].setOn()
-                    IO.output(anodePins[0], leds[x + y * 8 + z * cubeSize ** 2])
-                    time.sleep(delay)
-
-                    # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
-                    IO.output(anodePins[1], 1)
-                    time.sleep(delay)
-                    IO.output(anodePins[1], 0)
-                    time.sleep(delay)
-
-            # rck-bit
-            IO.output(anodePins[2], 1)
-            time.sleep(delay)
-            IO.output(anodePins[2], 0)
-            time.sleep(delay)
-
-            IO.output(kathodePins[y], 0)
-
-def print_registers2():
-    while True:
-        for y in range(8):
-            IO.output(kathodePins[y], 1)
-            for x in leds2[y * 64: (y + 1) * 64]:
+            for x in leds[y * 64: (y + 1) * 64]:
                 # Serieller Input über den ser-Pin
                 IO.output(anodePins[0], x)
                 #time.sleep(delay)
