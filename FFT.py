@@ -85,9 +85,6 @@ class AudioVis(Game.CubeGame, threading.Thread):
         musicfile.play()
         Direction.direction_p_1.value = 0
         while Direction.direction_p_1.value != 7:
-            if Direction.direction_p_1 == int(Direction.Direction.BACK):
-                musicfile.stop()
-                self.finished = True
             num = int(self.num)
             h = abs(dct(self.wave_data[0][self.nframes - num:self.nframes - num + self.N]))
             h = [min(self.HEIGHT, int(i ** (1 / 2.5) * self.HEIGHT / 100)) * self.amplifier for i in h]
@@ -114,4 +111,6 @@ class AudioVis(Game.CubeGame, threading.Thread):
 
             time.sleep(1 / (self.fps * 2.2))
 
+        musicfile.stop()
+        self.finished = True
         Direction.direction_p_1.value = 0
