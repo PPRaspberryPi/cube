@@ -111,6 +111,6 @@ class AudioVis(Game.CubeGame, threading.Thread):
 
             time.sleep(1 / (self.fps * 2.2))
 
-        musicfile.stop()
+        sa.stop_all()
         self.finished = True
         Direction.direction_p_1.value = 0
