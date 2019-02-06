@@ -146,7 +146,7 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
                     api.cuboid_on(self.player1_loc, self.player1_size, self.player1_size, 1)
 
-                Direction.direction_p_1 = 0
+                Direction.direction_p_1.value = 0
 
             # Player2 moving
             self.player2_action = Direction.direction_p_2.value
@@ -192,7 +192,7 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
                     api.cuboid_on(self.player2_loc, self.player2_size, self.player2_size, 1)
 
-                Direction.direction_p_2 = 0
+                Direction.direction_p_2.value = 0
 
             # If Ball hits player1 wall
             if self.ball_loc[0] == 0 and not any(loc in [self.ball_loc] for loc in self.player1_loc):
