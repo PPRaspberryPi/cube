@@ -95,6 +95,10 @@ class Snake(Game.CubeGame, threading.Thread):
 
             api.led_on(self.pickup_loc)
 
+            for loc in self.snake_loc:
+                loc[0] = loc[0] % 8
+                loc[1] = loc[1] % 8
+                loc[2] = loc[2] % 8
             if self.snake_loc[0] in self.snake_loc[1:]:
                 self.failed = True
                 api.change_face(api.Face.LEFT, 0, Frames.number_to_frame(int(self.score / 100)))
