@@ -1,5 +1,7 @@
 import threading
 import time
+
+import Direction
 import api
 import FrameCollection2D as Frames
 import random
@@ -40,7 +42,7 @@ class Rain(threading.Thread):
         self.fall_speed = 1 / (self.cube_size - 1)
 
     def run(self):
-        while True:
+        while Direction.direction_p_1.value != 7:
             for x in self.rain_drops:
                 api.cuboid_off(x, 1, 2, 1)
 
@@ -76,7 +78,7 @@ class Snow(threading.Thread):
         self.fall_speed = 1 / (self.cube_size - 1)
 
     def run(self):
-        while True:
+        while Direction.direction_p_1.value != 7:
             for x in self.snow_drops:
                 api.cuboid_off(x, 1, 1, 1)
 
@@ -108,7 +110,7 @@ class Fog:
         self.fall_speed = 1 / (self.cube_size - 1)
 
     def run(self):
-        while True:
+        while Direction.direction_p_1.value != 7:
             for x in self.fog_stripes:
                 api.cuboid_off(x, 1, 1, 3)
 
@@ -141,7 +143,7 @@ class Clouds(threading.Thread):
 
     def run(self):
         c = 0
-        while True:
+        while Direction.direction_p_1.value != 7:
             for x in self.cloud_stripes:
                 api.cuboid_off(x, 2, 2, 3)
 
@@ -175,6 +177,6 @@ class Sun(threading.Thread):
     def run(self):
         api.draw_sun([0.5, 0.5, 0.5], 8, 8, 8)
         api.display(api.leds)
-        while True:
+        while Direction.direction_p_1.value != 7:
             time.sleep(0.5)
 
