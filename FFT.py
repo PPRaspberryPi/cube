@@ -81,10 +81,12 @@ class AudioVis(Game.CubeGame, threading.Thread):
         pass
 
     def run(self):
-        sa.WaveObject.from_wave_file(self.file_name).play()
+        musicfile = sa.WaveObject.from_wave_file(self.file_name)
+        musicfile.play()
         Direction.direction_p_1.value = 0
         while Direction.direction_p_1.value != 7:
             if Direction.direction_p_1 == int(Direction.Direction.BACK):
+                musicfile.stop()
                 self.finished = True
             num = int(self.num)
             h = abs(dct(self.wave_data[0][self.nframes - num:self.nframes - num + self.N]))
