@@ -110,6 +110,6 @@ class AudioVis(Game.CubeGame, threading.Thread):
             if self.num < 0:
                 self.finished = True
 
-            time.sleep(1 / (self.fps * 2))
+            time.sleep(1 / (self.fps * 2.1))
 
         Direction.direction_p_1.value = 0
