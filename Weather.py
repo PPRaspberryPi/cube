@@ -69,9 +69,8 @@ class Weather(Game.CubeGame, threading.Thread):
         # 800 Clear
         # 80x Clouds
 
-
         Direction.direction_p_1.value = 0
         rain = Animations.Rain(1, self.cube_size, 1)
         rain.start()
         rain.join()
-
+        Direction.direction_p_1.value = 0
