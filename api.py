@@ -44,6 +44,7 @@ kathodePins = [14,15,17,18,27,22,23,24]
 # buffer_leds = [0 for y in range(cubeSize ** 3)]
 buffer_leds = [0 for x in range(cubeSize ** 3)]
 leds = multiprocessing.Array('i', cubeSize ** 3)
+leds2 = [0 for x in range(cubeSize ** 3)]
 
 pressed_enter = False
 
@@ -156,7 +157,7 @@ def change_face(face: Face, face_num: int, frame):
                 else:
                     buffer_leds[(x % cubeSize) + ((((cubeSize - 1) - face_num) % cubeSize) * cubeSize) + (
                             (y % cubeSize) * (cubeSize ** 2))] = 0
-    display(leds)
+    display2()
 
 
 def draw_sun(target_location, size_x, size_y, size_z):
@@ -319,6 +320,10 @@ def cuboid_off(target_location, size_x, size_y, size_z):
 def display(leds):
     leds[:] = buffer_leds
 
+def display2():
+    global leds
+    leds = buffer_leds
+
 
 def start():
     setup_pins()
@@ -329,6 +334,10 @@ def start():
     pad1.start()
     #pad2.start()
     p.join()
+
+def start2():
+    setup_pins()
+    print_registers(leds)
 
 
 def gamepad1():
@@ -406,6 +415,29 @@ def print_registers(leds):
             # rck-bit
             IO.output(anodePins[2], 1)
             time.sleep(delay)
+            IO.output(anodePins[2], 0)
+            time.sleep(delay)
+
+            IO.output(kathodePins[y], 0)
+
+def print_registers2(leds):
+    while True:
+        for y in range(8):
+            IO.output(kathodePins[y], 1)
+            for x in leds2[y * 64: (y + 1) * 64]:
+                # Serieller Input über den ser-Pin
+                IO.output(anodePins[0], x)
+                #time.sleep(delay)
+
+                # sck-bit down Flanke. Schaltet Bits weiter (Bit shift des Registers)
+                IO.output(anodePins[1], 1)
+                #time.sleep(delay)
+                IO.output(anodePins[1], 0)
+                #time.sleep(delay)
+
+            # rck-bit
+            IO.output(anodePins[2], 1)
+            #time.sleep(delay)
             IO.output(anodePins[2], 0)
             time.sleep(delay)
 
