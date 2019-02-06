@@ -83,8 +83,7 @@ class PongMulti(Game.CubeGame, threading.Thread):
             time.sleep(1)
 
     def run(self):
-        while not self.failed:
-
+        while not self.failed and Direction.direction_p_1.value != 7:
             api.cuboid_off(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
 
             # Ball moving
@@ -235,5 +234,4 @@ class PongMulti(Game.CubeGame, threading.Thread):
             api.cuboid_on(self.player2_loc, self.player2_size, self.player2_size, 1)
 
             api.display(api.leds)
-            print(self.ball_loc[0],self.ball_loc[1],self.ball_loc[2])
             time.sleep(0.02)
