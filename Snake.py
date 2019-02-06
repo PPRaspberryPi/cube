@@ -104,7 +104,7 @@ class Snake(Game.CubeGame, threading.Thread):
                 # Timer for cooldown
                 for x in range(0, 8):
                     api.led_on([0, x, 0], [7, x, 0], [0, x, 7], [7, x, 7])
-                    api.display()
+                    api.display(api.leds)
                     time.sleep(1)
 
             if self.snake_loc[0][0] % 8 == self.pickup_loc[0] and self.snake_loc[0][1] % 8 == self.pickup_loc[1] and \
