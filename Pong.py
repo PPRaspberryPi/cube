@@ -81,23 +81,28 @@ class Pong(Game.CubeGame, threading.Thread):
             self.ball_loc[2] += self.ball_vel_z
             """
 
-            api.ball_off(self.b_loc)
+            api.cuboid_off(self.b_loc, 1, 1, 1)
 
             if counter == 7:
                 self.b_loc[0] += self.ball_vel_x
                 self.b_loc[1] += self.ball_vel_y
                 self.b_loc[2] += self.ball_vel_z
 
+                changed = False
+
                 if self.b_loc[0] - self.b_radius < 0 or self.b_loc[0] + self.b_radius > 1:
                     self.ball_vel_x *= -1
+                    changed = True
 
                 if self.b_loc[1] - self.b_radius < 0 or self.b_loc[1] + self.b_radius > 1:
                     self.ball_vel_y *= -1
+                    changed = True
 
                 if self.b_loc[2] - self.b_radius < 0 or self.b_loc[2] + self.b_radius > 1:
                     self.ball_vel_z *= -1
+                    changed = True
 
-                if self.b_loc[1] - self.b_radius < 1 / self.cube_size:
+                if self.b_loc[1] - self.b_radius < 1 / self.cube_size and not changed:
                     if ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (
                             self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
                         self.ball_vel_y *= -1
@@ -155,13 +160,11 @@ class Pong(Game.CubeGame, threading.Thread):
 
             # Turn on new position
             # api.led_on(self.ball_loc)
-            api.ball_on(self.b_loc)
+            api.cuboid_on(self.b_loc, 1, 1, 1)
             api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
 
             api.display()
 
             counter = (counter + 1) % 8
-
-            print(counter)
 
             time.sleep(0.1)
