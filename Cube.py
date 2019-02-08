@@ -1,7 +1,7 @@
 import threading
 import time
 import Direction
-import api
+import vCubeAPI as api
 import Game as Game
 import FrameCollection2D as Frames
 import Snake
@@ -53,7 +53,7 @@ class LEDCube(threading.Thread):
 
                         self.show_menu_state()
 
-                        if api.pressed_enter:
+                        if api.cube.pressed_enter:
                             self.cube_games[self.current_item].close_animation()
                             self.current_game = self.cube_games[self.current_item]
                             updated = True
