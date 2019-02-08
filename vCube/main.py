@@ -5,7 +5,7 @@ import sys
 import pygame
 
 import Direction
-import vCube
+from vCube import vCube
 
 
 def un_lock_mouse(was_locked):

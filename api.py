@@ -405,7 +405,8 @@ def print_registers(leds):
 
             for z in range(8):
                 for x in range(8):
-                    # Serieller Input über den ser-Pin cube.buffer_cubes[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)].setOn()
+                    # Serieller Input über den ser-Pin
+                    # cube.buffer_cubes[(x % 8) + (((7 - face_num) % 8) * 8) + ((y % 8) * 64)].setOn()
                     IO.output(anodePins[0], leds[x + (y * 8) + (64 - (z + 2) % 8 * cubeSize ** 2)])
                     # time.sleep(delay)
 

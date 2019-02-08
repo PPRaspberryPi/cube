@@ -2,7 +2,7 @@ from enum import Enum
 
 import numpy as np
 
-import main as cube
+from vCube import main as cube
 
 
 class Face(Enum):

@@ -3,7 +3,7 @@ import threading
 import time
 
 import Direction
-import vCubeAPI as api
+from vCube import vCubeAPI as api
 
 
 class MyThread(threading.Thread):
