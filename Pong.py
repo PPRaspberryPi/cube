@@ -138,6 +138,11 @@ class Pong(Game.CubeGame, threading.Thread):
                     api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
                 Direction.direction_p_1.value = 0
 
+            if self.b_loc[1] - self.b_radius < 1 / self.cube_size:
+                if ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (
+                        self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
+                    self.ball_vel_y *= -1
+
             if self.b_loc[1] - self.b_radius < 0:
                 if not ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (
                         self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
@@ -152,4 +157,4 @@ class Pong(Game.CubeGame, threading.Thread):
 
             api.display(api.leds)
 
-            time.sleep(0.02)
+            time.sleep(0.04)

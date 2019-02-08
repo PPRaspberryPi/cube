@@ -193,6 +193,20 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
                 Direction.direction_p_2.value = 0
 
+            if self.ball_loc[2] - self.ball_radius < 1 / self.cube_size:
+                if ((self.player1_loc[1] + self.player1_radius * 2 > self.ball_loc[1] > self.player1_loc[
+                    1] - self.player1_radius * 2) and (
+                                self.player1_loc[0] + self.player1_radius * 2 > self.ball_loc[0] > self.player1_loc[
+                            0] - self.player1_radius * 2)):
+                    self.ball_vel_z *= -1
+
+            if self.ball_loc[2] + self.ball_radius > 1 - (1 / self.cube_size):
+                if ((self.player2_loc[1] + self.player2_radius * 2 > self.ball_loc[1] > self.player2_loc[
+                    1] - self.player2_radius * 2) and (
+                                self.player2_loc[0] + self.player2_radius * 2 > self.ball_loc[0] > self.player2_loc[
+                            0] - self.player2_radius * 2)):
+                    self.ball_vel_z *= -1
+
             # If Ball hits player1 wall
             if self.ball_loc[2] - self.ball_radius < 0:
                 if not ((self.player1_loc[1] + self.player1_radius * 2 > self.ball_loc[1] > self.player1_loc[
