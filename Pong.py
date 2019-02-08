@@ -25,12 +25,12 @@ class Pong(Game.CubeGame, threading.Thread):
 
         self.an = None
 
-        self.b_loc = [0.5, 0.5, 0.5]
+        self.b_loc = [0.250, 0.5, 0.250]
         self.b_size = 1
         self.b_radius = (self.b_size / self.cube_size) / 2
-        self.ball_vel_x = 0.01
-        self.ball_vel_y = 0.01
-        self.ball_vel_z = 0.01
+        self.ball_vel_x = 0.125
+        self.ball_vel_y = 0.125
+        self.ball_vel_z = 0.125
         self.failed = False
         self.player_action = None
 
@@ -69,6 +69,7 @@ class Pong(Game.CubeGame, threading.Thread):
             time.sleep(1)
 
     def run(self):
+        counter = 0
         while not self.failed:
             # Turn off last position
             # api.led_off(self.ball_loc)
@@ -80,20 +81,33 @@ class Pong(Game.CubeGame, threading.Thread):
             self.ball_loc[2] += self.ball_vel_z
             """
 
-            api.cuboid_off(self.b_loc, self.b_size, self.b_size, self.b_size)
+            api.ball_off(self.b_loc)
 
-            self.b_loc[0] += self.ball_vel_x
-            self.b_loc[1] += self.ball_vel_y
-            self.b_loc[2] += self.ball_vel_z
+            if counter == 7:
+                self.b_loc[0] += self.ball_vel_x
+                self.b_loc[1] += self.ball_vel_y
+                self.b_loc[2] += self.ball_vel_z
 
-            if self.b_loc[0] - self.b_radius < 0 or self.b_loc[0] + self.b_radius > 1:
-                self.ball_vel_x *= -1
+                if self.b_loc[0] - self.b_radius < 0 or self.b_loc[0] + self.b_radius > 1:
+                    self.ball_vel_x *= -1
 
-            if self.b_loc[1] - self.b_radius < 0 or self.b_loc[1] + self.b_radius > 1:
-                self.ball_vel_y *= -1
+                if self.b_loc[1] - self.b_radius < 0 or self.b_loc[1] + self.b_radius > 1:
+                    self.ball_vel_y *= -1
 
-            if self.b_loc[2] - self.b_radius < 0 or self.b_loc[2] + self.b_radius > 1:
-                self.ball_vel_z *= -1
+                if self.b_loc[2] - self.b_radius < 0 or self.b_loc[2] + self.b_radius > 1:
+                    self.ball_vel_z *= -1
+
+                if self.b_loc[1] - self.b_radius < 1 / self.cube_size:
+                    if ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (
+                            self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
+                        self.ball_vel_y *= -1
+
+                if self.b_loc[1] - self.b_radius < 0:
+                    if not ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (
+                            self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
+                        self.failed = True
+
+                        self.done()
 
             # Player moving
             self.player_action = Direction.direction
@@ -137,23 +151,17 @@ class Pong(Game.CubeGame, threading.Thread):
                     api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
                 Direction.direction = None
 
-            if self.b_loc[1] - self.b_radius < 1 / self.cube_size:
-                if ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (
-                        self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
-                    self.ball_vel_y *= -1
 
-            if self.b_loc[1] - self.b_radius < 0:
-                if not ((self.p_loc[0] + self.p_radius > self.b_loc[0] > self.p_loc[0] - self.p_radius) and (
-                        self.p_loc[2] + self.p_radius > self.b_loc[2] > self.p_loc[2] - self.p_radius)):
-                    self.failed = True
-
-                    self.done()
 
             # Turn on new position
             # api.led_on(self.ball_loc)
-            api.cuboid_on(self.b_loc, self.b_size, self.b_size, self.b_size)
+            api.ball_on(self.b_loc)
             api.cuboid_on(self.p_loc, self.p_size, 1, self.p_size)
 
             api.display()
 
-            time.sleep(0.04)
+            counter = (counter + 1) % 8
+
+            print(counter)
+
+            time.sleep(0.1)

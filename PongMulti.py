@@ -126,7 +126,7 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
                     api.cuboid_on(self.player1_loc, self.player1_size, self.player1_size, 1)
 
-                if self.player1_action == Direction.Direction.BACK:
+                if self.player1_action == Direction.Direction.LEFT:
                     api.cuboid_off(self.player1_loc, self.player1_size, self.player1_size, 1)
 
                     if self.player1_loc[0] + self.mov_val <= 1:
@@ -136,7 +136,7 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
                     api.cuboid_on(self.player1_loc, self.player1_size, self.player1_size, 1)
 
-                if self.player1_action == Direction.Direction.FORTH:
+                if self.player1_action == Direction.Direction.RIGHT:
                     api.cuboid_off(self.player1_loc, self.player1_size, self.player1_size, 1)
 
                     if self.player1_loc[0] - self.mov_val >= 0:
@@ -164,13 +164,19 @@ class PongMulti(Game.CubeGame, threading.Thread):
                 api.cuboid_on(self.ball_loc, self.ball_size, self.ball_size, self.ball_size)
                 time.sleep(3)
 
-            # If Ball hits the paddle bounce off of it and do not go into the paddle P1
-            if self.ball_loc[0] == 0 and any(loc in [self.ball_loc] for loc in self.player1_loc):
-                self.ball_loc[0] = 1
+            if self.ball_loc[2] - self.ball_radius < 1 / self.cube_size:
+                if ((self.player1_loc[1] + self.player1_radius * 2 > self.ball_loc[1] > self.player1_loc[
+                    1] - self.player1_radius * 2) and (
+                                self.player1_loc[0] + self.player1_radius * 2 > self.ball_loc[0] > self.player1_loc[
+                            0] - self.player1_radius * 2)):
+                    self.ball_vel_z *= -1
 
-            # If Ball hits the paddle bounce off of it and do not go into the paddle P2
-            if self.ball_loc[0] == 7 and any(loc in [self.ball_loc] for loc in self.player2_loc):
-                self.ball_loc[0] = 6
+            if self.ball_loc[2] + self.ball_radius > 1 - (1 / self.cube_size):
+                if ((self.player2_loc[1] + self.player2_radius * 2 > self.ball_loc[1] > self.player2_loc[
+                    1] - self.player2_radius * 2) and (
+                                self.player2_loc[0] + self.player2_radius * 2 > self.ball_loc[0] > self.player2_loc[
+                            0] - self.player2_radius * 2)):
+                    self.ball_vel_z *= -1
 
             if self.player1_score == 8 or self.player2_score == 8:
                 self.failed = True
@@ -187,4 +193,4 @@ class PongMulti(Game.CubeGame, threading.Thread):
 
             api.display()
 
-            time.sleep(0.02)
+            time.sleep(0.1)
