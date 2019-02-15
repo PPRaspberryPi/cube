@@ -4,7 +4,7 @@
 8x8x8 LED cube with some apps running on a Raspberry Pi.
 
 (Not the latest version)
-![](https://lambda.sx/ZSn.jpg)
+![](https://lambda.sx/Tgq.jpg)
 
 ## Requirements
 
