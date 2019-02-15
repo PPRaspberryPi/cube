@@ -1,9 +1,8 @@
-# (WIP) 8x8x8 LED cube - Pi³
+# 8x8x8 LED cube - Pi³
 > University project
 
 8x8x8 LED cube with some apps running on a Raspberry Pi.
 
-(Not the latest version)
 ![](https://lambda.sx/Tgq.jpg)
 
 ## Requirements
