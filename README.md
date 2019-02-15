@@ -12,10 +12,11 @@ Linux (Raspberry Pi):
 
 * (fresh) Raspbian installation
 * Python 3.5 (comes pre-installed with Raspbian)
-* Check if you have the latest pip version: ``sudo pip install pip --upgrade``
+* Check if you have the latest pip3 version: ``python3 -m pip install --user --upgrade pip``
+    * If you have any problems with pip3, use ``python3 -m pip install --user [package]`` instead.
 * Libraries (you can install them all via ```pip3 install [package]```):
-    * Numpy (pip3 install numpy)
-    * Scipy (pip3 install scipy)
+    * [Numpy](https://pypi.org/project/numpy/) (pip3 install --user numpy)
+    * [Scipy](https://pypi.org/project/scipy/) (pip3 install --user scipy)
         * There might come an error on your Pi. You might need to install scipy via your packet manager 
             
             (f.ex. apt: ```sudo apt-get install python3-scipy```) 
@@ -23,12 +24,12 @@ Linux (Raspberry Pi):
         * There are several solutions lurking github and stackoverflow (f.ex. https://github.com/scipy/scipy/issues/5995)
         * You can also try installing scipy via piwheels (https://www.raspberrypi.org/blog/piwheels/)
         * If those solutions won't fix your problems, you can follow the official guide: https://www.scipy.org/install.html
-    * SimpleAudio (pip3 install simpleaudio)
-    * Inputs (pip3 install inputs)
+    * [SimpleAudio](https://pypi.org/project/simpleaudio/) (pip3 install --user simpleaudio)
+    * [Inputs](https://pypi.org/project/inputs/) (pip3 install --user inputs)
         * (you have to edit the get_gamepad method tho - more below)
     
     Optional:
-    * PyGame for vCube (visualization)
+    * [PyGame](https://pypi.org/project/Pygame/) for vCube (visualization)
 
 
 ## Usage example
@@ -80,7 +81,7 @@ gamepads, we had to edit the library a bit to make it working flawlessly.
 You have to navigate to the library's location (depends if you have installed the libarary user/system wide) 
 and edit the file ```inputs.py```. Go to the very bottom of the file (you can ignore everything else) and edit the 
 method ```get_gamepad()``` to 
-```
+```python
 def get_gamepad(num):
     """Get a single action from a gamepad."""
     try:
