@@ -93,7 +93,7 @@ def get_gamepad(num):
 
 ```
 
-If you've followed this "guide", youve installed the library user-wide and the location is 
+If you've followed this "guide", you've installed the library user-wide and the location is 
 ``/home/pi/.local/lib/python3.5/site-packages/inputs.py``
 
 Otherwise the path is something like ``/usr/local/lib/dist-packages/inputs.py``
