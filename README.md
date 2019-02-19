@@ -33,7 +33,7 @@ Linux (Raspberry Pi):
 
 ## Usage example
 
-You can play snake, pong (single and multiplayer). In addition you can display the current weather state (location currently hard coded).
+You can play snake, pong (single and multiplayer). In addition, you can display the current weather state (location currently hardcoded).
 There is also an inbuilt music player which visualizes the spectrum (via DCT).
 
 I mean, you can play 3D Snake, isn't that enough? 🤷
@@ -68,8 +68,7 @@ oof
 This is just a university project of five guys who decided to have zero free time that semester.
 Congratulations, you did it. It's NOT meant to be reproduced.
 
-First of all, you would need a 8x8x8 LED cube (which you probably don't have),
-secondly you would need to have the exact same setup (shift registers etc.) as we have (which you also (probably) do not have).
+First of all, you would need an 8x8x8 LED cube (which you probably don't have), secondly, you would need to have the exact same setup (shift registers etc.) as we have (which you also (probably) do not have).
 To sum everything up: you cannot reproduce that (probably).
 
 Why would we put that on GitHub then, you might ask?
@@ -94,11 +93,11 @@ def get_gamepad(num):
 
 ```
 
-If you've followed this "guide", you've installed the library user-wide and the location is 
+If you've followed this "guide", youve installed the library user-wide and the location is 
 ``/home/pi/.local/lib/python3.5/site-packages/inputs.py``
 
 Otherwise the path is something like ``/usr/local/lib/dist-packages/inputs.py``
 
 ## Contributing
 
-You (probably) can't because you (probably) don't have a 8x8x8 LED Cube.
+You (probably) can't because you (probably) don't have an 8x8x8 LED Cube.
