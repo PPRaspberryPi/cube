@@ -33,7 +33,7 @@ Linux (Raspberry Pi):
 
 ## Usage example
 
-You can play snake, pong (single and multiplayer). In addition you can display the current weather state.
+You can play snake, pong (single and multiplayer). In addition you can display the current weather state (location currently hard coded).
 There is also an inbuilt music player which visualizes the spectrum (via DCT).
 
 I mean, you can play 3D Snake, isn't that enough? 🤷
@@ -69,7 +69,7 @@ This is just a university project of five guys who decided to have zero free tim
 Congratulations, you did it. It's NOT meant to be reproduced.
 
 First of all, you would need a 8x8x8 LED cube (which you probably don't have),
-secondly you would need to have the exact same setup as we have (which you also (probably) do not have).
+secondly you would need to have the exact same setup (shift registers etc.) as we have (which you also (probably) do not have).
 To sum everything up: you cannot reproduce that (probably).
 
 Why would we put that on GitHub then, you might ask?
@@ -77,8 +77,8 @@ Why would we put that on GitHub then, you might ask?
 
 ## Inputs library
 
-The default inputs library only returns the game which was plugged in first when using get_gamepad(). Since we use two
-gamepads, we had to edit the library a bit to make it working flawlessly.
+The default inputs library only returns the gamepad which was plugged in first when using get_gamepad(). Since we're using two
+gamepads, we had to edit the library a bit.
 
 You have to navigate to the library's location (depends if you have installed the libarary user/system wide) 
 and edit the file ```inputs.py```. Go to the very bottom of the file (you can ignore everything else) and edit the 
@@ -94,7 +94,7 @@ def get_gamepad(num):
 
 ```
 
-If you've followed this guide, you've installed the library user-wide and the location is 
+If you've followed this "guide", you've installed the library user-wide and the location is 
 ``/home/pi/.local/lib/python3.5/site-packages/inputs.py``
 
 Otherwise the path is something like ``/usr/local/lib/dist-packages/inputs.py``
