@@ -33,7 +33,8 @@ Linux (Raspberry Pi):
 
 ## Usage example
 
-You can play snake, pong (single and multiplayer). In addition you can display the current weather state. There is also an inbuilt music player which visualizes the spectrum (via DCT).
+You can play snake, pong (single and multiplayer). In addition you can display the current weather state.
+There is also an inbuilt music player which visualizes the spectrum (via DCT).
 
 I mean, you can play 3D Snake, isn't that enough? 🤷
 
@@ -64,9 +65,11 @@ oof
 
 ## General information
 
-This is just a university project of five guys who decided to have zero free time that semester. Congratulations, you did it. It's NOT meant to be reproduced.
+This is just a university project of five guys who decided to have zero free time that semester.
+Congratulations, you did it. It's NOT meant to be reproduced.
 
-First of all, you would need a 8x8x8 LED cube (which you probably don't have), secondly you would need to have the exact same setup as we have (which you also (probably) do not have).
+First of all, you would need a 8x8x8 LED cube (which you probably don't have),
+secondly you would need to have the exact same setup as we have (which you also (probably) do not have).
 To sum everything up: you cannot reproduce that (probably).
 
 Why would we put that on GitHub then, you might ask?
@@ -98,4 +101,4 @@ Otherwise the path is something like ``/usr/local/lib/dist-packages/inputs.py``
 
 ## Contributing
 
-You (probably) can't.
+You (probably) can't because you (probably) don't have a 8x8x8 LED Cube.
